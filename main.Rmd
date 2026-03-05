@@ -12,6 +12,8 @@ lang: fr
 
 J'espère que vous apprécierez.
 
-```{r child='intro.Rmd'}
-```{r child='methodo.Rmd'}
-```{r child='attacks.Rmd'}
+```{r child='master/intro.Rmd'}
+```{r child='master/ubuntu_install.Rmd'}
+```{r child='telephony/methodo.Rmd'}
+```{r child='LoRa/lora.Rmd'}
+```{r child='telephony/attacks.Rmd'}

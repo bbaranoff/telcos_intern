@@ -1,0 +1,670 @@
+# Méthodologie et matériel utilisé
+
+L'objectif de ce livre n'est pas seulement de présenter des concepts théoriques, mais aussi de montrer **comment expérimenter concrètement les technologies radio et télécom**.
+
+Pour cela, l'ensemble des expérimentations décrites dans ce livre a été réalisé avec un **ordinateur personnel sous Linux** et des outils **open-source** largement disponibles.
+
+L'environnement utilisé est volontairement simple afin de permettre à toute personne intéressée de **reproduire les expériences**.
+
+## Configuration matérielle
+
+Les expérimentations ont été réalisées sur un **ordinateur portable classique**.
+
+Configuration utilisée :
+
+## La clé RTL-SDR
+
+![](pictures/rtl-sdr.jpg)
+
+L'un des outils les plus accessibles pour explorer le spectre radio est la **clé RTL-SDR**.
+
+À l'origine, ces dispositifs étaient conçus comme de simples **récepteurs de télévision numérique DVB-T**.  
+Cependant, il a été découvert que la puce utilisée dans ces récepteurs permettait d'accéder directement au **flux brut du signal radio**.
+
+Grâce à un pilote modifié, ces clés peuvent être utilisées comme **récepteurs radio généralistes à très bas coût**.
+
+Une clé RTL-SDR typique se compose de :
+
+- **Un tuner radio**  
+  souvent basé sur la puce **R820T ou R860**.
+
+- **Un convertisseur analogique-numérique**  
+  intégré dans la puce **RTL2832U**.
+
+- **Une interface USB**  
+  permettant de connecter l'appareil à un ordinateur.
+
+La clé fonctionne alors comme un **récepteur SDR (Software Defined Radio)**.
+
+Le principe est le suivant :
+
+$$
+\text{Onde radio} \rightarrow \text{antenne} \rightarrow \text{tuner RF} \rightarrow \text{ADC} \rightarrow \text{USB} \rightarrow \text{logiciel}
+$$
+
+La plage de fréquences typique couverte par ces clés est :
+
+$$
+24\;MHz \rightarrow 1.7\;GHz
+$$
+
+Cela permet d'observer de nombreux systèmes radio :
+
+- radio **FM**
+- **aviation**
+- **satellites météo**
+- **AIS maritime**
+- **ADS-B aviation**
+- certains signaux **cellulaires**
+
+Ces clés coûtent généralement **moins de 40 €**, ce qui a largement contribué à démocratiser l'expérimentation radio.
+
+---
+
+# Installation des outils RTL-SDR sous Ubuntu
+
+La première étape consiste à installer les pilotes permettant d'accéder au matériel.
+
+Ouvrir un terminal :
+
+```bash
+sudo apt install rtl-sdr
+```
+
+Voici une version **plus propre et fluide** que tu peux intégrer dans ton livre.
+
+## Configuration des permissions RTL-SDR
+
+Pour permettre à un utilisateur normal d’accéder à la clé RTL-SDR sans utiliser `sudo`, il est nécessaire d’ajouter une règle **udev**.
+
+La méthode la plus simple consiste à utiliser un **here-document** en Bash.  
+Cette technique permet d’écrire directement le contenu du fichier avec les droits administrateur.
+
+Exécuter la commande suivante :
+
+```bash
+sudo tee /etc/udev/rules.d/20-rtl-sdr.rules > /dev/null << 'EOF'
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2832", GROUP="plugdev", MODE="0666"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="2838", GROUP="plugdev", MODE="0666"
+EOF
+````
+
+Cette règle donne aux membres du groupe **plugdev** l'accès au périphérique RTL-SDR.
+
+---
+
+## Recharger les règles udev
+
+Une fois la règle créée, il faut demander au système de recharger la configuration :
+
+```bash
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
+
+Ensuite, **débrancher puis rebrancher la clé RTL-SDR** pour que la règle soit appliquée.
+
+---
+
+## Vérifier que la clé fonctionne
+
+Pour vérifier que le système détecte correctement la clé, utiliser l’outil de test fourni avec les pilotes :
+
+```bash
+rtl_test
+```
+
+Si tout est correctement configuré, le programme devrait afficher quelque chose comme :
+
+```text
+Found 1 device(s):
+Realtek RTL2838UHIDIR
+```
+
+Cela indique que la clé est correctement reconnue par le système et prête à être utilisée par les logiciels SDR.
+
+
+## Vérifier que la clé est détectée
+
+Brancher la clé USB puis exécuter :
+
+```bash
+rtl_test
+```
+
+Si l'installation fonctionne, le programme affiche quelque chose comme :
+
+```
+Found 1 device(s):
+Realtek RTL2838UHIDIR
+```
+
+Le programme commence ensuite à tester la réception du signal.
+
+Pour arrêter le test :
+
+```
+CTRL + C
+```
+
+Si ce message apparaît, la clé est correctement reconnue par le système.
+
+---
+
+# Installation de GQRX
+
+Pour visualiser les signaux radio, on utilise un logiciel appelé **GQRX**.
+
+GQRX est une interface graphique permettant de :
+
+* observer le **spectre radio**
+* syntoniser une **fréquence**
+* écouter les **signaux analogiques**
+* analyser les transmissions
+
+Installer GQRX avec :
+
+```bash
+sudo apt install gqrx-sdr
+```
+
+---
+
+# Lancer GQRX
+
+Démarrer le programme :
+
+```bash
+gqrx
+```
+
+Lors du premier lancement, une fenêtre de configuration apparaît.
+
+Paramètres recommandés :
+
+* **Device** : RTL-SDR
+* **Sample rate** : 2.4 MS/s
+* **Input rate** : automatique
+
+Cliquer sur **Start DSP**.
+
+Le logiciel affiche alors :
+
+* un **spectre radio**
+* une **cascade (waterfall)** des signaux reçus
+
+Chaque pic visible dans le spectre correspond à **une transmission radio**.
+
+---
+
+
+3. ajuster le **gain** si nécessaire
+
+Si une station radio est présente, vous devriez **entendre la musique** immédiatement.
+
+Cette expérience simple montre un point essentiel :
+
+**le spectre radio est rempli de signaux invisibles que l'on peut observer avec une simple clé SDR et un ordinateur.**
+
+Dans les chapitres suivants, nous utiliserons ces outils pour **explorer différents systèmes radio et protocoles de communication**.
+
+la **clé RTL-SDR** est un accident technologique fascinant.
+
+Les ingénieurs de Realtek n'ont jamais prévu que cette puce devienne un **instrument scientifique mondial**.  
+
+Mais en exposant le **flux I/Q brut**, ils ont créé sans le vouloir l’un des outils les plus utilisés pour :
+
+- la **radio amateur**
+- la **recherche en télécom**
+- l’**analyse de protocoles radio**
+- la **sécurité sans fil**
+
+Un détail intéressant de l’histoire de ces clés est qu’elles **n’étaient pas conçues à l’origine pour être des récepteurs SDR**.
+
+Le circuit **RTL2832U**, fabriqué par Realtek, était destiné aux récepteurs **DVB-T (télévision numérique)**.
+Cependant, les ingénieurs avaient laissé accessible un **mode interne permettant de récupérer le flux IQ brut** utilisé pour la démodulation.
+
+Vers **2012**, des chercheurs et radioamateurs ont découvert ce mode et ont développé des pilotes permettant d’y accéder.
+
+Cette découverte a transformé un simple récepteur TV à bas coût en **récepteur radio large bande programmable**, ouvrant la porte à une démocratisation massive de l’expérimentation radio.
+
+Aujourd’hui, une clé RTL-SDR coûtant quelques dizaines d’euros permet d’explorer un spectre radio qui nécessitait autrefois **des analyseurs de spectre professionnels coûtant plusieurs dizaines de milliers d’euros**.
+
+# Première expérience : écouter la radio FM
+
+Pour tester la réception :
+
+1. régler la fréquence autour de
+
+```
+100 MHz
+```
+
+2. choisir le mode :
+
+```
+WFM (Wide FM)
+```
+
+![](pictures/gqrx.png)
+
+
+# Sniffing GSM passif
+
+## Installation de gr-gsm
+
+Le projet **gr-gsm** est un ensemble de modules développés pour **GNU Radio** permettant d’analyser et de décoder les signaux des réseaux **GSM**.
+
+Il est utilisé pour :
+
+- observer les **canaux GSM**
+- analyser les **messages de signalisation**
+- étudier le fonctionnement des réseaux mobiles
+
+Le projet est disponible sur GitHub :
+
+https://github.com/bkerler/gr-gsm
+
+### Dépendances nécessaires
+
+Avant d’installer gr-gsm, certaines bibliothèques doivent être installées.
+
+Exécuter :
+
+```bash
+sudo apt update
+````
+
+Puis installer les dépendances principales :
+
+```bash
+sudo apt install gr-osmosdr libosmocore-dev
+```
+
+Ces deux paquets sont essentiels.
+
+* **gr-osmosdr**
+
+  Ce module permet à **GNU Radio** d’accéder aux périphériques SDR.
+
+  Il supporte de nombreux matériels :
+
+  * RTL-SDR
+  * HackRF
+  * USRP
+  * LimeSDR
+  * Airspy
+
+  Il agit comme une **interface entre le matériel radio et GNU Radio**.
+
+* **libosmocore-dev**
+
+  Cette bibliothèque fait partie de l’écosystème **Osmocom**.
+
+  Elle contient des fonctions utilisées dans de nombreux projets télécom :
+
+  * gestion de protocoles GSM
+  * structures de messages
+  * outils de décodage
+
+  Le paquet `-dev` contient les **fichiers nécessaires à la compilation** des logiciels utilisant cette bibliothèque.
+
+### Installation de gr-gsm
+
+Une fois les dépendances installées, cloner le dépôt :
+
+```bash
+git clone https://github.com/bkerler/gr-gsm.git
+cd gr-gsm
+```
+
+Créer ensuite un dossier de compilation :
+
+```bash
+mkdir build
+cd build
+```
+
+Configurer la compilation :
+
+```bash
+cmake ..
+```
+
+Compiler le logiciel :
+
+```bash
+make
+```
+
+Installer les modules :
+
+```bash
+sudo make install
+```
+
+Enfin, mettre à jour le cache des bibliothèques :
+
+```bash
+sudo ldconfig
+```
+
+### Vérifier l'installation
+
+Après l'installation, plusieurs outils doivent être disponibles.
+
+Par exemple :
+
+```bash
+grgsm_livemon
+```
+
+Cet outil permet d'observer en temps réel un canal GSM capté par une **clé RTL-SDR**.
+
+Si l'installation est correcte, le programme devrait démarrer et afficher les messages GSM décodés.
+
+Avec :
+
+clé RTL-SDR
++
+GNU Radio
++
+gr-gsm
+
+
+![](pictures/grgsm_scan.png)
+
+# Guide d'installation modulaire EGPRS (Osmocom + SDR)
+
+## Présentation
+
+Ce guide décrit l'installation modulaire d'une infrastructure **EGPRS** (GPRS/EDGE) basée sur Osmocom et SDR (USRP, BladeRF).  
+Chaque chapitre détaille un module, son rôle, ses dépendances et options.  
+Tout peut être scripté pour une intégration Dockerfile ou un déploiement manuel sur Debian/Ubuntu 22.04+.
+
+---
+
+## Dépendances système
+
+Commencez par installer tous les outils de build essentiels, bibliothèques, Python et utilitaires de debug :
+- Compilation : `gcc`, `g++`, `make`, `cmake`, `autoconf`, `automake`, `libtool`, etc.
+- Libs système : `libusb-1.0-0-dev`, `libedit-dev`, `libfftw3-dev`, `liburing-dev`, …
+- Dev Python : `python3-dev`, `python3-pip`, `python3-numpy`, `python3-mako`, `python3-lxml`, `python3-six`, …
+- Outils additionnels : `nano`, `git`, `wget`, `curl`, `tmux`, `doxygen`, `ethtool`, etc.
+
+**Commande d'installation :**
+```sh
+apt update
+apt install -y <tous-les-paquets-listés>
+````
+
+---
+
+## SDR & Matériel (UHD, BladeRF)
+
+### UHD (USRP/Ettus)
+
+* **libuhd-dev, uhd-host** : Drivers et outils pour USRP.
+
+* **Images firmware** :
+
+```sh
+python3 /usr/lib/uhd/utils/uhd_images_downloader.py
+```
+
+* **Règle udev** pour détection auto :
+
+```sh
+wget https://raw.githubusercontent.com/EttusResearch/uhd/refs/heads/master/host/utils/uhd-usrp.rules && cp uhd-usrp.rules /etc/udev/rules.d/
+```
+
+### BladeRF (Nuand)
+
+* **libbladerf-dev** + build depuis les sources :
+
+```sh
+git clone https://github.com/nuand/BladeRF /opt/GSM/BladeRF
+cd /opt/GSM/BladeRF && mkdir build && cd build
+cmake .. && make -j$(nproc) && make install && ldconfig
+```
+
+---
+
+## Librairies Osmocom de base
+
+Ces librairies sont la fondation de toute la stack GSM Osmocom.
+
+* **libosmocore** : Primitives GSM, timers, gestion protocoles.
+* **libosmo-netif** : Interfaces réseau.
+* **libosmo-abis** : Support interface Abis (BTS ↔ BSC).
+
+**Build de chaque librairie :**
+
+```sh
+git clone https://github.com/osmocom/<repo>
+cd <repo> && autoreconf -fi && ./configure && make -j$(nproc) && make install && ldconfig
+```
+
+*(remplacer `<repo>` par le nom de la librairie)*
+
+---
+
+## Stack cœur GSM/EDGE
+
+**Osmocom fournit un module séparé pour chaque composant cœur de réseau :**
+
+* **osmo-hlr** : Home Location Register (base d’abonnés)
+* **osmo-msc** : Mobile Switching Center (appels, SMS, mobilité)
+* **osmo-bsc** : Base Station Controller (gestion BTS, handover)
+* **osmo-sgsn** : Serving GPRS Support Node (sessions GPRS/EDGE)
+* **osmo-ggsn** : Gateway GPRS Support Node (passerelle IP/data)
+* **osmo-mgw** : Media Gateway (flux voix/data)
+* **osmo-pcu** : Packet Control Unit (gestion trames GPRS/EDGE)
+* **libosmo-sigtran** : SIGTRAN/SS7 over IP
+* **libsmpp34** : Librairie SMPP (SMS)
+* **libgtpnl** : GTP (GPRS Tunneling Protocol pour data mobile)
+
+**Exemple de build générique :**
+
+```sh
+git clone https://github.com/osmocom/<module>
+cd <module> && autoreconf -fi && ./configure [OPTIONS] && make -j$(nproc) && make install && ldconfig
+```
+
+* Les options comme `--enable-gtp-linux`, `--enable-iu`, `--enable-smpp`, etc, dépendent du module.
+
+---
+
+## Couches radio (TRX/BTS)
+
+* **osmo-trx** : Transceiver SDR (modulation, A5/x, couche radio PHY)
+* **osmo-bts** : Interface logicielle pour le TRX (logiciel BTS)
+
+  * Option : `--enable-trx` pour activer le mode SDR.
+
+**Build typique :**
+
+```sh
+git clone https://github.com/osmocom/osmo-trx
+cd osmo-trx && autoreconf -fi && ./configure --with-uhd && make -j$(nproc) && make install && ldconfig
+
+git clone https://github.com/osmocom/osmo-bts
+cd osmo-bts && autoreconf -fi && ./configure --enable-trx && make -j$(nproc) && make install && ldconfig
+```
+
+---
+
+## Services & Outils additionnels
+
+* **osmo-sip-connector** : passerelle GSM ↔ VoIP SIP (pour appels IP)
+* **Outils SIM** : `pcsc-tools`, `pcscd`, `libpcsclite-dev`
+* **iptables**, **tmux**, **nano**, **python3-pip** : utilitaires système
+* **python3-requests** : scripts API/réseau
+
+**Exemple d'installation :**
+
+```sh
+apt install -y iptables tmux nano python3-pip python3-requests
+pip3 install requests
+```
+
+---
+
+## Script modulaire (bash)
+
+```bash
+#!/bin/bash
+# Installeur modulaire EGPRS/Osmocom
+# Construit une stack GSM/EDGE complète avec SDR : USRP, BladeRF, Osmocom core et toutes dépendances.
+# Auteur : Bastien / bbaranoff (software-defined-radio.com)
+# Testé sur Ubuntu 22.04+
+
+set -e
+N=$(nproc) || N=2
+ROOT=/opt/GSM
+
+# ----------------------------------------
+#  Dépendances système
+# ----------------------------------------
+install_deps() {
+    echo "==> Installation des paquets système et dépendances de build..."
+    apt update
+    apt install -y \
+        gcc g++ make cmake autoconf automake libtool pkg-config \
+        libedit-dev libfftw3-dev libusb-1.0-0-dev liburing-dev \
+        nano git wget curl tmux doxygen ethtool \
+        python3 python3-dev python3-pip python3-six python3-mako python3-lxml python3-numpy python3-pybind11 python3-requests python3-scipy python3-setuptools python3-ruamel.yaml \
+        libpcsclite-dev pcsc-tools pcscd cpufrequtils libsctp-dev libconfig++-dev libconfig-dev libmbedtls-dev \
+        libtalloc-dev libgnutls28-dev libmnl-dev libortp-dev libdbd-sqlite3 iproute2 iputils-ping \
+        libsqlite3-dev libdbi-dev libc-ares-dev libsofia-sip-ua-glib-dev telnet \
+        systemd systemd-sysv dbus dbus-user-session ccache libboost-all-dev libncurses5 libncurses5-dev \
+        libusb-1.0-0 libusb-dev iptables udev
+}
+
+# ----------------------------------------
+#  Drivers SDR & Firmware
+# ----------------------------------------
+
+install_uhd() {
+    echo "==> Installation UHD/USRP et téléchargement images firmware..."
+    apt install -y libuhd-dev uhd-host
+    python3 /usr/lib/uhd/utils/uhd_images_downloader.py
+    # Règles udev Ettus USRP
+    wget -O /etc/udev/rules.d/uhd-usrp.rules https://raw.githubusercontent.com/EttusResearch/uhd/refs/heads/master/host/utils/uhd-usrp.rules
+    echo "export UHD_MODULE_PATH=/usr/lib/uhd/modules" >> /root/.bashrc
+}
+
+install_bladerf() {
+    echo "==> Installation BladeRF et build depuis sources..."
+    apt install -y libbladerf-dev
+    git clone https://github.com/nuand/BladeRF $ROOT/BladeRF || true
+    cd $ROOT/BladeRF
+    mkdir -p build && cd build
+    cmake .. && make -j$N && make install && ldconfig
+}
+
+# ----------------------------------------
+# Librairies Osmocom de base
+# ----------------------------------------
+build_osmo_lib() {
+    echo "==> Build des librairies Osmocom : libosmocore, libosmo-netif, libosmo-abis"
+    for repo in libosmocore libosmo-netif libosmo-abis; do
+        git clone https://github.com/osmocom/$repo $ROOT/$repo || true
+        cd $ROOT/$repo
+        autoreconf -fi
+        ./configure
+        make -j$N
+        make install
+        ldconfig
+    done
+}
+
+# ----------------------------------------
+# Réseau cœur, radio, EDGE
+# ----------------------------------------
+build_osmo_core() {
+    echo "==> Build Osmocom réseau, radio et modules GPRS..."
+    
+    # HLR (DB abonnés)
+    git clone https://github.com/osmocom/osmo-hlr $ROOT/osmo-hlr || true
+    cd $ROOT/osmo-hlr && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # Media Gateway
+    git clone https://github.com/osmocom/osmo-mgw $ROOT/osmo-mgw || true
+    cd $ROOT/osmo-mgw && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # SIGTRAN (SS7 sur IP)
+    git clone https://gitea.osmocom.org/osmocom/libosmo-sigtran $ROOT/libosmo-sigtran || true
+    cd $ROOT/libosmo-sigtran && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # libsmpp34 (SMS)
+    git clone https://github.com/osmocom/libsmpp34 $ROOT/libsmpp34 || true
+    cd $ROOT/libsmpp34 && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # libgtpnl (tunnels GTP)
+    git clone https://github.com/osmocom/libgtpnl $ROOT/libgtpnl || true
+    cd $ROOT/libgtpnl && autoreconf -fi && ./configure --enable-gtp-linux && make -j$N && make install && ldconfig
+
+    # Éléments cœur (ordre : GGSN, SGSN, MSC, BSC, PCU)
+    git clone https://github.com/osmocom/osmo-ggsn $ROOT/osmo-ggsn || true
+    cd $ROOT/osmo-ggsn && autoreconf -fi && ./configure --enable-gtp-linux && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-sgsn $ROOT/osmo-sgsn || true
+    cd $ROOT/osmo-sgsn && autoreconf -fi && ./configure --enable-iu && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-msc $ROOT/osmo-msc || true
+    cd $ROOT/osmo-msc && autoreconf -fi && ./configure --enable-smpp --enable-iu && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-bsc $ROOT/osmo-bsc || true
+    cd $ROOT/osmo-bsc && autoreconf -fi && ./configure --enable-iu && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-pcu $ROOT/osmo-pcu || true
+    cd $ROOT/osmo-pcu && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # Couches radio : TRX, BTS
+    git clone https://github.com/osmocom/osmo-trx $ROOT/osmo-trx || true
+    cd $ROOT/osmo-trx && autoreconf -fi && ./configure --with-uhd && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-bts $ROOT/osmo-bts || true
+    cd $ROOT/osmo-bts && autoreconf -fi && ./configure --enable-trx && make -j$N && make install && ldconfig
+
+    # SIP connector (SIP/VoIP)
+    git clone https://github.com/osmocom/osmo-sip-connector $ROOT/osmo-sip-connector || true
+    cd $ROOT/osmo-sip-connector && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+}
+
+# ----------------------------------------
+# Python & utilitaires système
+# ----------------------------------------
+install_python_utils() {
+    echo "==> Installation dépendances pip et update images UHD..."
+    pip3 install requests
+    # (Re)télécharge images firmware UHD si besoin
+    python3 /usr/lib/uhd/utils/uhd_images_downloader.py || true
+}
+
+# ----------------------------------------
+# Séquence principale
+# ----------------------------------------
+main() {
+    install_deps
+    install_uhd
+    install_bladerf
+    build_osmo_lib
+    build_osmo_core
+    install_python_utils
+    echo "==> Tous les modules sont installés. Vous pouvez passer à la configuration et aux scripts de run."
+}
+
+main "$@"
+```
+
+---
+
+## Résumé & Bonnes pratiques
+
+* **Chaque module** est un bloc indépendant, à construire dans l’ordre (libs → cœur → radio → services)
+* Pour EGPRS, l’ordre **BTS/TRX/PCU/SGSN/GGSN** est crucial (le flux data traverse chaque élément)
+* **Séparation des modules** = maintenance et debug facilités
+* Toujours vérifier les dépendances système/matériel (drivers USRP, firmware BladeRF, règles udev…)
+
