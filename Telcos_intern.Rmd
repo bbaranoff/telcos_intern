@@ -383,3 +383,97 @@ Ce livre propose donc un parcours allant :
 - jusqu’à l’étude concrète des **protocoles des réseaux mobiles**.
 
 L’objectif n’est pas seulement de comprendre les télécommunications, mais aussi de montrer comment ces systèmes fonctionnent réellement, **du signal radio jusqu’aux protocoles qui transportent l’information**.
+
+\newpage
+# Méthodologie et matériel utilisé
+
+L'objectif de ce livre n'est pas seulement de présenter des concepts théoriques, mais aussi de montrer **comment expérimenter concrètement les technologies radio et télécom**.
+
+Pour cela, l'ensemble des expérimentations décrites dans ce livre a été réalisé avec un **ordinateur personnel sous Linux** et des outils **open-source** largement disponibles.
+
+L'environnement utilisé est volontairement simple afin de permettre à toute personne intéressée de **reproduire les expériences**.
+
+## Configuration matérielle
+
+Les expérimentations ont été réalisées sur un **ordinateur portable classique**.
+
+Configuration utilisée :
+
+- **Ordinateur** : PC portable
+- **Système d'exploitation** : Ubuntu 24.04 LTS
+- **Processeur** : architecture x86-64
+- **Interface radio** : SDR (Software Defined Radio)
+- **Antenne** : antenne large bande adaptée aux fréquences étudiées
+
+Les outils utilisés dans ce livre reposent principalement sur :
+
+- **logiciels open-source**
+- **outils de traitement du signal**
+- **outils d'analyse réseau**
+
+Cette approche permet d'éviter l'utilisation d'équipements propriétaires coûteux souvent utilisés dans l'industrie des télécommunications.
+
+## Installation d'Ubuntu 24.04 à partir de Windows
+
+De nombreux lecteurs utilisent initialement **Windows**.  
+La première étape consiste donc à installer **Ubuntu Linux**, qui offre un environnement particulièrement adapté à l'expérimentation réseau et radio.
+
+### 1. Télécharger Ubuntu
+
+Télécharger l'image officielle :
+
+https://ubuntu.com/download
+
+Choisir :
+
+**Ubuntu 24.04 LTS**
+
+Le fichier téléchargé est une image **ISO** du système.
+
+### 2. Créer une clé USB bootable
+
+Sous Windows, utiliser un outil comme :
+
+- **Rufus**
+- **Balena Etcher**
+
+Procédure :
+
+- insérer une **clé USB (8 Go minimum)**
+- sélectionner l'image **ISO Ubuntu**
+- créer la **clé bootable**
+
+### 3. Démarrer sur la clé USB
+
+Redémarrer l'ordinateur et accéder au **menu de démarrage** (souvent avec une touche comme `F12`, `F10` ou `ESC`).
+
+Sélectionner :
+
+**Boot sur la clé USB**
+
+### 4. Installer Ubuntu
+
+L'installateur Ubuntu guide ensuite l'utilisateur.
+
+Les options recommandées :
+
+- installation complète
+- téléchargement des mises à jour pendant l'installation
+- installation des pilotes supplémentaires
+
+Deux options sont possibles :
+
+- **Dual boot** (Windows + Ubuntu)
+- **Ubuntu seul**
+
+Pour les expérimentations décrites dans ce livre, un système **Ubuntu seul** simplifie généralement la configuration.
+
+### 5. Mise à jour du système
+
+Une fois Ubuntu installé, ouvrir un terminal et exécuter :
+
+```bash
+sudo apt update
+sudo apt upgrade
+```
+
