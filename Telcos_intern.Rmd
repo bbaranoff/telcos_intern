@@ -197,6 +197,7 @@ En **1901**, Marconi réalise une démonstration spectaculaire en recevant un si
 
 Cette invention marque le début de la **communication sans fil**, qui deviendra plus tard la base de la radio, de la télévision, des satellites et finalement des **réseaux mobiles modernes**.
 
+\newpage
 # Le principe du téléphone
 
 Le téléphone inventé par **Alexander Graham Bell en 1876** repose sur un principe physique simple mais fondamental :  
@@ -248,3 +249,137 @@ En pratique, Bell reste considéré comme l’inventeur du téléphone pour une 
 il est **le premier à avoir obtenu un brevet solide et exploitable industriellement**.
 
 Comme souvent dans l’histoire des technologies, l’invention n’est pas l’œuvre d’un seul homme mais le résultat d’un **ensemble de recherches simultanées**, dont Bell a été celui qui a su transformer l’idée en **système fonctionnel et en industrie mondiale**.
+
+# La naissance de la téléphonie mobile
+
+Les deux grandes inventions présentées précédemment reposent sur des principes différents :
+
+- le **téléphone** permet de transmettre **la voix humaine**
+- la **radio** permet de transmettre **un signal électrique sans fil**
+
+Pendant longtemps, ces deux technologies ont évolué séparément.
+
+Le téléphone fonctionnait sur un **réseau filaire** reliant les abonnés aux **centraux de commutation**, tandis que la radio était utilisée principalement pour des **signaux télégraphiques**, la **navigation maritime** ou la **diffusion radio**.
+
+L’idée de la téléphonie mobile consiste à **combiner ces deux technologies**.
+
+Le principe devient alors :
+
+$$
+\text{Voix} \rightarrow \text{signal électrique} \rightarrow \text{onde radio}
+$$
+
+puis à la réception :
+
+$$
+\text{onde radio} \rightarrow \text{signal électrique} \rightarrow \text{voix}
+$$
+
+Autrement dit, le téléphone mobile repose sur la même chaîne physique que le téléphone classique, mais le **fil est remplacé par une transmission radio**.
+
+Le fonctionnement général peut être résumé ainsi :
+
+- **Le microphone du téléphone**  
+  convertit la voix en **signal électrique**.
+
+- **L'émetteur radio**  
+  transforme ce signal en **onde électromagnétique modulée**.
+
+- **L'antenne**  
+  diffuse l’onde radio dans l’espace.
+
+- **Une station de base**  
+  reçoit le signal et l’achemine dans le **réseau de télécommunications**.
+
+- **Le téléphone du correspondant**  
+  effectue l’opération inverse pour **reproduire la voix**.
+
+La difficulté principale n’est pas la transmission elle-même, mais **l’organisation du réseau radio**.
+
+Contrairement à un câble téléphonique, l’espace radio est **partagé** par de nombreux utilisateurs.  
+Il faut donc des mécanismes pour :
+
+- **partager le spectre radio**
+- **éviter les interférences**
+- **gérer la mobilité des utilisateurs**
+- **authentifier les abonnés**
+
+Ces problèmes conduiront à la création des **réseaux cellulaires**, dans lesquels le territoire est découpé en **cellules radio** desservies par des **stations de base**.
+
+C’est cette architecture qui donnera naissance aux générations successives de réseaux mobiles :
+
+- **1G** : téléphonie analogique  
+- **2G (GSM)** : téléphonie numérique  
+- **3G / 4G** : Internet mobile  
+- **5G** : réseaux radio à très haut débit
+
+Ainsi, le téléphone mobile peut être vu comme la **synthèse de deux grandes inventions du XIXᵉ siècle** :
+
+- le **téléphone**, qui permet de transporter la voix
+- la **radio**, qui permet de transmettre un signal sans fil
+
+\newpage
+# Les radios définies par logiciel (SDR)
+
+Pendant longtemps, les équipements radio étaient construits autour de **circuits matériels spécialisés**.  
+Chaque technologie — radio FM, télévision, GSM, satellite — nécessitait des **émetteurs et récepteurs dédiés**, conçus spécifiquement pour un protocole précis.
+
+Cette approche rendait l’expérimentation difficile : étudier un système radio nécessitait souvent des **équipements coûteux et propriétaires**.
+
+Depuis les années 2000, une nouvelle approche s’est imposée : la **radio définie par logiciel**, ou **SDR (Software Defined Radio)**.
+
+Le principe est simple : remplacer une grande partie de l’électronique spécialisée par **du traitement numérique exécuté par logiciel**.
+
+Une SDR se compose généralement de trois éléments :
+
+- **Une antenne**  
+  Elle capte ou émet les **ondes électromagnétiques**.
+
+- **Un convertisseur radio-numérique**  
+  Le signal analogique est converti en **données numériques**.
+
+- **Un logiciel de traitement du signal**  
+  Les opérations radio (démodulation, décodage, filtrage, protocole) sont réalisées **par logiciel**.
+
+Le schéma devient alors :
+
+$$
+\text{Onde radio} \rightarrow \text{signal analogique} \rightarrow \text{signal numérique} \rightarrow \text{logiciel}
+$$
+
+Cette évolution a profondément transformé l’étude des télécommunications.
+
+Avec une SDR et un ordinateur, il est désormais possible de :
+
+- **observer le spectre radio**
+- **analyser des protocoles sans fil**
+- **implémenter des systèmes radio complets**
+- **expérimenter de nouvelles modulations**
+- **reproduire ou étudier des réseaux existants**
+
+Les SDR ont ainsi démocratisé l’accès à l’ingénierie radio, autrefois réservée aux **laboratoires industriels** et aux **fabricants d’équipements**.
+
+\newpage
+# Objectif de ce livre
+
+Ce livre a pour objectif d’expliquer **le fonctionnement réel des réseaux radio modernes** en partant de leurs **fondements physiques et historiques**.
+
+Plutôt que de présenter uniquement la théorie, l’approche adoptée ici est **pratique et expérimentale**.
+
+L’objectif est de montrer comment :
+
+- les **ondes électromagnétiques** décrites par Maxwell
+- les **systèmes radio** développés depuis Marconi
+- et les **réseaux cellulaires modernes**
+
+se combinent pour former les infrastructures de communication actuelles.
+
+Grâce aux outils modernes comme les **Software Defined Radio**, il est aujourd’hui possible d’observer et d’expérimenter directement ces systèmes.
+
+Ce livre propose donc un parcours allant :
+
+- des **principes physiques des ondes**
+- à la **radio moderne**
+- jusqu’à l’étude concrète des **protocoles des réseaux mobiles**.
+
+L’objectif n’est pas seulement de comprendre les télécommunications, mais aussi de montrer comment ces systèmes fonctionnent réellement, **du signal radio jusqu’aux protocoles qui transportent l’information**.
