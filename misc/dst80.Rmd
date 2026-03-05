@@ -1,0 +1,224 @@
+# Suite de rétro-ingénierie et de brute-force DST80
+
+Basé sur **DST80 (non rétro-ingéniéré)** disponible ici
+
+Ce projet fournit une implémentation **haute performance** pour récupérer les clés **TI DST80** (Digital Signature Transponder) en utilisant **OpenCL**.
+
+Il est conçu pour démontrer comment des **faiblesses architecturales** et des **constantes spécifiques aux constructeurs** peuvent réduire la marge de sécurité théorique de **80 bits** à une **attaque brute-force réalisable en pratique**.
+
+---
+
+# La théorie : pourquoi c’est cassable
+
+L’algorithme **DST80** utilise une clé de **80 bits**, traditionnellement divisée en deux moitiés de **40 bits** :
+
+* **Key Left (KL)**
+* **Key Right (KR)**
+
+Cependant, dans de nombreuses implémentations automobiles et RFID, l’entropie réelle est bien plus faible.
+
+### Contrainte de symétrie
+
+Les clés sont souvent générées de manière à ce que **les 3 octets à gauche soient le masque ou l’inverse des 3 octets à droite**.
+
+Cela divise immédiatement l’espace de recherche **par deux**.
+
+### Constantes constructeur
+
+Sur les **80 bits**, environ **32 bits** sont souvent des **constantes fixées par le constructeur**.
+
+### Réduction de l’espace de recherche
+
+En combinant ces facteurs, la complexité passe de :
+
+```
+2^80
+```
+
+à environ :
+
+```
+2^40  ou  2^32
+```
+
+(selon les constantes connues).
+
+---
+
+# Performance et stratégie (méthode IACR)
+
+Comme décrit dans les travaux de recherche :
+
+L’attaque suit une approche **par étapes** :
+
+![IACR Algorithm](pictures/iacr.png)
+
+### 1. Constantes inconnues
+
+Sur un GPU grand public (par exemple **NVIDIA RTX 3050 Ti**), récupérer une clé complète avec **un octet inconnu** prend environ :
+
+**300 minutes (~5 heures)**.
+
+### 2. Constantes connues
+
+Une fois les constantes constructeur identifiées, l’espace de recherche se réduit drastiquement :
+
+**environ 1 minute** pour retrouver une clé.
+
+### 3. Changement de constructeur
+
+Si le constructeur change, il suffit de :
+
+1. retrouver les nouvelles constantes
+2. puis revenir au temps de récupération d’environ **1 minute par clé**.
+
+---
+
+# Configuration matérielle
+
+* **GPU** : tout GPU compatible **OpenCL**
+
+  * NVIDIA
+  * AMD
+  * Intel
+
+* **Testé sur** :
+
+  * NVIDIA GeForce **RTX 3050 Ti Laptop GPU**
+
+* **Performance observée** :
+
+```
+~35 millions de clés testées par seconde
+```
+
+---
+
+# Structure du projet
+
+| Fichier                | Description                                                                                  |
+| ---------------------- | -------------------------------------------------------------------------------------------- |
+| `dst80_fast.py`        | Recherche optimisée utilisant un octet constructeur fixe (`0x2f`).                           |
+| `dst80_constructor.py` | Permet de passer deux octets constructeur (`m2`, `m1`) en argument.                          |
+| `dst80_reverse.py`     | Recherche complète (jusqu’à 5 octets) pour identifier les constantes constructeur inconnues. |
+| `*.cl`                 | Kernels OpenCL contenant la simulation du chiffrement DST80.                                 |
+
+---
+
+# Utilisation
+
+## 1. Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 2. Recherche rapide (constante 1 octet connue)
+
+Si vous connaissez le suffixe (par exemple `0x2f`) :
+
+```bash
+python dst80_fast.py <c1> <t1> <c2> <t2>
+```
+
+---
+
+## 3. Recherche constructeur (constantes 2 octets)
+
+Pour tester des constantes constructeur spécifiques (exemple `d1 2f`) :
+
+```bash
+python dst80_constructor.py <c1> <t1> <c2> <t2> d1 2f
+```
+
+---
+
+## 4. Reverse complet (mode découverte)
+
+Pour explorer l’espace complet (5 octets variables) afin de trouver les constantes :
+
+```bash
+python dst80_reverse.py <c1> <t1> <c2> <t2> 4228250625
+```
+
+---
+
+# Démonstration
+
+Ci-dessous un exemple de récupération réussie d’une clé avec la méthode **double challenge**.
+
+![Search Demo](pictures/demo.png)
+
+---
+
+# Tutoriel : générateur de signature DST80
+
+Ce script calcule la **réponse de 24 bits (signature)** pour un challenge DST80 donné.
+
+Il gère automatiquement la **symétrie interne du chiffrement** en dérivant **Key Right (KR)** à partir de **Key Left (KL)**.
+
+---
+
+# Construction de la clé
+
+Le script suppose l’implémentation automobile classique où la clé de **80 bits est symétrique** :
+
+* **KeyL (40 bits)**
+  fourni par l’utilisateur.
+
+* **KeyR (40 bits)**
+  généré automatiquement en **inversant chaque octet de KeyL**.
+
+---
+
+# Utilisation basique
+
+Lancer simplement le script pour utiliser les valeurs par défaut :
+
+```bash
+python generate.py
+```
+
+Cela permet de **vérifier que l’environnement fonctionne correctement**.
+
+---
+
+# Challenges et clés personnalisés
+
+Vous pouvez fournir vos propres valeurs hexadécimales.
+
+### Signer un challenge spécifique
+
+```bash
+python generate.py --challenge 0xABCDE12345
+```
+
+---
+
+### Utiliser une clé récupérée
+
+```bash
+python generate.py --kl 0xFD4AEDD12F
+```
+
+---
+
+### Commande complète
+
+```bash
+python generate.py --kl 0x1122334455 --challenge 0x6162636465
+```
+
+---
+
+# Détail de la sortie
+
+Le script affiche un résumé clair :
+
+* **KeyL** : clé source (40 bits)
+* **KeyR** : clé miroir générée
+* **Challenge** : nonce d’entrée (40 bits)
+* **RESPONSE** : signature finale **0xXXXXXX** utilisée pour l’authentification
+

@@ -18,3 +18,4 @@ J'espère que vous apprécierez.
 ```{r child='telephony/networks.Rmd'}
 ```{r child='LoRa/lora.Rmd'}
 ```{r child='telephony/attacks.Rmd'}
+```{r child='misc/dst80.Rmd'}
