@@ -1,327 +1,252 @@
-# LoRa
+# LoRa et réseaux longue portée
 
-**GPS tracker via LoraWAN**
+Les réseaux radio traditionnels, comme les réseaux cellulaires ou le Wi-Fi, sont conçus pour transporter des volumes importants de données avec des débits élevés.  
+Cependant, de nombreuses applications de l’Internet des objets (IoT) nécessitent des caractéristiques différentes :
+
+- très faible consommation énergétique
+- portée radio importante
+- faible volume de données
+- coût matériel réduit
+
+La technologie **LoRa (Long Range)** a été conçue pour répondre à ces besoins.
+
+LoRa est une modulation radio développée par la société **Semtech**, utilisée dans l’architecture réseau **LoRaWAN**.  
+Cette technologie permet de transmettre des données sur plusieurs kilomètres tout en conservant une consommation énergétique extrêmement faible.
+
+Les applications typiques incluent :
+
+- capteurs environnementaux
+- agriculture connectée
+- suivi d’objets
+- capteurs industriels
+- réseaux de capteurs urbains
+
+Dans ce chapitre, nous allons décrire :
+
+1. l’architecture d’un réseau LoRa
+2. la configuration d’une gateway
+3. l’enregistrement de capteurs et l’exploitation des données
+
+---
+
+# 1 — Architecture d’un réseau LoRa
+
+Contrairement aux réseaux cellulaires traditionnels, les réseaux LoRaWAN utilisent une architecture relativement simple.
+
+Un réseau LoRa est composé de quatre éléments principaux :
+
+- **End devices** (capteurs ou objets connectés)
+- **LoRa Gateway**
+- **Network Server**
+- **Application Server**
+
+L’architecture générale peut être représentée par le diagramme suivant :
 
 [![UML](assets/uml.png)](assets/uml.png)
 
-ISO :
-<https://drive.google.com/file/d/1YTdmb8JlvePSKiniwBKYyqXx-m-NhzIe/view?usp=sharing>
+Les capteurs LoRa transmettent leurs données par radio vers une **gateway LoRa**.  
+Cette gateway agit comme un **pont entre le réseau radio et Internet**.
 
-**Installation du routeur sur Internet (via WiFi)**
+Contrairement à une station de base cellulaire, la gateway LoRa ne réalise pas de traitement complexe.  
+Elle agit principalement comme un **relai de paquets radio**.
 
-N.B. : Pourquoi via WiFi ? Dans le cas particulier de l'Université de
-Perpignan Via Domitia, le FireWall "n'aime" pas les connections sur le
-port 1700 nécessaire à l'établissement de la connection routeur -\>
-TheThingsNetwork.
+Les données sont ensuite envoyées vers un **Network Server**, qui se charge de :
 
--   Plug on sector the gateway with USB-C 5V-2A a WiFi network
-dragino-XXXXXX apparait.
--   Connect to it via the password "dragino+dragino"
--   Go on the webbrowser on IP 10.130.1.1 an Id/Pwd is asked by the
-dragino (by default) "root" / "dragino"
--   Connect via the WiFi Mesh the dragino as a client to your smartphone
-or your box for example
+- vérifier l’authentification des capteurs
+- supprimer les duplications de paquets
+- router les messages vers les applications
+
+Dans de nombreux déploiements expérimentaux ou communautaires, le serveur réseau utilisé est :
+
+**The Things Network (TTN)**.
+
+---
+
+## Exemple de gateway LoRa
+
+Dans ce projet, une gateway **Dragino LoRa** a été utilisée.
 
 [![WiFi_Dragino](assets/WiFi_Dragino.png)](assets/WiFi_Dragino.png)
 
-**Routage des paquets LoRa vers TheThingsNetwork**
+Cette gateway peut être connectée au réseau via :
 
--   Create a thethingsnetwork account (free, need email)
--   We can see the Gateway EUI on the LoRa tab of the network interface
--   We have to choose now TheThingsNetwork v3 on the defilant menu
-beside (the thingsnetwork v is avaible but not deserved for new
-gateways on TTN)
--   On the second defilant menu choose eu1.cloud.thethings.network
+- WiFi
+- Ethernet
+- modem cellulaire
+
+Les données radio reçues sont encapsulées dans des paquets IP et envoyées vers le serveur LoRaWAN.
+
+---
+
+# 2 — Configuration de la gateway LoRa
+
+La première étape consiste à configurer la gateway pour qu’elle se connecte au serveur **The Things Network**.
+
+La configuration s’effectue généralement via une interface web embarquée.
+
+Les paramètres principaux sont :
+
+- **fréquence radio**
+- **identifiant de la gateway**
+- **adresse du serveur LoRaWAN**
+
+Voici un exemple d’interface de configuration :
 
 [![config_gw_ttn](assets/config_gw_ttn.png)](assets/config_gw_ttn.png)
 
-On thethingsnetwork :
+Une fois la gateway configurée, elle doit être enregistrée sur la plateforme TTN.
 
-Fill the Gateway EUI same as precedent configuration on the dragino. Le
-GatewayID is free but must be unique and available on TTN. The gateway
-name is totally free of choice. Enfin les Gateway Server Address doit
-correspondre au précedent soit pour l'Europe :
-eu1.cloud.thethings.network
-
-The last option can be let as it is.
-
-You have now your gateway connected to LoRaWAN
+L’opération s’effectue via l’interface web de **The Things Network**.
 
 [![config_ttn_gw](assets/config_ttn_gw.png)](assets/config_ttn_gw.png)
 
-**Preparation of the RaspberryPi (the connected object) :** A raspberry
-is a minicomputer of the height approximatively of a Bank card with the
-power of a smartphone et a I/O electrical pinout. The Operationnal
-System of this hardware is often (and in this study) on a micro-SD card
-(it can be Netboot, USB/HDD, eMMC). We gonna greate the SD card with
-this methodology :
+Les informations nécessaires sont :
 
-**The SD-Card :**
+- Gateway ID
+- localisation géographique
+- fréquence utilisée
 
-Download Raspi-Imager from <https://www.raspberrypi.com/software/>
+Ces informations permettent au réseau TTN d’intégrer la gateway dans son infrastructure.
 
-To install it on Ubuntu \> 20.04 you just have to do (Ctrl-Alt-t) and
-type
+---
 
-```
-sudo snap install rpi-imager
-```
+## Installation du système sur Raspberry Pi
 
-Then we download the Debian Bullseye OS
+Certaines gateways LoRa utilisent un **Raspberry Pi** comme système embarqué.
+
+Dans ce cas, il est nécessaire d’installer un système Linux sur la carte SD.
+
+Le système recommandé est généralement **Raspberry Pi OS**.
 
 [![choose_os](assets/choose_os.png)](assets/choose_os.png)
 
-we select the following options ssh : username/password (advice :
-"pi"/"raspberry") Wifi : from the phone or any you have available
-optional : set hostname = raspberry.local
+La préparation de la carte SD peut être réalisée avec l’outil **Raspberry Pi Imager**.
+
+Une fois l’image sélectionnée, certaines options doivent être configurées :
+
+- accès SSH
+- configuration WiFi
+- utilisateur et mot de passe
 
 [![options_sd_rpi](assets/options_sd_rpi.png)](assets/options_sd_rpi.png)
 
-We the the media that will be written on Then we put the SD-Card on the
-raspberry and monitor it via HDMI. Or if you don't have HDMI hardware
-you can access through SSH. For example if the local network is
-192.168.1.0/24 youinstall.packages(‘readr’) can do (on the host)
+Après l’installation, la gateway peut être configurée via SSH.
 
-```
-nmap 192.168.1.1-254 -p 22
-```
+Exemple de connexion :
 
-to know RPi IP adress or you can try
+```bash
+ssh pi@192.168.1.42
+````
 
-```
-sudo arp -a
-```
+Mise à jour du système :
 
-Then to spawn a shell on the RPi
-
-```
-ssh pi@ip_found_previously
+```bash
+sudo apt update && \
+sudo apt upgrade -y
 ```
 
-or
+Installation des outils nécessaires :
 
-```
-ssh pi@raspberrypi.local
-```
-
-Then on the shell
-
-```
-sudo apt update && sudo apt upgrade
+```bash
+sudo apt install \
+    git \
+    build-essential \
+    python3 \
+    python3-pip
 ```
 
-Now we install necessary packages
+---
 
-```
-sudo apt install git device-tree-compiler git python3-crypto python3-nmea2 python3-rpi.gpio python3-serial python3-spidev python3-configobj gpsd libgps-dev gpsd-clients python3-pip
-pip3 install simplecayennelpp
-git clone https://github.com/bbaranoff/libgps
-cd libgps
-make 
-sudo make install
-sudo ldconfig
-nano /etc/default/gpsd
-```
+# 3 — Enregistrement des capteurs LoRa
 
-Default settings for the gpsd init script and the hotplug wrapper.
-```
-# Start the gpsd daemon automatically at boot time
-START_DAEMON=“true”
+Une fois la gateway opérationnelle, il est possible d’ajouter des **end devices** dans le réseau.
 
-# Use USB hotplugging to add new USB devices automatically to the daemon
+L’opération s’effectue depuis la console TTN.
 
-USBAUTO=“false”
+[![add\_enddevice](assets/add_enddevice.png)](assets/add_enddevice.png)
 
-# Devices gpsd should collect to at boot time.
+Les paramètres nécessaires sont :
 
-# They need to be read/writeable, either by user gpsd or the group dialout.
+* **DevEUI**
+* **AppEUI**
+* **AppKey**
 
-DEVICES=“/dev/ttyAMA0”
+Ces identifiants permettent d’authentifier le capteur sur le réseau LoRaWAN.
 
-# Other options you want to pass to gpsd
+Une fois ces paramètres renseignés, l’appareil peut être enregistré.
 
-GPSD_OPTIONS=“-n”
-```
+[![register\_enddevice](assets/register_enddevice.png)](assets/register_enddevice.png)
 
+---
 
-Now we add to /boot/config.txt those lines at the end
+## Encodage des données
 
-```
-enable_uart=1
-dtoverlay=miniuart-bt
-dtoverlay=spi-gpio-cs
-```
+Les données transmises par les capteurs LoRa sont généralement encodées dans un format compact.
 
-We modify /boot/cmdline.txt to make it looks like
+Un format largement utilisé est **Cayenne LPP (Low Power Payload)**.
 
-```
-dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait`
-```
+Ce format permet de représenter différents types de capteurs :
 
-Then /home/pi
+* température
+* humidité
+* pression
+* GPS
+* niveau de batterie
 
-``` sourceCode
-git clone https://github.com/computenodes/dragino
-cd dragino/overlay
-dtc -@ -I dts -O dtb -o spi-gpio-cs.dtbo spi-gpio-cs-overlay.dts
-sudo cp spi-gpio-cs.dtbo /boot/overlays/
-sudo reboot
-```
+Exemple de format Cayenne :
 
-Then in /home/pi we create gpscron like :
+[![format\_cayenne](assets/format_cayenne.png)](assets/format_cayenne.png)
 
-```
-#!/bin/bash
-sudo python3 /home/pi/dragino/test_cayenne.py
-```
+Ce format facilite l’intégration avec les plateformes IoT.
 
-It will be called par cron. (Advice ! Set `sudo chmod 644 gpscorn` to
-avoid privilege escalation)
+---
 
-Then we write in /home/pi/dragino : test_cayenne.py like
+## Configuration de l’application TTN
 
-```py
-#!/usr/bin/env python3
-"""
-Test harness for dragino module - sends hello world out over LoRaWAN 5 times
-"""
-import logging
-from datetime import datetime
-from time import sleep
-import RPi.GPIO as GPIO
-from dragino import Dragino
-#import subprocess
-import gpsd
-from simplecayennelpp import CayenneLPP # import the module required to pack th$
-import binascii
-# importing the module
-# Connect to the local gpsd
-gpsd.connect()
-packet = gpsd.get_current()
-# See the inline docs for GpsResponse for the available data
-print(packet.position())
-lat = packet.lat
-lon = packet.lon
-alt = packet.alt
+Pour recevoir les données du capteur, il est nécessaire de récupérer les informations de connexion :
 
-print (lat, lon, alt)
-lpp = CayenneLPP()
-lpp.addGPS( 1, lat, lon, alt)
-text=binascii.hexlify(lpp.getBuffer()).decode()
-sent=list(binascii.unhexlify(text))
-print(text)
-logLevel=logging.DEBUG
-logging.basicConfig(filename="test.log", format='%(asctime)s - %(funcName)s - %(lineno)d - %(levelname)s - %(message)s', level=logLevel)
-D = Dragino("/home/pi/dragino/dragino.ini", logging_level=logLevel)
-D.join()
-while not D.registered():
-print("Waiting for JOIN ACCEPT")
-sleep(2)
-for i in range(0, 2):
-D.send_bytes(sent)
-start = datetime.utcnow()
-while D.transmitting:
-pass
-end = datetime.utcnow()
-print("Sent GPS coordinates ({})".format(end-start))
-sleep(1)
-```
+[![coordonnees\_ttn](assets/coordonnees_ttn.png)](assets/coordonnees_ttn.png)
 
-We take now /home/pi/dragino/dragino.ini.default to rewrite it to
-/home/pi/dragino/dragino.ini like
+Ces informations incluent :
 
-```
-gps_baud_rate = 9600 gps_serial_port = /dev/ttyS0
-gps_serial_timeout = 1 gps_wait_period = 10
+* identifiant d’application
+* clé d’accès
+* endpoint du serveur
 
-#LoRaWAN configuration spreading_factor = 7 max_power = 0x0F
-output_power = 0x0E sync_word = 0x34 rx_crc = True #Where to store the
-frame count fcount_filename = .lora_fcount
+---
 
-##Valid auth modes are ABP or OTAA ##All values are hex arrays eg
-devaddr = 0x01, 0x02, 0x03, 0x04 #auth_mode = “abp” #devaddr = #nwskey =
-#appskey =
+## Visualisation des données
 
-auth_mode = otaa deveui = 0xFF, 0xFE, 0xFD, 0xFC, 0xFC, 0xFD, 0xFE, 0xFF
-appeui = 0x70, 0xB3, 0xD5, 0x00, 0x00, 0xD5, 0xB3, 0x70 appkey = 0x3D,
-0x83, 0xC3, 0x16, 0x2C, 0xAD, 0x44, 0xB7, 0xB0, 0x50, 0x6C, 0x3C, 0xA1,
-0x54, 0x36, 0xB7
-```
+Les données LoRa peuvent être visualisées sur différentes plateformes IoT.
 
-By choosing DevEUI, AppEUI (unique on TTN), and AppKey with enough
-entropy that it can\'t be cracked (beware of MSB, LSB writing between
-dragin\_cayenne.py and TTN) Enfin pour executer le script python toutes
-les minutes :
+Un exemple couramment utilisé est **Cayenne IoT**.
 
-```
-sudo crontab -e
-```
+Ajout d’un nouvel appareil :
 
-We select our favorite editor to add
+[![add\_new\_cayenne](assets/add_new_cayenne.png)](assets/add_new_cayenne.png)
 
-```
-* * * * * /home/pi/gpscron`
-```
+Une fois le capteur connecté, les données peuvent être affichées sous forme de tableaux ou de graphiques.
 
-at the endfile. For the raspberry we are now ready to go. Lets see from
-the network side
+[![dragino\_cayenne](assets/dragino_cayenne.png)](assets/dragino_cayenne.png)
 
-**LoraWan Conection (TheThingsNetwork)**
+Certains capteurs permettent également de transmettre des **coordonnées GPS**.
 
-Go to application -\> Create then in EndDevices -\> + Add Endevice
+Ces données peuvent être visualisées en temps réel sur une carte.
 
-[![add_enddevice](assets/add_enddevice.png)](assets/add_enddevice.png)
+[![gps\_live](assets/gps_live.png)](assets/gps_live.png)
 
-Then with previous parameters set on the RPi (AppEUI, DevEUI, AppKey) in
-/home/pi/dragino/dragino.ini we put them on TTN
+---
 
-So in this study example :
+# Conclusion
 
-```
-deveui = 0xFF, 0xFE, 0xFD, 0xFC, 0xFC, 0xFD, 0xFE, 0xFF appeui = 0x70, 0xB3, 0xD5, 0x00, 0x00, 0xD5, 0xB3, 0x70 appkey = 0x3D, 0x83, 0xC3, 0x16, 0x2C, 0xAD, 0x44, 0xB7, 0xB0, 0x50, 0x6C, 0x3C, 0xA1, 0x54, 0x36, 0xB7`
-```
+Les réseaux LoRaWAN offrent une solution efficace pour connecter des objets sur de longues distances avec une consommation énergétique très faible.
 
-[![register_enddevice](assets/register_enddevice.png)](assets/register_enddevice.png)
+Grâce à :
 
-Power On the Pi (Trick to make GPS work (on RPi) !!!!!)
+* une infrastructure radio simple
+* des gateways peu coûteuses
+* des plateformes open source comme TTN
 
-Sur le shell du pi :
+il est possible de déployer rapidement un réseau IoT fonctionnel.
 
-```
-sudo ntpdate fr.pool.ntp.org
-```
-
-Put the RPi outside Pull off the Tx Jumper of the dragino and wait for
-3D Fix (the green blinking light of the dragino). Then hotplug the
-jumper Tx.
-
-You should have (your first ?) connected object
-
-**Payload Format**
-
-In this study we have choose the CayenneLPP format like
-
-[![format_cayenne](assets/format_cayenne.png)](assets/format_cayenne.png)
-
-In the created application you should see your device
-
-[![coordonnees_ttn](assets/coordonnees_ttn.png)](assets/coordonnees_ttn.png)
-
-**Data monitoring (Cayenne Integration)**
-
-Go to <https://mydevices.com/>
-
-Create a Cayenne Account
-
-Select TheThingsNetwork
-
-[![add_new_cayenne](assets/add_new_cayenne.png)](assets/add_new_cayenne.png)
-
-Sélection Dragino RPi Hat et mettre le DevEUI
-
-[![dragino_cayenne](assets/dragino_cayenne.png)](assets/dragino_cayenne.png)
-
-[![gps_live](assets/gps_live.png)](assets/gps_live.png)
-
-Live Data from GPS tracker !
-
+Cette technologie constitue aujourd’hui une composante importante de l’écosystème **Internet des objets**, en complément des réseaux cellulaires traditionnels.

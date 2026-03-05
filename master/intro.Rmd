@@ -1,371 +1,531 @@
-# Introduction
+# INTRODUCTION
 
-L’histoire des télécommunications commence bien avant **Internet** ou même le **téléphone**. Elle débute au XIXᵉ siècle avec une idée simple mais révolutionnaire : **transmettre de l’information plus vite que les personnes qui la transportent**.
+## Transmettre l’information plus vite que l’homme
 
-Le **télégraphe électrique**, développé dans les années **1830–1840**, est le premier système technique capable de **dissocier la communication de la distance physique**. Grâce au **code Morse**, un message peut parcourir des centaines de kilomètres en quelques secondes. Les premières lignes télégraphiques se déploient rapidement le long des **voies ferrées** et des **infrastructures stratégiques**, marquant la naissance des premiers réseaux d’information modernes.
+Avant l’électricité, la communication à distance était limitée par une contrainte simple : **la vitesse d’un messager**.
 
-En **1858**, le premier **câble télégraphique transatlantique** relie l’Europe et l’Amérique. Même si cette première tentative ne fonctionne que quelques semaines, elle inaugure une transformation majeure : **la création du premier réseau mondial de communication**.
+Pendant des millénaires, transmettre une information signifiait déplacer physiquement un objet ou une personne :
 
-Le **téléphone**, inventé dans les années **1870**, introduit une nouvelle rupture technologique. Là où le télégraphe transmet des **symboles**, le téléphone transmet directement **la voix humaine**. Pour fonctionner à grande échelle, les réseaux téléphoniques nécessitent la mise en place d’une **architecture complexe** : centraux de **commutation**, systèmes de **numérotation**, gestion des **abonnés** et infrastructures de **signalisation**. Cette organisation centralisée restera le cœur des télécommunications pendant plus d’un siècle.
+- un cavalier
+- un navire
+- un pigeon voyageur
+- un courrier postal
 
-Au **XXᵉ siècle**, les réseaux évoluent progressivement vers le **numérique**. Les systèmes de signalisation comme **SS7 (Signaling System No.7)** permettent aux opérateurs d’échanger automatiquement les informations nécessaires pour **établir les appels**, **gérer la mobilité** et **fournir de nouveaux services**. La téléphonie cesse alors d’être un simple transport de voix : elle devient un **réseau mondial capable d’authentifier des utilisateurs, router des messages et gérer des milliards d’abonnés**.
+La vitesse maximale d’une information était donc celle du transport.
 
-L’arrivée de la **téléphonie mobile** transforme encore profondément le paysage. Les réseaux **GSM (2G)** introduisent la **carte SIM**, qui contient **l’identité cryptographique de l’abonné** et permet de **séparer l’utilisateur de l’appareil**. Cette architecture, conçue pour **sécuriser l’accès au réseau** tout en permettant la **mobilité internationale**, devient l’un des fondements des télécommunications modernes.
+Un message envoyé de Paris à Londres pouvait prendre **plusieurs jours**.  
+Une information stratégique — militaire, politique ou économique — arrivait souvent **trop tard pour être utile**.
 
-Aujourd’hui, les réseaux mobiles — de la **2G à la 5G** — constituent l’une des **infrastructures techniques les plus complexes jamais construites**. Derrière la simplicité apparente d’un appel ou d’un message se cache un écosystème mondial d’**opérateurs**, de **protocoles**, de **systèmes cryptographiques** et d’**équipements interconnectés**.
+Certaines civilisations ont tenté de contourner cette limite.
 
-Comprendre ces réseaux nécessite de **remonter à leurs origines**. Car les **architectures**, les **choix techniques** et parfois même les **vulnérabilités** des télécommunications contemporaines trouvent souvent leurs racines dans des décisions prises **bien avant l’ère numérique**.
+Par exemple :
 
-## Les ondes électromagnétiques : les travaux de Maxwell
+- **signaux de fumée**
+- **feux de signalisation**
+- **sémaphores optiques**
+- **télégraphes optiques**
 
-Au XIXᵉ siècle, les scientifiques cherchent à comprendre la relation entre **électricité** et **magnétisme**.
+Le système de **Claude Chappe**, développé en France à la fin du XVIIIᵉ siècle, est l’un des premiers véritables réseaux de communication à distance.  
+Il utilisait des **tours équipées de bras mobiles** visibles à plusieurs kilomètres.
 
-En **1864**, le physicien écossais **James Clerk Maxwell** publie une théorie révolutionnaire : les phénomènes électriques et magnétiques peuvent se combiner pour former des **ondes électromagnétiques** capables de se propager dans l’espace.
+Chaque position des bras représentait un symbole.
 
-Maxwell montre mathématiquement que :
+Le message se propageait de tour en tour :
 
-- **Un champ électrique variable crée un champ magnétique**
-- **Un champ magnétique variable crée un champ électrique**
+```
 
-Cette interaction produit une **onde qui se propage dans l’espace**, même dans le vide.
+Tour A → Tour B → Tour C → Tour D
 
-Ses équations permettent également de calculer la **vitesse de propagation** de ces ondes.  
-Le résultat est surprenant : cette vitesse correspond exactement à **la vitesse de la lumière**.
+```
 
-Maxwell en déduit une conclusion fondamentale :
+Ce système permettait déjà une transmission beaucoup plus rapide qu’un cavalier.
 
-**La lumière est une onde électromagnétique.**
+Cependant il avait plusieurs limites importantes :
 
-Sa théorie implique également l’existence d’autres ondes électromagnétiques, invisibles pour l’œil humain, mais qui devraient obéir aux mêmes lois physiques.
+- dépendance à la **visibilité**
+- impossibilité de fonctionner **la nuit**
+- sensibilité aux **conditions météorologiques**
+- infrastructure lourde à maintenir
 
-À l’époque, ces ondes restent **purement théoriques**.  
-Il faudra attendre plusieurs années pour qu’un scientifique parvienne à les produire et à les détecter expérimentalement.
+Malgré ces contraintes, le télégraphe optique a introduit une idée fondamentale :
 
-Ce sera le travail du physicien allemand **Heinrich Hertz** à la fin du XIXᵉ siècle.
+**l’information peut être codée en symboles et transmise à distance indépendamment du support physique du message.**
 
-## Les équations de Maxwell
+Cette idée ouvre la porte à une révolution.
 
-La théorie électromagnétique de **James Clerk Maxwell** repose sur **quatre équations fondamentales** qui décrivent le comportement des champs électriques et magnétiques.
+Car une question devient alors possible :
 
-### 1. Loi de Gauss (électricité)
+> et si l'information pouvait voyager non plus à la vitesse d'un cheval…  
+> mais à la vitesse de l'électricité ?
 
-Elle relie le champ électrique aux charges électriques.
+## L’électricité devient un langage
 
-$$
-\nabla \cdot E = \frac{\rho}{\varepsilon_0}
-$$
+Au début du XIXᵉ siècle, les progrès en **électricité et en électromagnétisme** transforment progressivement la manière dont les scientifiques comprennent les phénomènes physiques.
 
-- $E$ : champ électrique  
-- $\rho$ : densité de charge électrique  
-- $\varepsilon_0$ : permittivité du vide  
+Les expériences menées par **Ørsted**, **Ampère** et **Faraday** montrent qu’il existe un lien profond entre **électricité et magnétisme**.  
+Un courant électrique peut produire un champ magnétique, et inversement un champ magnétique variable peut produire un courant.
 
-Cette équation signifie que **les charges électriques sont la source du champ électrique**.
+Cette relation ouvre une possibilité nouvelle : utiliser l’électricité pour **transmettre un signal à distance dans un fil conducteur**.
 
----
+Le principe est simple.
 
-### 2. Loi de Gauss (magnétisme)
+Un circuit électrique peut être **ouvert ou fermé**.  
+Cette variation peut être détectée à l’autre extrémité du fil.
 
-$$
-\nabla \cdot B = 0
-$$
+Autrement dit, un signal électrique peut transporter **de l’information**.
 
-- $B$ : champ magnétique
+Dans les années 1830–1840, plusieurs inventeurs expérimentent ce principe.  
+Le système qui va s’imposer est celui de **Samuel Morse**.
 
-Cette équation indique qu’il **n’existe pas de monopôle magnétique**.
+Son idée est élégante :
 
-Autrement dit :
+- l’électricité sert uniquement à transmettre un **signal simple**
+- le message est codé sous forme de **symboles courts et longs**
 
-**les lignes de champ magnétique forment toujours des boucles fermées.**
+Ce système devient le **code Morse**.
 
----
+Par exemple :
 
-### 3. Loi de Faraday
+```
 
-$$
-\nabla \times E = - \frac{\partial B}{\partial t}
-$$
+A  .-
+B  -...
+C  -.-.
 
-Cette équation décrit l’**induction électromagnétique** :
+```
 
-- un **champ magnétique variable**
-- crée un **champ électrique**
+Chaque lettre correspond à une combinaison de :
 
-C’est le principe utilisé dans les **générateurs électriques** et les **transformateurs**.
+- **points**
+- **traits**
 
----
+Le signal électrique envoyé dans le fil actionne un **électroaimant** à l’autre extrémité, qui produit un clic mécanique.
 
-### 4. Loi d’Ampère-Maxwell
+L’opérateur entend donc une séquence de sons qu’il peut traduire en lettres.
 
-$$
-\nabla \times B = \mu_0 J + \mu_0 \varepsilon_0 \frac{\partial E}{\partial t}
-$$
+Un message devient ainsi une **suite de signaux électriques**.
 
-- $J$ : densité de courant  
-- $\mu_0$ : perméabilité du vide  
+Le télégraphe électrique marque une rupture majeure dans l’histoire des communications :
 
-Cette équation indique que :
+- la transmission n’est plus limitée par la vitesse du transport physique
+- l’information peut voyager **quasi instantanément** sur de longues distances
 
-- un **courant électrique**
-- ou un **champ électrique variable**
+Les réseaux télégraphiques se déploient rapidement le long des **voies ferrées** et entre les grandes villes.
 
-peut produire un **champ magnétique**.
+En 1858, un événement spectaculaire illustre la puissance de cette technologie :
 
-# La démonstration des ondes électromagnétiques
+le premier **câble télégraphique transatlantique** est posé entre l’Europe et l’Amérique.
 
-Dans le vide, il n’y a **ni charge ni courant** :
+Pour la première fois dans l’histoire humaine, un message peut traverser l’océan en **quelques minutes**.
 
-$$
-\rho = 0
-$$
+Le monde vient d’entrer dans l’ère des **réseaux de communication**.
 
-$$
-J = 0
-$$
 
-Les équations deviennent :
+## La voix dans un fil : le téléphone
 
-$$
-\nabla \times E = - \frac{\partial B}{\partial t}
-$$
+Le télégraphe a permis de transmettre des **symboles** à distance.  
+Mais une question restait ouverte :
 
-$$
-\nabla \times B = \mu_0 \varepsilon_0 \frac{\partial E}{\partial t}
-$$
+> peut-on transmettre **directement la voix humaine** ?
 
-En combinant ces deux équations on obtient :
+La voix est un phénomène physique :  
+ce sont **des vibrations de l’air** produites par les cordes vocales.
 
-$$
-\nabla^2 E = \mu_0 \varepsilon_0 \frac{\partial^2 E}{\partial t^2}
-$$
+Ces vibrations ont deux caractéristiques principales :
 
-C’est **l’équation d’une onde**.
+- **fréquence**
+- **amplitude**
 
-La vitesse de propagation est alors :
+Autrement dit, la voix est déjà un **signal analogique**.
 
-$$
+L’idée du téléphone est donc de transformer ces vibrations en **signal électrique équivalent**, de le transmettre dans un fil, puis de le reconvertir en **vibration sonore**.
+
+Le principe du premier téléphone est étonnamment simple.
+
+```
+
+voix → membrane → variation électrique → fil → membrane → son
+
+```
+
+Le dispositif comprend trois éléments essentiels :
+
+- une **membrane** qui vibre avec la voix
+- un **transducteur électromagnétique**
+- un **fil conducteur**
+
+Lorsque quelqu’un parle :
+
+1. la membrane vibre  
+2. ces vibrations modifient un champ magnétique  
+3. cela crée un **courant électrique variable** dans le fil  
+4. ce courant est reproduit à l’autre extrémité  
+5. une seconde membrane recrée les vibrations sonores
+
+La parole devient donc une **onde électrique analogique**.
+
+Ce principe est démontré en 1876 par **Alexander Graham Bell**, qui dépose l’un des brevets fondateurs du téléphone.
+
+Sa première phrase célèbre aurait été :
+
+> *“Mr. Watson, come here, I want to see you.”*
+
+Cependant, l’histoire du téléphone est plus complexe qu’un seul inventeur.
+
+Plusieurs chercheurs travaillaient simultanément sur des idées similaires :
+
+- **Antonio Meucci**
+- **Elisha Gray**
+- **Johann Philipp Reis**
+
+Elisha Gray aurait même déposé une description technique **le même jour que Bell**, à quelques heures près.
+
+Le téléphone n’est donc pas seulement une invention isolée.  
+C’est le résultat d’une **convergence technologique** rendue possible par les progrès de l’électricité et du télégraphe.
+
+Mais une conséquence va changer le monde.
+
+Avec le téléphone, la communication ne passe plus par un opérateur qui décode des symboles.
+
+Elle devient **instantanée et naturelle**.
+
+La voix humaine peut désormais voyager à travers un réseau électrique.
+
+Et pour faire fonctionner ce réseau, il faut inventer de nouvelles infrastructures :
+
+- **centraux téléphoniques**
+- **commutation**
+- **numérotation**
+- **gestion des abonnés**
+
+Ces concepts deviendront la base de toute l’architecture des **télécommunications modernes**.
+
+# Partie 4 — L’unification de l’électricité et du magnétisme : Maxwell
+
+Pendant que le téléphone et le télégraphe se développent, la physique poursuit une question plus fondamentale :
+
+**quelle est la nature de l’électricité et du magnétisme ?**
+
+Au milieu du XIXᵉ siècle, les expériences de **Faraday** avaient déjà montré qu’un champ magnétique variable pouvait produire un courant électrique.  
+Mais il manquait encore une **théorie unifiée** capable de décrire ces phénomènes.
+
+C’est le physicien écossais **James Clerk Maxwell** qui va apporter cette réponse.
+
+En 1864, Maxwell publie une série d’équations qui décrivent complètement le comportement des **champs électriques et magnétiques**.  
+Ces équations montrent que l’électricité et le magnétisme ne sont pas deux phénomènes séparés, mais **deux aspects d’un même champ électromagnétique**.
+
+Sous leur forme moderne, les équations de Maxwell s’écrivent :
+
+\[
+\nabla \cdot \mathbf{E} = \frac{\rho}{\varepsilon_0}
+\]
+
+Cette équation indique que les **charges électriques** sont la source des champs électriques.
+
+\[
+\nabla \cdot \mathbf{B} = 0
+\]
+
+Elle exprime qu’il n’existe pas de **monopôle magnétique** : les lignes de champ magnétique forment toujours des boucles fermées.
+
+\[
+\nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}
+\]
+
+Une variation d’un **champ magnétique** crée un **champ électrique**.
+
+\[
+\nabla \times \mathbf{B} =
+\mu_0 \mathbf{J} + \mu_0 \varepsilon_0
+\frac{\partial \mathbf{E}}{\partial t}
+\]
+
+Un courant électrique ou une variation du champ électrique produit un **champ magnétique**.
+
+Ces équations contiennent une conséquence remarquable.
+
+Si un champ électrique varie dans le temps, il crée un champ magnétique.  
+Ce champ magnétique variable recrée à son tour un champ électrique.
+
+Le résultat est une **onde électromagnétique auto-propagée**.
+
+Maxwell calcule alors la vitesse de propagation de cette onde :
+
+\[
 c = \frac{1}{\sqrt{\mu_0 \varepsilon_0}}
-$$
+\]
 
-En remplaçant les constantes physiques :
+Cette vitesse correspond exactement à la **vitesse de la lumière**.
 
-$$
-c \approx 3 \times 10^8 \; m/s
-$$
+La conclusion est spectaculaire :
 
-C’est exactement **la vitesse de la lumière**.
+> **la lumière est une onde électromagnétique.**
 
+Et si la lumière est une onde électromagnétique, alors d’autres ondes similaires doivent exister.
 
-## La naissance de la radio
+Des ondes qui pourraient transporter de l’énergie…  
+ou même **de l’information**.
 
-À la fin du XIXᵉ siècle, les scientifiques découvrent qu’il est possible de transmettre de l’information **sans fil**, grâce aux **ondes électromagnétiques**.
+Cette prédiction théorique ouvrira la voie à une nouvelle révolution :
 
-Les travaux du physicien **James Clerk Maxwell** montrent en 1864 que l’électricité et le magnétisme peuvent se propager sous forme d’ondes dans l’espace.  
-En 1887, **Heinrich Hertz** confirme expérimentalement cette théorie en produisant et détectant ces ondes en laboratoire.
+la **communication sans fil**.
 
-Quelques années plus tard, l’ingénieur italien **Guglielmo Marconi** comprend que ces ondes peuvent être utilisées pour **transmettre des signaux à distance**.
 
-Le principe de la radio repose sur trois éléments :
+## La preuve expérimentale : Hertz
 
-- **Un émetteur**  
-  Un circuit électrique génère un signal qui est envoyé dans une **antenne**.  
-  Cette antenne convertit le signal électrique en **onde électromagnétique** qui se propage dans l’espace.
+Une théorie physique ne devient réellement solide que lorsqu’elle est **vérifiée expérimentalement**.  
+Les équations de Maxwell prédisaient l’existence d’ondes électromagnétiques, mais encore fallait-il démontrer qu’elles pouvaient être **produites et détectées**.
 
-- **La propagation dans l’air**  
-  Contrairement au télégraphe ou au téléphone, **aucun fil n’est nécessaire**.  
-  Le signal se propage dans l’air à la **vitesse de la lumière**.
+C’est le physicien allemand **Heinrich Hertz** qui réalisera cette démonstration en 1887.
 
-- **Un récepteur**  
-  Une autre antenne capte l’onde radio et la transforme à nouveau en **signal électrique**, qui peut ensuite être interprété.
+Hertz conçoit une expérience simple mais ingénieuse.  
+Il utilise un **oscillateur électrique** composé de deux électrodes séparées par un petit espace.  
+Lorsqu’une haute tension est appliquée, une **étincelle** apparaît entre les électrodes.
 
-En **1901**, Marconi réalise une démonstration spectaculaire en recevant un signal radio transmis depuis l’Angleterre jusqu’à **Terre-Neuve**, traversant l’océan Atlantique.
+Cette décharge produit un courant oscillant très rapide, qui génère un **champ électromagnétique variable**.
 
-Cette invention marque le début de la **communication sans fil**, qui deviendra plus tard la base de la radio, de la télévision, des satellites et finalement des **réseaux mobiles modernes**.
+Autrement dit, une **onde électromagnétique** est émise dans l’espace.
 
-\newpage
-# Le principe du téléphone
+Pour détecter cette onde, Hertz utilise un dispositif tout aussi simple :
 
-Le téléphone inventé par **Alexander Graham Bell en 1876** repose sur un principe physique simple mais fondamental :  
-**convertir une onde sonore en signal électrique, puis reconvertir ce signal en son.**
+```
 
-Le fonctionnement peut être résumé en quelques étapes :
+antenne → boucle métallique → petite étincelle
 
-- **La voix humaine produit des ondes sonores**  
-  Lorsque nous parlons, les cordes vocales créent des **variations de pression dans l’air**.  
-  Ces variations sont des **ondes acoustiques**.
+```
 
-- **Un microphone transforme ces vibrations en signal électrique**  
-  Dans les premiers téléphones, une **membrane métallique** vibre sous l'effet du son.  
-  Cette membrane est placée devant un **aimant et une bobine**, ce qui provoque des **variations de courant électrique** dans le circuit.
+Lorsque l’onde électromagnétique atteint la boucle métallique, un courant est induit et une **minuscule étincelle** apparaît dans l’interrupteur de la boucle.
 
-- **Le signal électrique circule dans un fil**  
-  Le courant variable reproduit **exactement les variations de la voix**.  
-  Il peut alors être transmis sur une **ligne téléphonique** parfois longue de plusieurs kilomètres.
+Cela prouve que l’énergie a voyagé **dans l’air, sans fil**.
 
-- **Un haut-parleur retransforme le signal en son**  
-  À l'autre extrémité, un dispositif similaire reconvertit les **variations électriques en vibrations mécaniques**.  
-  La membrane vibre à nouveau et **reproduit la voix originale**.
+Hertz réalise plusieurs expériences pour vérifier les propriétés de ces ondes :
 
-Le téléphone repose donc sur une chaîne de transformation fondamentale :
+- **réflexion**
+- **réfraction**
+- **interférences**
+- **polarisation**
 
-**Voix → vibration mécanique → signal électrique → vibration mécanique → voix**
+Les ondes qu’il observe se comportent exactement comme la **lumière**.
 
-Ce principe, découvert au XIXᵉ siècle, reste aujourd’hui **au cœur de toutes les technologies de communication audio**, qu’il s’agisse du téléphone fixe, du GSM ou des appels sur Internet.
+La prédiction de Maxwell est donc confirmée.
 
-Ce qui changera au fil du temps ne sera pas le principe lui-même, mais **les moyens techniques utilisés pour transporter et traiter ce signal**.
+Cependant, Hertz lui-même ne voit pas d’application pratique à sa découverte.  
+Lorsqu’on lui demande à quoi peuvent servir ces ondes, il répond simplement :
 
-### Bell était-il vraiment l’inventeur du téléphone ?
+> « Je suppose que cela n’a aucune utilité… c’est juste une expérience qui prouve que Maxwell avait raison. »
 
-L’histoire attribue généralement l’invention du téléphone à **Alexander Graham Bell**, qui dépose en **1876** le brevet américain n°174 465 décrivant un dispositif capable de **transmettre la voix par courant électrique**.
+Comme souvent dans l’histoire des sciences, une découverte fondamentale attendra qu’un autre esprit en imagine l’usage.
 
-Cependant, la question de savoir s’il est **le véritable inventeur unique** reste débattue.
+Quelques années plus tard, un ingénieur italien comprendra que ces ondes peuvent être utilisées pour **transmettre des messages à distance**.
 
-Plusieurs chercheurs et ingénieurs travaillaient au même moment sur des systèmes similaires :
+Cet ingénieur s’appelle **Guglielmo Marconi**.
 
-- **Antonio Meucci** avait développé dès les années **1850** un dispositif appelé *telettrofono* permettant de transmettre la voix par fil.  
-  Faute de moyens financiers, il ne déposa qu’un **caveat** (une déclaration d’intention de brevet) qui expira avant qu’il ne puisse déposer un brevet complet.
+## De la radio à la communication mobile
 
-- **Elisha Gray**, ingénieur américain, travaillait également sur un système de **transmission de la voix par variation de courant**.  
-  Il déposa un document très proche du brevet de Bell **le même jour**.
+La radio de Marconi permettait déjà de transmettre de l'information sans fil.  
+Mais ces systèmes restaient principalement **point à point** :
 
-- Plusieurs expérimentateurs européens étudiaient déjà la **transmission électrique du son**, dans la continuité des travaux sur le télégraphe.
+- navire ↔ station côtière  
+- station ↔ station  
+- émetteur ↔ récepteur
 
-En pratique, Bell reste considéré comme l’inventeur du téléphone pour une raison simple :  
-il est **le premier à avoir obtenu un brevet solide et exploitable industriellement**.
+Ils ne formaient pas encore un **réseau structuré** capable de gérer des millions d'utilisateurs.
 
-Comme souvent dans l’histoire des technologies, l’invention n’est pas l’œuvre d’un seul homme mais le résultat d’un **ensemble de recherches simultanées**, dont Bell a été celui qui a su transformer l’idée en **système fonctionnel et en industrie mondiale**.
+Pendant la première moitié du XXᵉ siècle, la radio évolue rapidement.  
+Les ingénieurs développent de nouvelles techniques pour transporter plus d'information et améliorer la qualité du signal.
 
-# La naissance de la téléphonie mobile
+Par exemple :
 
-Les deux grandes inventions présentées précédemment reposent sur des principes différents :
+- **modulation d’amplitude (AM)**  
+- **modulation de fréquence (FM)**  
+- **multiplexage fréquentiel**
 
-- le **téléphone** permet de transmettre **la voix humaine**
-- la **radio** permet de transmettre **un signal électrique sans fil**
+Ces techniques permettent de transporter :
 
-Pendant longtemps, ces deux technologies ont évolué séparément.
+- de la **voix**
+- de la **musique**
+- des **signaux de contrôle**
 
-Le téléphone fonctionnait sur un **réseau filaire** reliant les abonnés aux **centraux de commutation**, tandis que la radio était utilisée principalement pour des **signaux télégraphiques**, la **navigation maritime** ou la **diffusion radio**.
+La radio devient alors un véritable **média de communication de masse**.
 
-L’idée de la téléphonie mobile consiste à **combiner ces deux technologies**.
+Cependant, un problème technique apparaît rapidement.
 
-Le principe devient alors :
+Le spectre radio est une **ressource limitée**.
 
-$$
-\text{Voix} \rightarrow \text{signal électrique} \rightarrow \text{onde radio}
-$$
+Deux émetteurs utilisant la même fréquence dans la même zone produisent des **interférences**.
 
-puis à la réception :
+Pour résoudre ce problème, les ingénieurs introduisent un concept fondamental :  
+la **cellularisation du réseau**.
 
-$$
-\text{onde radio} \rightarrow \text{signal électrique} \rightarrow \text{voix}
-$$
+L’idée consiste à diviser le territoire en **cellules radio**.
 
-Autrement dit, le téléphone mobile repose sur la même chaîne physique que le téléphone classique, mais le **fil est remplacé par une transmission radio**.
+```
 
-Le fonctionnement général peut être résumé ainsi :
+cellule A | cellule B | cellule C
 
-- **Le microphone du téléphone**  
-  convertit la voix en **signal électrique**.
+```
 
-- **L'émetteur radio**  
-  transforme ce signal en **onde électromagnétique modulée**.
+Chaque cellule utilise un ensemble de fréquences spécifique.
 
-- **L'antenne**  
-  diffuse l’onde radio dans l’espace.
+Lorsqu’un utilisateur se déplace :
 
-- **Une station de base**  
-  reçoit le signal et l’achemine dans le **réseau de télécommunications**.
+- le réseau détecte sa position
+- la communication est transférée vers une **nouvelle cellule**
 
-- **Le téléphone du correspondant**  
-  effectue l’opération inverse pour **reproduire la voix**.
+Ce mécanisme s’appelle le **handover**.
 
-La difficulté principale n’est pas la transmission elle-même, mais **l’organisation du réseau radio**.
+Cette architecture transforme complètement la communication radio.
 
-Contrairement à un câble téléphonique, l’espace radio est **partagé** par de nombreux utilisateurs.  
-Il faut donc des mécanismes pour :
+On ne parle plus simplement d’un émetteur et d’un récepteur, mais d’un **réseau distribué d’antennes** capable de :
 
-- **partager le spectre radio**
-- **éviter les interférences**
-- **gérer la mobilité des utilisateurs**
-- **authentifier les abonnés**
+- gérer la mobilité
+- partager le spectre radio
+- connecter simultanément des millions d’utilisateurs
 
-Ces problèmes conduiront à la création des **réseaux cellulaires**, dans lesquels le territoire est découpé en **cellules radio** desservies par des **stations de base**.
+C’est la naissance du **réseau cellulaire**.
 
-C’est cette architecture qui donnera naissance aux générations successives de réseaux mobiles :
+Dans les années 1980, cette architecture devient la base des premiers réseaux mobiles numériques.
 
-- **1G** : téléphonie analogique  
-- **2G (GSM)** : téléphonie numérique  
-- **3G / 4G** : Internet mobile  
-- **5G** : réseaux radio à très haut débit
+Le standard qui va s’imposer en Europe et dans une grande partie du monde s’appelle :
 
-Ainsi, le téléphone mobile peut être vu comme la **synthèse de deux grandes inventions du XIXᵉ siècle** :
+**GSM — Global System for Mobile Communications.**
 
-- le **téléphone**, qui permet de transporter la voix
-- la **radio**, qui permet de transmettre un signal sans fil
+Les réseaux cellulaires modernes reposent alors sur trois éléments essentiels :
 
-\newpage
-# Les radios définies par logiciel (SDR)
+- un **terminal mobile** (le téléphone)
+- une **station de base radio**
+- un **réseau cœur** qui gère les abonnés et les appels
 
-Pendant longtemps, les équipements radio étaient construits autour de **circuits matériels spécialisés**.  
-Chaque technologie — radio FM, télévision, GSM, satellite — nécessitait des **émetteurs et récepteurs dédiés**, conçus spécifiquement pour un protocole précis.
+Cette architecture constitue le fondement des systèmes mobiles modernes :
 
-Cette approche rendait l’expérimentation difficile : étudier un système radio nécessitait souvent des **équipements coûteux et propriétaires**.
+- GSM (2G)
+- UMTS (3G)
+- LTE (4G)
+- 5G
 
-Depuis les années 2000, une nouvelle approche s’est imposée : la **radio définie par logiciel**, ou **SDR (Software Defined Radio)**.
+Cependant, pendant longtemps, ces réseaux sont restés **fermés et difficiles à étudier**.
 
-Le principe est simple : remplacer une grande partie de l’électronique spécialisée par **du traitement numérique exécuté par logiciel**.
+Les équipements radio nécessaires étaient extrêmement coûteux et réservés aux opérateurs ou aux laboratoires industriels.
 
-Une SDR se compose généralement de trois éléments :
+Cette situation va changer radicalement avec l'apparition d'une nouvelle technologie :
 
-- **Une antenne**  
-  Elle capte ou émet les **ondes électromagnétiques**.
+les **Software Defined Radios**.
 
-- **Un convertisseur radio-numérique**  
-  Le signal analogique est converti en **données numériques**.
+## Les Software Defined Radios
 
-- **Un logiciel de traitement du signal**  
-  Les opérations radio (démodulation, décodage, filtrage, protocole) sont réalisées **par logiciel**.
+Pendant longtemps, étudier un réseau radio nécessitait des équipements spécialisés extrêmement coûteux.  
+Les analyseurs RF, les stations de base expérimentales ou les simulateurs de protocole étaient généralement réservés :
 
-Le schéma devient alors :
+- aux opérateurs télécom
+- aux fabricants d’équipements
+- aux laboratoires de recherche
 
-$$
-\text{Onde radio} \rightarrow \text{signal analogique} \rightarrow \text{signal numérique} \rightarrow \text{logiciel}
-$$
+Pour un ingénieur indépendant ou un étudiant, accéder à ces outils était pratiquement impossible.
 
-Cette évolution a profondément transformé l’étude des télécommunications.
+La situation change profondément au début des années 2000 avec l’apparition des **Software Defined Radios (SDR)**.
 
-Avec une SDR et un ordinateur, il est désormais possible de :
+Le principe est simple : déplacer la majorité des fonctions radio **du matériel vers le logiciel**.
 
-- **observer le spectre radio**
-- **analyser des protocoles sans fil**
-- **implémenter des systèmes radio complets**
-- **expérimenter de nouvelles modulations**
-- **reproduire ou étudier des réseaux existants**
+Dans une radio traditionnelle, la chaîne de traitement est composée de circuits analogiques spécialisés :
 
-Les SDR ont ainsi démocratisé l’accès à l’ingénierie radio, autrefois réservée aux **laboratoires industriels** et aux **fabricants d’équipements**.
+```
 
-\newpage
-# Objectif de ce livre
+antenne → filtre RF → mélangeur → démodulateur → données
 
-Ce livre a pour objectif d’expliquer **le fonctionnement réel des réseaux radio modernes** en partant de leurs **fondements physiques et historiques**.
+```
 
-Plutôt que de présenter uniquement la théorie, l’approche adoptée ici est **pratique et expérimentale**.
+Chaque fonction est réalisée par un composant électronique dédié.  
+Le comportement du système est donc **figé par le matériel**.
 
-L’objectif est de montrer comment :
+Avec un SDR, l’architecture est différente.
 
-- les **ondes électromagnétiques** décrites par Maxwell
-- les **systèmes radio** développés depuis Marconi
-- et les **réseaux cellulaires modernes**
+```
 
-se combinent pour former les infrastructures de communication actuelles.
+antenne → convertisseur ADC/DAC → traitement logiciel
 
-Grâce aux outils modernes comme les **Software Defined Radio**, il est aujourd’hui possible d’observer et d’expérimenter directement ces systèmes.
+```
 
-Ce livre propose donc un parcours allant :
+Le signal radio est numérisé très tôt, puis toutes les opérations sont réalisées par logiciel :
 
-- des **principes physiques des ondes**
-- à la **radio moderne**
-- jusqu’à l’étude concrète des **protocoles des réseaux mobiles**.
+- filtrage
+- modulation
+- démodulation
+- décodage de protocole
 
-L’objectif n’est pas seulement de comprendre les télécommunications, mais aussi de montrer comment ces systèmes fonctionnent réellement, **du signal radio jusqu’aux protocoles qui transportent l’information**.
+Cela transforme la radio en **système programmable**.
 
-\newpage
+Le même matériel peut être utilisé pour :
+
+- écouter la radio FM
+- analyser un signal GSM
+- décoder des trames ADS-B
+- expérimenter avec LoRa
+- étudier les réseaux LTE
+
+Autrement dit, la radio devient une **plateforme de recherche et d’expérimentation**.
+
+L’apparition de matériels relativement accessibles, comme :
+
+- **RTL-SDR**
+- **USRP**
+- **HackRF**
+- **LimeSDR**
+
+a ouvert l’étude des systèmes radio à une communauté beaucoup plus large.
+
+Associés à des outils logiciels comme :
+
+- **GNU Radio**
+- **gr-gsm**
+- **srsRAN**
+- **Osmocom**
+
+ces dispositifs permettent aujourd’hui de reconstruire des systèmes radio complexes avec un simple ordinateur.
+
+Les réseaux cellulaires, longtemps considérés comme des infrastructures opaques et inaccessibles, deviennent ainsi **des systèmes observables et reproductibles**.
+
+C’est précisément cette évolution qui rend possible le type d’expérimentation présenté dans ce livre.
+
+# Objectif du livre
+
+Les télécommunications modernes reposent sur une infrastructure extraordinairement complexe.  
+Un simple appel téléphonique ou l’envoi d’un message implique en réalité de nombreux éléments techniques :
+
+- transmission radio
+- protocoles réseau
+- authentification cryptographique
+- gestion de mobilité
+- routage dans le cœur de réseau
+
+Pour la majorité des utilisateurs, ces mécanismes restent invisibles.  
+Les réseaux cellulaires apparaissent comme des **boîtes noires** dont le fonctionnement interne est difficile à observer.
+
+L’un des objectifs de ce livre est de lever une partie de cette opacité.
+
+Grâce aux **Software Defined Radios** et aux outils logiciels open source développés par la communauté, il est aujourd’hui possible de :
+
+- observer des signaux radio réels
+- analyser les protocoles utilisés par les réseaux mobiles
+- reconstruire des environnements expérimentaux
+- comprendre le fonctionnement interne des systèmes cellulaires
+
+L’approche adoptée dans ce livre est volontairement **expérimentale**.
+
+Plutôt que de présenter uniquement la théorie des télécommunications, les chapitres suivants s’appuient sur :
+
+- du matériel accessible
+- des logiciels open source
+- des expériences reproductibles
+
+L’objectif n’est pas seulement de décrire les technologies radio modernes, mais aussi de montrer **comment elles peuvent être étudiées concrètement**.
+
+Le lecteur découvrira ainsi progressivement :
+
+- comment observer le spectre radio
+- comment analyser les communications cellulaires
+- comment fonctionnent les protocoles de signalisation
+- quelles sont les limites et les vulnérabilités de ces systèmes
+
+Les réseaux mobiles sont aujourd’hui l’une des infrastructures techniques les plus importantes de notre société.
+
+Comprendre leur fonctionnement constitue donc non seulement un exercice technique, mais aussi une manière d’explorer l’un des systèmes technologiques les plus complexes jamais construits.
