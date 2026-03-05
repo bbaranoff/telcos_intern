@@ -1,3 +1,11 @@
+# Méthodologie et matériel utilisé
+
+L'objectif de ce livre n'est pas seulement de présenter des concepts théoriques, mais aussi de montrer **comment expérimenter concrètement les technologies radio et télécom**.
+
+Pour cela, l'ensemble des expérimentations décrites dans ce livre a été réalisé avec un **ordinateur personnel sous Linux** et des outils **open-source** largement disponibles.
+
+L'environnement utilisé est volontairement simple afin de permettre à toute personne intéressée de **reproduire les expériences**.
+
 ## Configuration matérielle
 
 Les expérimentations ont été réalisées sur un **ordinateur portable classique**.
