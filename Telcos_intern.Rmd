@@ -6,6 +6,8 @@ output:
   pdf_document:
     latex_engine: xelatex
 lang: fr
+header-includes:
+  - \usepackage{amsmath}
 ---  
 
 # Un livre sur mon expérience en radio-télécommunications
@@ -124,6 +126,49 @@ Cette équation indique que :
 
 peut produire un **champ magnétique**.
 
+# La démonstration des ondes électromagnétiques
+
+Dans le vide, il n’y a **ni charge ni courant** :
+
+$$
+\rho = 0
+$$
+
+$$
+J = 0
+$$
+
+Les équations deviennent :
+
+$$
+\nabla \times E = - \frac{\partial B}{\partial t}
+$$
+
+$$
+\nabla \times B = \mu_0 \varepsilon_0 \frac{\partial E}{\partial t}
+$$
+
+En combinant ces deux équations on obtient :
+
+$$
+\nabla^2 E = \mu_0 \varepsilon_0 \frac{\partial^2 E}{\partial t^2}
+$$
+
+C’est **l’équation d’une onde**.
+
+La vitesse de propagation est alors :
+
+$$
+c = \frac{1}{\sqrt{\mu_0 \varepsilon_0}}
+$$
+
+En remplaçant les constantes physiques :
+
+$$
+c \approx 3 \times 10^8 \; m/s
+$$
+
+C’est exactement **la vitesse de la lumière**.
 
 
 ## La naissance de la radio
