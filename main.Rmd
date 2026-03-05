@@ -14,3 +14,4 @@ J'espère que vous apprécierez.
 
 ```{r child='intro.Rmd'}
 ```{r child='methodo.Rmd'}
+```{r child='attacks.Rmd'}
