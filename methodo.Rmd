@@ -343,3 +343,139 @@ WFM (Wide FM)
 ```
 
 ![](pictures/gqrx.png)
+
+
+# Sniffing GSM passif
+
+## Installation de gr-gsm
+
+Le projet **gr-gsm** est un ensemble de modules développés pour **GNU Radio** permettant d’analyser et de décoder les signaux des réseaux **GSM**.
+
+Il est utilisé pour :
+
+- observer les **canaux GSM**
+- analyser les **messages de signalisation**
+- étudier le fonctionnement des réseaux mobiles
+
+Le projet est disponible sur GitHub :
+
+https://github.com/bkerler/gr-gsm
+
+### Dépendances nécessaires
+
+Avant d’installer gr-gsm, certaines bibliothèques doivent être installées.
+
+Exécuter :
+
+```bash
+sudo apt update
+````
+
+Puis installer les dépendances principales :
+
+```bash
+sudo apt install gr-osmosdr libosmocore-dev
+```
+
+Ces deux paquets sont essentiels.
+
+* **gr-osmosdr**
+
+  Ce module permet à **GNU Radio** d’accéder aux périphériques SDR.
+
+  Il supporte de nombreux matériels :
+
+  * RTL-SDR
+  * HackRF
+  * USRP
+  * LimeSDR
+  * Airspy
+
+  Il agit comme une **interface entre le matériel radio et GNU Radio**.
+
+* **libosmocore-dev**
+
+  Cette bibliothèque fait partie de l’écosystème **Osmocom**.
+
+  Elle contient des fonctions utilisées dans de nombreux projets télécom :
+
+  * gestion de protocoles GSM
+  * structures de messages
+  * outils de décodage
+
+  Le paquet `-dev` contient les **fichiers nécessaires à la compilation** des logiciels utilisant cette bibliothèque.
+
+### Installation de gr-gsm
+
+Une fois les dépendances installées, cloner le dépôt :
+
+```bash
+git clone https://github.com/bkerler/gr-gsm.git
+cd gr-gsm
+```
+
+Créer ensuite un dossier de compilation :
+
+```bash
+mkdir build
+cd build
+```
+
+Configurer la compilation :
+
+```bash
+cmake ..
+```
+
+Compiler le logiciel :
+
+```bash
+make
+```
+
+Installer les modules :
+
+```bash
+sudo make install
+```
+
+Enfin, mettre à jour le cache des bibliothèques :
+
+```bash
+sudo ldconfig
+```
+
+### Vérifier l'installation
+
+Après l'installation, plusieurs outils doivent être disponibles.
+
+Par exemple :
+
+```bash
+grgsm_livemon
+```
+
+Cet outil permet d'observer en temps réel un canal GSM capté par une **clé RTL-SDR**.
+
+Si l'installation est correcte, le programme devrait démarrer et afficher les messages GSM décodés.
+
+```
+
+Petit détail intéressant pour ton livre :  
+**gr-gsm est l’un des projets qui ont réellement rendu l’étude du GSM accessible** au grand public. Avant ça, analyser un réseau cellulaire nécessitait souvent :
+
+- des **équipements opérateur**
+- des **analyseurs RF très coûteux**
+
+Avec :
+
+```
+
+clé RTL-SDR
++
+GNU Radio
++
+gr-gsm
+
+
+![](pictures/grgsm_scan.png)
