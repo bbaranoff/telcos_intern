@@ -459,17 +459,7 @@ Cet outil permet d'observer en temps réel un canal GSM capté par une **clé RT
 
 Si l'installation est correcte, le programme devrait démarrer et afficher les messages GSM décodés.
 
-```
-
-Petit détail intéressant pour ton livre :  
-**gr-gsm est l’un des projets qui ont réellement rendu l’étude du GSM accessible** au grand public. Avant ça, analyser un réseau cellulaire nécessitait souvent :
-
-- des **équipements opérateur**
-- des **analyseurs RF très coûteux**
-
 Avec :
-
-```
 
 clé RTL-SDR
 +
