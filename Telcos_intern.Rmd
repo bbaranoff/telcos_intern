@@ -1,0 +1,14 @@
+---
+title: "Telco's intern"
+author: "Bastien Baranoff"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+# A book about my experience in telecommunications
+
+Hope you (and I) will enjoy.
+
+```{r echo=FALSE}
+print("Hello, world!")
+```
