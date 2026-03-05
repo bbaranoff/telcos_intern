@@ -466,8 +466,6 @@ Deux options sont possibles :
 - **Dual boot** (Windows + Ubuntu)
 - **Ubuntu seul**
 
-Pour les expérimentations décrites dans ce livre, un système **Ubuntu seul** simplifie généralement la configuration.
-
 ### 5. Mise à jour du système
 
 Une fois Ubuntu installé, ouvrir un terminal et exécuter :
@@ -476,4 +474,182 @@ Une fois Ubuntu installé, ouvrir un terminal et exécuter :
 sudo apt update
 sudo apt upgrade
 ```
+
+Voici une section claire que tu peux mettre juste après la méthodologie. L’objectif est que **le lecteur puisse brancher une clé RTL-SDR et voir un signal en quelques minutes**.
+
+\newpage
+## La clé RTL-SDR
+
+L'un des outils les plus accessibles pour explorer le spectre radio est la **clé RTL-SDR**.
+
+À l'origine, ces dispositifs étaient conçus comme de simples **récepteurs de télévision numérique DVB-T**.  
+Cependant, il a été découvert que la puce utilisée dans ces récepteurs permettait d'accéder directement au **flux brut du signal radio**.
+
+Grâce à un pilote modifié, ces clés peuvent être utilisées comme **récepteurs radio généralistes à très bas coût**.
+
+Une clé RTL-SDR typique se compose de :
+
+- **Un tuner radio**  
+  souvent basé sur la puce **R820T ou R860**.
+
+- **Un convertisseur analogique-numérique**  
+  intégré dans la puce **RTL2832U**.
+
+- **Une interface USB**  
+  permettant de connecter l'appareil à un ordinateur.
+
+La clé fonctionne alors comme un **récepteur SDR (Software Defined Radio)**.
+
+Le principe est le suivant :
+
+$$
+\text{Onde radio} \rightarrow \text{antenne} \rightarrow \text{tuner RF} \rightarrow \text{ADC} \rightarrow \text{USB} \rightarrow \text{logiciel}
+$$
+
+La plage de fréquences typique couverte par ces clés est :
+
+$$
+24\;MHz \rightarrow 1.7\;GHz
+$$
+
+Cela permet d'observer de nombreux systèmes radio :
+
+- radio **FM**
+- **aviation**
+- **satellites météo**
+- **AIS maritime**
+- **ADS-B aviation**
+- certains signaux **cellulaires**
+
+Ces clés coûtent généralement **moins de 40 €**, ce qui a largement contribué à démocratiser l'expérimentation radio.
+
+---
+
+# Installation des outils RTL-SDR sous Ubuntu
+
+La première étape consiste à installer les pilotes permettant d'accéder au matériel.
+
+Ouvrir un terminal :
+
+```bash
+sudo apt install rtl-sdr
+````
+
+Cette commande installe :
+
+* les **pilotes RTL-SDR**
+* plusieurs **outils de test**
+
+## Vérifier que la clé est détectée
+
+Brancher la clé USB puis exécuter :
+
+```bash
+rtl_test
+```
+
+Si l'installation fonctionne, le programme affiche quelque chose comme :
+
+```
+Found 1 device(s):
+Realtek RTL2838UHIDIR
+```
+
+Le programme commence ensuite à tester la réception du signal.
+
+Pour arrêter le test :
+
+```
+CTRL + C
+```
+
+Si ce message apparaît, la clé est correctement reconnue par le système.
+
+---
+
+# Installation de GQRX
+
+Pour visualiser les signaux radio, on utilise un logiciel appelé **GQRX**.
+
+GQRX est une interface graphique permettant de :
+
+* observer le **spectre radio**
+* syntoniser une **fréquence**
+* écouter les **signaux analogiques**
+* analyser les transmissions
+
+Installer GQRX avec :
+
+```bash
+sudo apt install gqrx-sdr
+```
+
+---
+
+# Lancer GQRX
+
+Démarrer le programme :
+
+```bash
+gqrx
+```
+
+Lors du premier lancement, une fenêtre de configuration apparaît.
+
+Paramètres recommandés :
+
+* **Device** : RTL-SDR
+* **Sample rate** : 2.4 MS/s
+* **Input rate** : automatique
+
+Cliquer sur **Start DSP**.
+
+Le logiciel affiche alors :
+
+* un **spectre radio**
+* une **cascade (waterfall)** des signaux reçus
+
+Chaque pic visible dans le spectre correspond à **une transmission radio**.
+
+---
+
+# Première expérience : écouter la radio FM
+
+Pour tester la réception :
+
+1. régler la fréquence autour de
+
+```
+100 MHz
+```
+
+2. choisir le mode :
+
+```
+WFM (Wide FM)
+```
+
+3. ajuster le **gain** si nécessaire
+
+Si une station radio est présente, vous devriez **entendre la musique** immédiatement.
+
+Cette expérience simple montre un point essentiel :
+
+**le spectre radio est rempli de signaux invisibles que l'on peut observer avec une simple clé SDR et un ordinateur.**
+
+Dans les chapitres suivants, nous utiliserons ces outils pour **explorer différents systèmes radio et protocoles de communication**.
+
+la **clé RTL-SDR** est un accident technologique fascinant.
+
+Les ingénieurs de Realtek n'ont jamais prévu que cette puce devienne un **instrument scientifique mondial**.  
+
+Mais en exposant le **flux I/Q brut**, ils ont créé sans le vouloir l’un des outils les plus utilisés pour :
+
+- la **radio amateur**
+- la **recherche en télécom**
+- l’**analyse de protocoles radio**
+- la **sécurité sans fil**
+
+Et aujourd’hui, une clé à **30 €** permet d’observer des signaux qui nécessitaient autrefois des **analyseurs de spectre à plusieurs dizaines de milliers d’euros**.
+
 
