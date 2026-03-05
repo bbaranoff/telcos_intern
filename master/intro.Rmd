@@ -200,7 +200,7 @@ Et pour faire fonctionner ce réseau, il faut inventer de nouvelles infrastructu
 
 Ces concepts deviendront la base de toute l’architecture des **télécommunications modernes**.
 
-# Partie 4 — L’unification de l’électricité et du magnétisme : Maxwell
+## L’unification de l’électricité et du magnétisme : Maxwell
 
 Pendant que le téléphone et le télégraphe se développent, la physique poursuit une question plus fondamentale :
 
