@@ -1,0 +1,665 @@
+# Guide d'installation modulaire EGPRS (Osmocom + SDR)
+
+## Présentation
+
+Ce guide décrit l'installation modulaire d'une infrastructure **EGPRS** (GPRS/EDGE) basée sur Osmocom et SDR (USRP, BladeRF).  
+Chaque chapitre détaille un module, son rôle, ses dépendances et options.  
+Tout peut être scripté pour une intégration Dockerfile ou un déploiement manuel sur Debian/Ubuntu 22.04+.
+
+---
+
+## Dépendances système
+
+Commencez par installer tous les outils de build essentiels, bibliothèques, Python et utilitaires de debug :
+- Compilation : `gcc`, `g++`, `make`, `cmake`, `autoconf`, `automake`, `libtool`, etc.
+- Libs système : `libusb-1.0-0-dev`, `libedit-dev`, `libfftw3-dev`, `liburing-dev`, …
+- Dev Python : `python3-dev`, `python3-pip`, `python3-numpy`, `python3-mako`, `python3-lxml`, `python3-six`, …
+- Outils additionnels : `nano`, `git`, `wget`, `curl`, `tmux`, `doxygen`, `ethtool`, etc.
+
+**Commande d'installation :**
+```sh
+apt update
+apt install -y <tous-les-paquets-listés>
+````
+
+---
+
+## SDR & Matériel (UHD, BladeRF)
+
+### UHD (USRP/Ettus)
+
+* **libuhd-dev, uhd-host** : Drivers et outils pour USRP.
+
+* **Images firmware** :
+
+```sh
+python3 /usr/lib/uhd/utils/uhd_images_downloader.py
+```
+
+* **Règle udev** pour détection auto :
+
+```sh
+wget https://raw.githubusercontent.com/EttusResearch/uhd/refs/heads/master/host/utils/uhd-usrp.rules && cp uhd-usrp.rules /etc/udev/rules.d/
+```
+
+### BladeRF (Nuand)
+
+* **libbladerf-dev** + build depuis les sources :
+
+```sh
+git clone https://github.com/nuand/BladeRF /opt/GSM/BladeRF
+cd /opt/GSM/BladeRF && mkdir build && cd build
+cmake .. && make -j$(nproc) && make install && ldconfig
+```
+
+---
+
+## Librairies Osmocom de base
+
+Ces librairies sont la fondation de toute la stack GSM Osmocom.
+
+* **libosmocore** : Primitives GSM, timers, gestion protocoles.
+* **libosmo-netif** : Interfaces réseau.
+* **libosmo-abis** : Support interface Abis (BTS ↔ BSC).
+
+**Build de chaque librairie :**
+
+```sh
+git clone https://github.com/osmocom/<repo>
+cd <repo> && autoreconf -fi && ./configure && make -j$(nproc) && make install && ldconfig
+```
+
+*(remplacer `<repo>` par le nom de la librairie)*
+
+---
+
+## Stack cœur GSM/EDGE
+
+**Osmocom fournit un module séparé pour chaque composant cœur de réseau :**
+
+* **osmo-hlr** : Home Location Register (base d’abonnés)
+* **osmo-msc** : Mobile Switching Center (appels, SMS, mobilité)
+* **osmo-bsc** : Base Station Controller (gestion BTS, handover)
+* **osmo-sgsn** : Serving GPRS Support Node (sessions GPRS/EDGE)
+* **osmo-ggsn** : Gateway GPRS Support Node (passerelle IP/data)
+* **osmo-mgw** : Media Gateway (flux voix/data)
+* **osmo-pcu** : Packet Control Unit (gestion trames GPRS/EDGE)
+* **libosmo-sigtran** : SIGTRAN/SS7 over IP
+* **libsmpp34** : Librairie SMPP (SMS)
+* **libgtpnl** : GTP (GPRS Tunneling Protocol pour data mobile)
+
+**Exemple de build générique :**
+
+```sh
+git clone https://github.com/osmocom/<module>
+cd <module> && autoreconf -fi && ./configure [OPTIONS] && make -j$(nproc) && make install && ldconfig
+```
+
+* Les options comme `--enable-gtp-linux`, `--enable-iu`, `--enable-smpp`, etc, dépendent du module.
+
+---
+
+## Couches radio (TRX/BTS)
+
+* **osmo-trx** : Transceiver SDR (modulation, A5/x, couche radio PHY)
+* **osmo-bts** : Interface logicielle pour le TRX (logiciel BTS)
+
+  * Option : `--enable-trx` pour activer le mode SDR.
+
+**Build typique :**
+
+```sh
+git clone https://github.com/osmocom/osmo-trx
+cd osmo-trx && autoreconf -fi && ./configure --with-uhd && make -j$(nproc) && make install && ldconfig
+
+git clone https://github.com/osmocom/osmo-bts
+cd osmo-bts && autoreconf -fi && ./configure --enable-trx && make -j$(nproc) && make install && ldconfig
+```
+
+---
+
+## Services & Outils additionnels
+
+* **osmo-sip-connector** : passerelle GSM ↔ VoIP SIP (pour appels IP)
+* **Outils SIM** : `pcsc-tools`, `pcscd`, `libpcsclite-dev`
+* **iptables**, **tmux**, **nano**, **python3-pip** : utilitaires système
+* **python3-requests** : scripts API/réseau
+
+**Exemple d'installation :**
+
+```sh
+apt install -y iptables tmux nano python3-pip python3-requests
+pip3 install requests
+```
+
+---
+
+## Script modulaire (bash)
+
+```bash
+#!/bin/bash
+# Installeur modulaire EGPRS/Osmocom
+# Construit une stack GSM/EDGE complète avec SDR : USRP, BladeRF, Osmocom core et toutes dépendances.
+# Auteur : Bastien / bbaranoff (software-defined-radio.com)
+# Testé sur Ubuntu 22.04+
+
+set -e
+N=$(nproc) || N=2
+ROOT=/opt/GSM
+
+# ----------------------------------------
+#  Dépendances système
+# ----------------------------------------
+install_deps() {
+    echo "==> Installation des paquets système et dépendances de build..."
+    apt update
+    apt install -y \
+        gcc g++ make cmake autoconf automake libtool pkg-config \
+        libedit-dev libfftw3-dev libusb-1.0-0-dev liburing-dev \
+        nano git wget curl tmux doxygen ethtool \
+        python3 python3-dev python3-pip python3-six python3-mako python3-lxml python3-numpy python3-pybind11 python3-requests python3-scipy python3-setuptools python3-ruamel.yaml \
+        libpcsclite-dev pcsc-tools pcscd cpufrequtils libsctp-dev libconfig++-dev libconfig-dev libmbedtls-dev \
+        libtalloc-dev libgnutls28-dev libmnl-dev libortp-dev libdbd-sqlite3 iproute2 iputils-ping \
+        libsqlite3-dev libdbi-dev libc-ares-dev libsofia-sip-ua-glib-dev telnet \
+        systemd systemd-sysv dbus dbus-user-session ccache libboost-all-dev libncurses5 libncurses5-dev \
+        libusb-1.0-0 libusb-dev iptables udev
+}
+
+# ----------------------------------------
+#  Drivers SDR & Firmware
+# ----------------------------------------
+
+install_uhd() {
+    echo "==> Installation UHD/USRP et téléchargement images firmware..."
+    apt install -y libuhd-dev uhd-host
+    python3 /usr/lib/uhd/utils/uhd_images_downloader.py
+    # Règles udev Ettus USRP
+    wget -O /etc/udev/rules.d/uhd-usrp.rules https://raw.githubusercontent.com/EttusResearch/uhd/refs/heads/master/host/utils/uhd-usrp.rules
+    echo "export UHD_MODULE_PATH=/usr/lib/uhd/modules" >> /root/.bashrc
+}
+
+install_bladerf() {
+    echo "==> Installation BladeRF et build depuis sources..."
+    apt install -y libbladerf-dev
+    git clone https://github.com/nuand/BladeRF $ROOT/BladeRF || true
+    cd $ROOT/BladeRF
+    mkdir -p build && cd build
+    cmake .. && make -j$N && make install && ldconfig
+}
+
+# ----------------------------------------
+# Librairies Osmocom de base
+# ----------------------------------------
+build_osmo_lib() {
+    echo "==> Build des librairies Osmocom : libosmocore, libosmo-netif, libosmo-abis"
+    for repo in libosmocore libosmo-netif libosmo-abis; do
+        git clone https://github.com/osmocom/$repo $ROOT/$repo || true
+        cd $ROOT/$repo
+        autoreconf -fi
+        ./configure
+        make -j$N
+        make install
+        ldconfig
+    done
+}
+
+# ----------------------------------------
+# Réseau cœur, radio, EDGE
+# ----------------------------------------
+build_osmo_core() {
+    echo "==> Build Osmocom réseau, radio et modules GPRS..."
+    
+    # HLR (DB abonnés)
+    git clone https://github.com/osmocom/osmo-hlr $ROOT/osmo-hlr || true
+    cd $ROOT/osmo-hlr && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # Media Gateway
+    git clone https://github.com/osmocom/osmo-mgw $ROOT/osmo-mgw || true
+    cd $ROOT/osmo-mgw && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # SIGTRAN (SS7 sur IP)
+    git clone https://gitea.osmocom.org/osmocom/libosmo-sigtran $ROOT/libosmo-sigtran || true
+    cd $ROOT/libosmo-sigtran && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # libsmpp34 (SMS)
+    git clone https://github.com/osmocom/libsmpp34 $ROOT/libsmpp34 || true
+    cd $ROOT/libsmpp34 && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # libgtpnl (tunnels GTP)
+    git clone https://github.com/osmocom/libgtpnl $ROOT/libgtpnl || true
+    cd $ROOT/libgtpnl && autoreconf -fi && ./configure --enable-gtp-linux && make -j$N && make install && ldconfig
+
+    # Éléments cœur (ordre : GGSN, SGSN, MSC, BSC, PCU)
+    git clone https://github.com/osmocom/osmo-ggsn $ROOT/osmo-ggsn || true
+    cd $ROOT/osmo-ggsn && autoreconf -fi && ./configure --enable-gtp-linux && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-sgsn $ROOT/osmo-sgsn || true
+    cd $ROOT/osmo-sgsn && autoreconf -fi && ./configure --enable-iu && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-msc $ROOT/osmo-msc || true
+    cd $ROOT/osmo-msc && autoreconf -fi && ./configure --enable-smpp --enable-iu && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-bsc $ROOT/osmo-bsc || true
+    cd $ROOT/osmo-bsc && autoreconf -fi && ./configure --enable-iu && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-pcu $ROOT/osmo-pcu || true
+    cd $ROOT/osmo-pcu && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+
+    # Couches radio : TRX, BTS
+    git clone https://github.com/osmocom/osmo-trx $ROOT/osmo-trx || true
+    cd $ROOT/osmo-trx && autoreconf -fi && ./configure --with-uhd && make -j$N && make install && ldconfig
+
+    git clone https://github.com/osmocom/osmo-bts $ROOT/osmo-bts || true
+    cd $ROOT/osmo-bts && autoreconf -fi && ./configure --enable-trx && make -j$N && make install && ldconfig
+
+    # SIP connector (SIP/VoIP)
+    git clone https://github.com/osmocom/osmo-sip-connector $ROOT/osmo-sip-connector || true
+    cd $ROOT/osmo-sip-connector && autoreconf -fi && ./configure && make -j$N && make install && ldconfig
+}
+
+# ----------------------------------------
+# Python & utilitaires système
+# ----------------------------------------
+install_python_utils() {
+    echo "==> Installation dépendances pip et update images UHD..."
+    pip3 install requests
+    # (Re)télécharge images firmware UHD si besoin
+    python3 /usr/lib/uhd/utils/uhd_images_downloader.py || true
+}
+
+# ----------------------------------------
+# Séquence principale
+# ----------------------------------------
+main() {
+    install_deps
+    install_uhd
+    install_bladerf
+    build_osmo_lib
+    build_osmo_core
+    install_python_utils
+    echo "==> Tous les modules sont installés. Vous pouvez passer à la configuration et aux scripts de run."
+}
+
+main "$@"
+```
+
+---
+
+## Résumé & Bonnes pratiques
+
+* **Chaque module** est un bloc indépendant, à construire dans l’ordre (libs → cœur → radio → services)
+* Pour EGPRS, l’ordre **BTS/TRX/PCU/SGSN/GGSN** est crucial (le flux data traverse chaque élément)
+* **Séparation des modules** = maintenance et debug facilités
+* Toujours vérifier les dépendances système/matériel (drivers USRP, firmware BladeRF, règles udev…)
+
+# Installation de srsRAN 4G (via PPA ou sources)
+
+## 1. Installation rapide via PPA (Ubuntu)
+
+```bash
+sudo apt update
+sudo apt install -y software-properties-common
+sudo add-apt-repository ppa:srsran/ppa
+sudo apt update
+sudo apt install -y srsran
+```
+
+**Vérifie l’install :**
+
+```bash
+srsenb --version
+```
+
+---
+
+## 2. Compilation depuis les sources
+
+```bash
+sudo apt update
+sudo apt install -y git cmake build-essential libfftw3-dev libmbedtls-dev \
+  libboost-program-options-dev libconfig++-dev libsctp-dev \
+  libuhd-dev libpcsclite-dev pkg-config python3 python3-pip
+
+git clone https://github.com/srsran/srsRAN_Project.git
+cd srsRAN_Project
+mkdir build && cd build
+cmake ../
+make -j$(nproc)
+sudo make install
+```
+
+---
+
+## 3. Générer/Configurer une SIM (IMSI, Ki, OPC)
+
+Pour connecter un téléphone réel ou un UE logiciel, il faut une SIM dont les paramètres sont connus du core **srsEPC**.
+
+## a. Générer un profil SIM standard
+
+* **IMSI** : identifiant unique (ex: `001010123456789`)
+* **Ki** : clé de 16 octets (ex: `00112233445566778899aabbccddeeff`)
+* **OPC** : clé d'opérateur de 16 octets (ex: `0102030405060708090a0b0c0d0e0f10`)
+* **MSISDN** (optionnel) : numéro de tel virtuel
+
+Tu peux utiliser un générateur en ligne ([Free5GC SIM Generator](https://free5gc.org/webconsole/sim.html)), ou générer aléatoirement :
+
+```bash
+# Générer un IMSI au hasard
+IMSI="001010$(shuf -i 100000000-999999999 -n 1)"
+# Générer une clé Ki et OPC
+KI=$(openssl rand -hex 16)
+OPC=$(openssl rand -hex 16)
+echo "IMSI: $IMSI"
+echo "KI:   $KI"
+echo "OPC:  $OPC"
+```
+
+## b. Ajouter l’abonné dans srsEPC
+
+Ouvre le fichier de conf des abonnés, typiquement :
+
+```bash
+nano /etc/srsran/epc_user_db.csv
+```
+
+Ou dans ton dossier local `srsRAN_Project/config/user_db.csv`
+
+**Exemple d’entrée :**
+
+```
+IMSI,  Ki,                       OPC,                      MSISDN,     AMF,   SQN
+001010123456789,00112233445566778899aabbccddeeff,0102030405060708090a0b0c0d0e0f10,1234567890,8000,000000
+```
+
+**Champ obligatoire** : IMSI, Ki, OPC (les autres = valeur par défaut si besoin).
+
+---
+
+## 4. Programmer une carte SIM réelle (optionnel)
+
+Si tu utilises une carte programmable (Sysmocom, MagicSIM, etc.) :
+
+* Utilise [pySIM](https://github.com/osmocom/pysim) (Python)
+* Lance :
+
+```bash
+pysim-prog.py --ki $KI --opc $OPC --imsi $IMSI
+```
+
+(Adapté selon ton lecteur et modèle de carte)
+
+---
+
+## 5. Lancer srsENB (eNodeB) et srsEPC (core)
+
+Dans deux terminaux :
+
+```bash
+# Terminal 1 (eNodeB)
+srsenb enb.conf
+
+# Terminal 2 (EPC)
+srsepc epc.conf
+```
+
+---
+
+## 6. Tester l’attachement UE
+
+* Allume ton téléphone (SIM insérée, mode réseau “4G/auto”)
+* Vérifie la détection dans les logs
+* Si besoin, ajuste le PLMN dans `enb.conf` et `epc.conf` pour matcher l’IMSI de la SIM (ex: MCC/MNC = 001/01)
+
+---
+
+### Docs utiles
+
+* [https://docs.srsran.com/projects/4g/en/latest/index.html](https://docs.srsran.com/projects/4g/en/latest/index.html)
+* [https://osmocom.org/projects/pysim/wiki](https://osmocom.org/projects/pysim/wiki)
+
+# L’évolution 5G : rupture technologique, nouveaux usages
+
+## 1. Objectifs et rupture de la 5G
+
+* **Débit x10 à x100 par rapport à la 4G** (jusqu’à 10 Gbps en pointe, 1 Gbps courant)
+* **Ultra faible latence** (< 1 ms possible)
+* **Connectivité massive** : jusqu’à 1 million d’objets/km² (IoT, capteurs, véhicules)
+* **Fiabilité et disponibilité quasi temps réel** (industrie, santé, véhicules autonomes)
+* **Flexibilité réseau** : découpage “network slicing”, chaque usage a son “mini-réseau” dédié
+
+---
+
+## 2. Ruptures techniques majeures
+
+* **Nouvelles bandes de fréquences** : ajout du spectre millimétrique (>24 GHz), plus de capacité mais portée plus courte
+* **Massive MIMO** : dizaines/centaines d’antennes pour booster débit et couverture
+* **Beamforming** : orientation dynamique du signal vers chaque utilisateur
+* **Core 5G tout IP/cloud natif** : virtualisation (NFV), fonctions réseau en software (SDN)
+* **Architecture Standalone (SA)** : cœur 5G indépendant, vs Non-Standalone (NSA) où la 5G s’appuie sur la 4G
+
+---
+
+## 3. Nouveaux usages rendus possibles
+
+* **Internet mobile ultra haut débit** (streaming 4K/8K, réalité augmentée/virtuelle, cloud gaming)
+* **Industrie 4.0** : automatisation, robotique, maintenance prédictive, réseaux privés d’usine
+* **Véhicules connectés et autonomes** : communication V2X temps réel
+* **Santé** : télémédecine en temps réel, chirurgie à distance
+* **Smart Cities et IoT massif** : gestion d’énergie, surveillance, transports, capteurs urbains
+
+---
+
+## 4. Limites, critiques et défis
+
+* **Couverture inégale** (surtout en mmWave, portée faible, besoin de micro-cellules)
+* **Consommation énergétique** (optimisée par le slicing mais déploiement massif d’antennes)
+* **Nouveaux risques de sécurité** (surface d’attaque plus large, virtualisation du cœur réseau)
+* **Investissements lourds** (infrastructures, renouvellement terminaux)
+
+---
+
+## 5. Tableau récapitulatif
+
+| Génération | Débit max           | Latence   | Connexions/km² | Architecture   | Usages clés                      |
+| ---------- | ------------------- | --------- | -------------- | -------------- | -------------------------------- |
+| 4G         | \~100 Mbps – 1 Gbps | \~50 ms   | \~100 000      | Tout-IP        | Vidéo, web, app mobile           |
+| **5G**     | 1–10 Gbps           | < 1–10 ms | 1 000 000+     | Cloud, slicing | IoT massif, VR/AR, Industrie 4.0 |
+
+---
+
+## 6. À retenir
+
+> **La 5G n’est pas juste “plus rapide”** : elle transforme l’infrastructure, permet l’émergence de nouveaux usages critiques (industrie, santé, véhicules), et prépare le terrain pour un monde ultra-connecté, piloté en temps réel.
+
+# 5G SA labo : srsRAN Project + Open5GS (Ubuntu 2024)
+
+## 1. Prérequis
+
+* **OS :** Ubuntu 22.04 ou 24.04 (x86\_64)
+* **Matériel :** SDR (USRP B200/B210/X300/PlutoSDR/LimeSDR…)
+  *OU* mode simulation (aucun matériel SDR requis)
+* **Packages de base :** git, cmake, build-essential, etc.
+
+---
+
+## 2. Installer Open5GS (Core 5G)
+
+### a) Dépendances
+
+```bash
+sudo apt update
+sudo apt install -y git build-essential meson ninja-build python3 python3-pip python3-setuptools \
+  flex bison libsctp-dev libssl-dev libnghttp2-dev libmicrohttpd-dev \
+  libyaml-dev libmariadb-dev libmongoc-dev libbson-dev mongodb
+```
+
+### b) Cloner et compiler Open5GS
+
+```bash
+git clone https://github.com/open5gs/open5gs
+cd open5gs
+meson build --prefix=`pwd`/install
+ninja -C build
+ninja -C build install
+```
+
+*(Binaires dans `open5gs/install/bin/`)*
+
+---
+
+## 3. Installer srsRAN Project (gNB/UE)
+
+### a) Dépendances
+
+```bash
+sudo apt install -y cmake g++ libsctp-dev libfftw3-dev libmbedtls-dev \
+  libboost-program-options-dev libconfig++-dev pkg-config python3 python3-pip \
+  libzmq3-dev libpcsclite-dev
+```
+
+### b) Cloner et compiler srsRAN
+
+```bash
+git clone https://github.com/srsran/srsRAN_Project.git
+cd srsRAN_Project
+mkdir build && cd build
+cmake ../
+make -j$(nproc)
+sudo make install
+```
+
+*(Binaires dans `/usr/local/bin/`)*
+
+---
+
+## 4. Configurer Open5GS (Core)
+
+* Tous les fichiers : `open5gs/install/etc/open5gs/`
+* Fichiers clés :
+
+  * `amf.yaml` (AMF/core)
+  * `smf.yaml` (SMF/session)
+  * `upf.yaml` (UPF/user-plane)
+  * `udm.yaml`, `ausf.yaml`, etc.
+
+**Edits minimaux :**
+
+* PLMN : `mcc: 001`, `mnc: 01` (ou tes propres valeurs)
+* Dans `amf.yaml` : l’adresse `ngap` doit matcher celle de ton gNB (ex : `127.0.0.1`)
+
+### Ajouter un abonné test (SIM)
+
+* Ouvre `subscribers.yaml` ou passe par le [WebUI Open5GS](https://github.com/open5gs/open5gs/wiki/WebUI)
+* Exemple d’entrée :
+
+  ```yaml
+  - imsi: '001010123456789'
+    key: '465B5CE8B199B49FAA5F0A2EE238A6BC'
+    opc: 'E8ED289DEBA952E4283B54E88E6183CA'
+    amf: '8000'
+    sqn: '000000000000'
+  ```
+* À reporter dans la SIM (physique ou config UE logicielle)
+
+---
+
+## 5. Configurer srsRAN gNB
+
+* Fichier : `srsran_project/config/gnb.yaml` *(ou `gnb.conf` selon la version)*
+
+Exemple minimal :
+
+```yaml
+plmn:
+  mcc: 001
+  mnc: 01
+amf:
+  addr: 127.0.0.1   # IP du core Open5GS
+  port: 38412
+slices:
+  - sst: 1
+    sd: 0x000001
+```
+
+* Spécifie `rf.device_name` pour ton SDR (si RF)
+* Réseau/interface : ex : `ngap.interface_name: lo` pour tests locaux
+
+---
+
+## 6. Configurer srsRAN UE (si test en pur logiciel)
+
+* Fichier : `srsran_project/config/ue.yaml` *(ou `ue.conf`)*
+* Paramètres : PLMN, key, opc, amf, imei identiques à l’abonné Open5GS.
+* Mode RF ou simulation selon besoin.
+
+---
+
+## 7. Lancer le Core Open5GS
+
+Ouvre **plusieurs terminaux** (ou `tmux`) :
+
+```bash
+cd open5gs/install/bin/
+sudo ./open5gs-mmed
+sudo ./open5gs-sgwcd
+sudo ./open5gs-smfd
+sudo ./open5gs-amfd
+sudo ./open5gs-upfd
+sudo ./open5gs-ausfd
+sudo ./open5gs-udmd
+sudo ./open5gs-pcfd
+sudo ./open5gs-nrfd
+sudo ./open5gs-bsfd
+sudo ./open5gs-hssd
+```
+
+Ou tout-en-un :
+
+```bash
+sudo ./open5gs-daemon
+```
+
+---
+
+## 8. Lancer le gNB srsRAN
+
+```bash
+srsran_gnb --cfg srsran_project/config/gnb.yaml
+```
+
+---
+
+## 9. (Optionnel) Lancer le srsUE (UE 5G SA logiciel)
+
+```bash
+srsran_ue --cfg srsran_project/config/ue.yaml
+```
+
+Ou utiliser un vrai smartphone 5G + SDR côté réseau.
+
+---
+
+## 10. Supervision
+
+* Utilise le **WebUI Open5GS** (si installé) pour la gestion des SIM et le monitoring.
+* Surveille les logs (attach, registration, PDU session, etc.).
+* Une fois le UE attaché, fais un `ping` (depuis l’UE ou via l’interface UPF).
+
+---
+
+## Conseils de dépannage
+
+* **PLMN, clés et IP doivent correspondre** partout.
+* Utilise `127.0.0.1` ou une IP locale réelle selon ton cas.
+* Avec du RF : vérifie fréquence/bande/SDR.
+* En simulation pure (“null device”) tu peux tout tester sans SDR.
+
+---
+
+## Liens utiles
+
+* [Docs srsRAN Project 5G](https://docs.srsran.com/projects/5g/en/latest/)
+* [Docs Open5GS](https://open5gs.org/open5gs/docs/)
+* [WebUI Open5GS](https://github.com/open5gs/open5gs/wiki/WebUI)
+* [Guide abonnés Open5GS](https://open5gs.org/open5gs/docs/guide-subscription/)
+
