@@ -11,6 +11,9 @@ header-includes:
   - \usepackage[export]{adjustbox}
   - \usepackage{graphicx}
   - \usepackage{eso-pic}
+  - \usepackage{tocloft}
+  - \setlength{\cftbeforesecskip}{2pt}
+  - \setlength{\cftbeforesubsecskip}{1pt}
   - |
     \AtBeginDocument{
       \begin{titlepage}
@@ -27,6 +30,8 @@ header-includes:
 lang: fr
 always_allow_html: true
 ---
+
+\newpage
 
 # Un livre sur mon expérience en radio-télécommunications {.unnumbered}
 
