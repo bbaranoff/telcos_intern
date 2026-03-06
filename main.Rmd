@@ -14,10 +14,6 @@ lang: fr
 always_allow_html: true
 ---
 
-<!-- # ```{r load_packages, message=FALSE, warning=FALSE, include=FALSE} -->
-library(DiagrammeR)
-```
-
 ![](pictures/couverture.png)
 
 

@@ -135,248 +135,376 @@
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
-library(DiagrammeR)
+\pandocbounded{\includegraphics[keepaspectratio]{pictures/couverture.png}}
 
-\begin{verbatim}
-
-![](pictures/couverture.png)
-
-
-# Un livre sur mon expérience en radio-télécommunications
+\section{Un livre sur mon expérience en
+radio-télécommunications}\label{un-livre-sur-mon-expuxe9rience-en-radio-tuxe9luxe9communications}
 
 J'espère que vous apprécierez.
 
+\section{INTRODUCTION}\label{introduction}
 
-# INTRODUCTION
+\subsection{Transmettre l'information plus vite que
+l'homme}\label{transmettre-linformation-plus-vite-que-lhomme}
 
-## Transmettre l’information plus vite que l’homme
+Avant l'électricité, la communication à distance était limitée par une
+contrainte simple : \textbf{la vitesse d'un messager}.
 
-Avant l’électricité, la communication à distance était limitée par une contrainte simple : **la vitesse d’un messager**.
+Pendant des millénaires, transmettre une information signifiait déplacer
+physiquement un objet ou une personne :
 
-Pendant des millénaires, transmettre une information signifiait déplacer physiquement un objet ou une personne :
+\begin{itemize}
+\tightlist
+\item
+  un cavalier
+\item
+  un navire
+\item
+  un pigeon voyageur
+\item
+  un courrier postal
+\end{itemize}
 
-- un cavalier
-- un navire
-- un pigeon voyageur
-- un courrier postal
+La vitesse maximale d'une information était donc celle du transport.
 
-La vitesse maximale d’une information était donc celle du transport.
-
-Un message envoyé de Paris à Londres pouvait prendre **plusieurs jours**.  
-Une information stratégique — militaire, politique ou économique — arrivait souvent **trop tard pour être utile**.
+Un message envoyé de Paris à Londres pouvait prendre \textbf{plusieurs
+jours}.\\
+Une information stratégique --- militaire, politique ou économique ---
+arrivait souvent \textbf{trop tard pour être utile}.
 
 Certaines civilisations ont tenté de contourner cette limite.
 
 Par exemple :
 
-- **signaux de fumée**
-- **feux de signalisation**
-- **sémaphores optiques**
-- **télégraphes optiques**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{signaux de fumée}
+\item
+  \textbf{feux de signalisation}
+\item
+  \textbf{sémaphores optiques}
+\item
+  \textbf{télégraphes optiques}
+\end{itemize}
 
-Le système de **Claude Chappe**, développé en France à la fin du XVIII siècle, est l’un des premiers véritables réseaux de communication à distance.  
-Il utilisait des **tours équipées de bras mobiles** visibles à plusieurs kilomètres.
+Le système de \textbf{Claude Chappe}, développé en France à la fin du
+XVIII siècle, est l'un des premiers véritables réseaux de communication
+à distance.\\
+Il utilisait des \textbf{tours équipées de bras mobiles} visibles à
+plusieurs kilomètres.
 
 Chaque position des bras représentait un symbole.
 
 Le message se propageait de tour en tour :
-\end{verbatim}
-
-Tour A → Tour B → Tour C → Tour D
 
 \begin{verbatim}
 
-Ce système permettait déjà une transmission beaucoup plus rapide qu’un cavalier.
+Tour A → Tour B → Tour C → Tour D
+\end{verbatim}
+
+Ce système permettait déjà une transmission beaucoup plus rapide qu'un
+cavalier.
 
 Cependant il avait plusieurs limites importantes :
 
-- dépendance à la **visibilité**
-- impossibilité de fonctionner **la nuit**
-- sensibilité aux **conditions météorologiques**
-- infrastructure lourde à maintenir
+\begin{itemize}
+\tightlist
+\item
+  dépendance à la \textbf{visibilité}
+\item
+  impossibilité de fonctionner \textbf{la nuit}
+\item
+  sensibilité aux \textbf{conditions météorologiques}
+\item
+  infrastructure lourde à maintenir
+\end{itemize}
 
-Malgré ces contraintes, le télégraphe optique a introduit une idée fondamentale :
+Malgré ces contraintes, le télégraphe optique a introduit une idée
+fondamentale :
 
-**l’information peut être codée en symboles et transmise à distance indépendamment du support physique du message.**
+\textbf{l'information peut être codée en symboles et transmise à
+distance indépendamment du support physique du message.}
 
 Cette idée ouvre la porte à une révolution.
 
 Car une question devient alors possible :
 
-> et si l'information pouvait voyager non plus à la vitesse d'un cheval…  
-> mais à la vitesse de l'électricité ?
+\begin{quote}
+et si l'information pouvait voyager non plus à la vitesse d'un
+cheval\ldots{}\\
+mais à la vitesse de l'électricité ?
+\end{quote}
 
-## L’électricité devient un langage
+\subsection{L'électricité devient un
+langage}\label{luxe9lectricituxe9-devient-un-langage}
 
-Au début du XIX siècle, les progrès en **électricité et en électromagnétisme** transforment progressivement la manière dont les scientifiques comprennent les phénomènes physiques.
+Au début du XIX siècle, les progrès en \textbf{électricité et en
+électromagnétisme} transforment progressivement la manière dont les
+scientifiques comprennent les phénomènes physiques.
 
-Les expériences menées par **Ørsted**, **Ampère** et **Faraday** montrent qu’il existe un lien profond entre **électricité et magnétisme**.  
-Un courant électrique peut produire un champ magnétique, et inversement un champ magnétique variable peut produire un courant.
+Les expériences menées par \textbf{Ørsted}, \textbf{Ampère} et
+\textbf{Faraday} montrent qu'il existe un lien profond entre
+\textbf{électricité et magnétisme}.\\
+Un courant électrique peut produire un champ magnétique, et inversement
+un champ magnétique variable peut produire un courant.
 
-Cette relation ouvre une possibilité nouvelle : utiliser l’électricité pour **transmettre un signal à distance dans un fil conducteur**.
+Cette relation ouvre une possibilité nouvelle : utiliser l'électricité
+pour \textbf{transmettre un signal à distance dans un fil conducteur}.
 
 Le principe est simple.
 
-Un circuit électrique peut être **ouvert ou fermé**.  
-Cette variation peut être détectée à l’autre extrémité du fil.
+Un circuit électrique peut être \textbf{ouvert ou fermé}.\\
+Cette variation peut être détectée à l'autre extrémité du fil.
 
-Autrement dit, un signal électrique peut transporter **de l’information**.
+Autrement dit, un signal électrique peut transporter \textbf{de
+l'information}.
 
-Dans les années 1830–1840, plusieurs inventeurs expérimentent ce principe.  
-Le système qui va s’imposer est celui de **Samuel Morse**.
+Dans les années 1830--1840, plusieurs inventeurs expérimentent ce
+principe.\\
+Le système qui va s'imposer est celui de \textbf{Samuel Morse}.
 
 Son idée est élégante :
 
-- l’électricité sert uniquement à transmettre un **signal simple**
-- le message est codé sous forme de **symboles courts et longs**
+\begin{itemize}
+\tightlist
+\item
+  l'électricité sert uniquement à transmettre un \textbf{signal simple}
+\item
+  le message est codé sous forme de \textbf{symboles courts et longs}
+\end{itemize}
 
-Ce système devient le **code Morse**.
+Ce système devient le \textbf{code Morse}.
 
 Par exemple :
-\end{verbatim}
-
-A .- B -\ldots{} C -.-.
 
 \begin{verbatim}
+
+A  .-
+B  -...
+C  -.-.
+\end{verbatim}
 
 Chaque lettre correspond à une combinaison de :
 
-- **points**
-- **traits**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{points}
+\item
+  \textbf{traits}
+\end{itemize}
 
-Le signal électrique envoyé dans le fil actionne un **électroaimant** à l’autre extrémité, qui produit un clic mécanique.
+Le signal électrique envoyé dans le fil actionne un
+\textbf{électroaimant} à l'autre extrémité, qui produit un clic
+mécanique.
 
-L’opérateur entend donc une séquence de sons qu’il peut traduire en lettres.
+L'opérateur entend donc une séquence de sons qu'il peut traduire en
+lettres.
 
-Un message devient ainsi une **suite de signaux électriques**.
+Un message devient ainsi une \textbf{suite de signaux électriques}.
 
-Le télégraphe électrique marque une rupture majeure dans l’histoire des communications :
+Le télégraphe électrique marque une rupture majeure dans l'histoire des
+communications :
 
-- la transmission n’est plus limitée par la vitesse du transport physique
-- l’information peut voyager **quasi instantanément** sur de longues distances
+\begin{itemize}
+\tightlist
+\item
+  la transmission n'est plus limitée par la vitesse du transport
+  physique
+\item
+  l'information peut voyager \textbf{quasi instantanément} sur de
+  longues distances
+\end{itemize}
 
-Les réseaux télégraphiques se déploient rapidement le long des **voies ferrées** et entre les grandes villes.
+Les réseaux télégraphiques se déploient rapidement le long des
+\textbf{voies ferrées} et entre les grandes villes.
 
-En 1858, un événement spectaculaire illustre la puissance de cette technologie :
+En 1858, un événement spectaculaire illustre la puissance de cette
+technologie :
 
-le premier **câble télégraphique transatlantique** est posé entre l’Europe et l’Amérique.
+le premier \textbf{câble télégraphique transatlantique} est posé entre
+l'Europe et l'Amérique.
 
-Pour la première fois dans l’histoire humaine, un message peut traverser l’océan en **quelques minutes**.
+Pour la première fois dans l'histoire humaine, un message peut traverser
+l'océan en \textbf{quelques minutes}.
 
-Le monde vient d’entrer dans l’ère des **réseaux de communication**.
+Le monde vient d'entrer dans l'ère des \textbf{réseaux de
+communication}.
 
+\subsection{La voix dans un fil : le
+téléphone}\label{la-voix-dans-un-fil-le-tuxe9luxe9phone}
 
-## La voix dans un fil : le téléphone
-
-Le télégraphe a permis de transmettre des **symboles** à distance.  
+Le télégraphe a permis de transmettre des \textbf{symboles} à
+distance.\\
 Mais une question restait ouverte :
 
-> peut-on transmettre **directement la voix humaine** ?
+\begin{quote}
+peut-on transmettre \textbf{directement la voix humaine} ?
+\end{quote}
 
-La voix est un phénomène physique :  
-ce sont **des vibrations de l’air** produites par les cordes vocales.
+La voix est un phénomène physique :\\
+ce sont \textbf{des vibrations de l'air} produites par les cordes
+vocales.
 
 Ces vibrations ont deux caractéristiques principales :
 
-- **fréquence**
-- **amplitude**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{fréquence}
+\item
+  \textbf{amplitude}
+\end{itemize}
 
-Autrement dit, la voix est déjà un **signal analogique**.
+Autrement dit, la voix est déjà un \textbf{signal analogique}.
 
-L’idée du téléphone est donc de transformer ces vibrations en **signal électrique équivalent**, de le transmettre dans un fil, puis de le reconvertir en **vibration sonore**.
+L'idée du téléphone est donc de transformer ces vibrations en
+\textbf{signal électrique équivalent}, de le transmettre dans un fil,
+puis de le reconvertir en \textbf{vibration sonore}.
 
 Le principe du premier téléphone est étonnamment simple.
-\end{verbatim}
-
-voix → membrane → variation électrique → fil → membrane → son
 
 \begin{verbatim}
 
+voix → membrane → variation électrique → fil → membrane → son
+\end{verbatim}
+
 Le dispositif comprend trois éléments essentiels :
 
-- une **membrane** qui vibre avec la voix
-- un **transducteur électromagnétique**
-- un **fil conducteur**
+\begin{itemize}
+\tightlist
+\item
+  une \textbf{membrane} qui vibre avec la voix
+\item
+  un \textbf{transducteur électromagnétique}
+\item
+  un \textbf{fil conducteur}
+\end{itemize}
 
-Lorsque quelqu’un parle :
+Lorsque quelqu'un parle :
 
-1. la membrane vibre  
-2. ces vibrations modifient un champ magnétique  
-3. cela crée un **courant électrique variable** dans le fil  
-4. ce courant est reproduit à l’autre extrémité  
-5. une seconde membrane recrée les vibrations sonores
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  la membrane vibre\\
+\item
+  ces vibrations modifient un champ magnétique\\
+\item
+  cela crée un \textbf{courant électrique variable} dans le fil\\
+\item
+  ce courant est reproduit à l'autre extrémité\\
+\item
+  une seconde membrane recrée les vibrations sonores
+\end{enumerate}
 
-La parole devient donc une **onde électrique analogique**.
+La parole devient donc une \textbf{onde électrique analogique}.
 
-Ce principe est démontré en 1876 par **Alexander Graham Bell**, qui dépose l’un des brevets fondateurs du téléphone.
+Ce principe est démontré en 1876 par \textbf{Alexander Graham Bell}, qui
+dépose l'un des brevets fondateurs du téléphone.
 
 Sa première phrase célèbre aurait été :
 
-> *“Mr. Watson, come here, I want to see you.”*
+\begin{quote}
+\emph{``Mr.~Watson, come here, I want to see you.''}
+\end{quote}
 
-Cependant, l’histoire du téléphone est plus complexe qu’un seul inventeur.
+Cependant, l'histoire du téléphone est plus complexe qu'un seul
+inventeur.
 
-Plusieurs chercheurs travaillaient simultanément sur des idées similaires :
+Plusieurs chercheurs travaillaient simultanément sur des idées
+similaires :
 
-- **Antonio Meucci**
-- **Elisha Gray**
-- **Johann Philipp Reis**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Antonio Meucci}
+\item
+  \textbf{Elisha Gray}
+\item
+  \textbf{Johann Philipp Reis}
+\end{itemize}
 
-Elisha Gray aurait même déposé une description technique **le même jour que Bell**, à quelques heures près.
+Elisha Gray aurait même déposé une description technique \textbf{le même
+jour que Bell}, à quelques heures près.
 
-Le téléphone n’est donc pas seulement une invention isolée.  
-C’est le résultat d’une **convergence technologique** rendue possible par les progrès de l’électricité et du télégraphe.
+Le téléphone n'est donc pas seulement une invention isolée.\\
+C'est le résultat d'une \textbf{convergence technologique} rendue
+possible par les progrès de l'électricité et du télégraphe.
 
 Mais une conséquence va changer le monde.
 
-Avec le téléphone, la communication ne passe plus par un opérateur qui décode des symboles.
+Avec le téléphone, la communication ne passe plus par un opérateur qui
+décode des symboles.
 
-Elle devient **instantanée et naturelle**.
+Elle devient \textbf{instantanée et naturelle}.
 
 La voix humaine peut désormais voyager à travers un réseau électrique.
 
-Et pour faire fonctionner ce réseau, il faut inventer de nouvelles infrastructures :
+Et pour faire fonctionner ce réseau, il faut inventer de nouvelles
+infrastructures :
 
-- **centraux téléphoniques**
-- **commutation**
-- **numérotation**
-- **gestion des abonnés**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{centraux téléphoniques}
+\item
+  \textbf{commutation}
+\item
+  \textbf{numérotation}
+\item
+  \textbf{gestion des abonnés}
+\end{itemize}
 
-Ces concepts deviendront la base de toute l’architecture des **télécommunications modernes**.
+Ces concepts deviendront la base de toute l'architecture des
+\textbf{télécommunications modernes}.
 
-## L’unification de l’électricité et du magnétisme : Maxwell
+\subsection{L'unification de l'électricité et du magnétisme :
+Maxwell}\label{lunification-de-luxe9lectricituxe9-et-du-magnuxe9tisme-maxwell}
 
-Pendant que le téléphone et le télégraphe se développent, la physique poursuit une question plus fondamentale :
+Pendant que le téléphone et le télégraphe se développent, la physique
+poursuit une question plus fondamentale :
 
-**quelle est la nature de l’électricité et du magnétisme ?**
+\textbf{quelle est la nature de l'électricité et du magnétisme ?}
 
-Au milieu du XIX siècle, les expériences de **Faraday** avaient déjà montré qu’un champ magnétique variable pouvait produire un courant électrique.  
-Mais il manquait encore une **théorie unifiée** capable de décrire ces phénomènes.
+Au milieu du XIX siècle, les expériences de \textbf{Faraday} avaient
+déjà montré qu'un champ magnétique variable pouvait produire un courant
+électrique.\\
+Mais il manquait encore une \textbf{théorie unifiée} capable de décrire
+ces phénomènes.
 
-C’est le physicien écossais **James Clerk Maxwell** qui va apporter cette réponse.
+C'est le physicien écossais \textbf{James Clerk Maxwell} qui va apporter
+cette réponse.
 
-En 1864, Maxwell publie une série d’équations qui décrivent complètement le comportement des **champs électriques et magnétiques**.  
-Ces équations montrent que l’électricité et le magnétisme ne sont pas deux phénomènes séparés, mais **deux aspects d’un même champ électromagnétique**.
+En 1864, Maxwell publie une série d'équations qui décrivent complètement
+le comportement des \textbf{champs électriques et magnétiques}.\\
+Ces équations montrent que l'électricité et le magnétisme ne sont pas
+deux phénomènes séparés, mais \textbf{deux aspects d'un même champ
+électromagnétique}.
 
-Sous leur forme moderne, les équations de Maxwell s’écrivent :
+Sous leur forme moderne, les équations de Maxwell s'écrivent :
 
 \[
 \nabla \cdot \mathbf{E} = \frac{\rho}{\varepsilon_0}
 \]
 
-Cette équation indique que les **charges électriques** sont la source des champs électriques.
+Cette équation indique que les \textbf{charges électriques} sont la
+source des champs électriques.
 
 \[
 \nabla \cdot \mathbf{B} = 0
 \]
 
-Elle exprime qu’il n’existe pas de **monopôle magnétique** : les lignes de champ magnétique forment toujours des boucles fermées.
+Elle exprime qu'il n'existe pas de \textbf{monopôle magnétique} : les
+lignes de champ magnétique forment toujours des boucles fermées.
 
 \[
 \nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}
 \]
 
-Une variation d’un **champ magnétique** crée un **champ électrique**.
+Une variation d'un \textbf{champ magnétique} crée un \textbf{champ
+électrique}.
 
 \[
 \nabla \times \mathbf{B} =
@@ -384,14 +512,16 @@ Une variation d’un **champ magnétique** crée un **champ électrique**.
 \frac{\partial \mathbf{E}}{\partial t}
 \]
 
-Un courant électrique ou une variation du champ électrique produit un **champ magnétique**.
+Un courant électrique ou une variation du champ électrique produit un
+\textbf{champ magnétique}.
 
 Ces équations contiennent une conséquence remarquable.
 
-Si un champ électrique varie dans le temps, il crée un champ magnétique.  
+Si un champ électrique varie dans le temps, il crée un champ
+magnétique.\\
 Ce champ magnétique variable recrée à son tour un champ électrique.
 
-Le résultat est une **onde électromagnétique auto-propagée**.
+Le résultat est une \textbf{onde électromagnétique auto-propagée}.
 
 Maxwell calcule alors la vitesse de propagation de cette onde :
 
@@ -399,368 +529,599 @@ Maxwell calcule alors la vitesse de propagation de cette onde :
 c = \frac{1}{\sqrt{\mu_0 \varepsilon_0}}
 \]
 
-Cette vitesse correspond exactement à la **vitesse de la lumière**.
+Cette vitesse correspond exactement à la \textbf{vitesse de la lumière}.
 
 La conclusion est spectaculaire :
 
-> **la lumière est une onde électromagnétique.**
+\begin{quote}
+\textbf{la lumière est une onde électromagnétique.}
+\end{quote}
 
-Et si la lumière est une onde électromagnétique, alors d’autres ondes similaires doivent exister.
+Et si la lumière est une onde électromagnétique, alors d'autres ondes
+similaires doivent exister.
 
-Des ondes qui pourraient transporter de l’énergie…  
-ou même **de l’information**.
+Des ondes qui pourraient transporter de l'énergie\ldots{}\\
+ou même \textbf{de l'information}.
 
 Cette prédiction théorique ouvrira la voie à une nouvelle révolution :
 
-la **communication sans fil**.
+la \textbf{communication sans fil}.
 
+\subsection{La preuve expérimentale :
+Hertz}\label{la-preuve-expuxe9rimentale-hertz}
 
-## La preuve expérimentale : Hertz
+Une théorie physique ne devient réellement solide que lorsqu'elle est
+\textbf{vérifiée expérimentalement}.\\
+Les équations de Maxwell prédisaient l'existence d'ondes
+électromagnétiques, mais encore fallait-il démontrer qu'elles pouvaient
+être \textbf{produites et détectées}.
 
-Une théorie physique ne devient réellement solide que lorsqu’elle est **vérifiée expérimentalement**.  
-Les équations de Maxwell prédisaient l’existence d’ondes électromagnétiques, mais encore fallait-il démontrer qu’elles pouvaient être **produites et détectées**.
+C'est le physicien allemand \textbf{Heinrich Hertz} qui réalisera cette
+démonstration en 1887.
 
-C’est le physicien allemand **Heinrich Hertz** qui réalisera cette démonstration en 1887.
+Hertz conçoit une expérience simple mais ingénieuse.\\
+Il utilise un \textbf{oscillateur électrique} composé de deux électrodes
+séparées par un petit espace.\\
+Lorsqu'une haute tension est appliquée, une \textbf{étincelle} apparaît
+entre les électrodes.
 
-Hertz conçoit une expérience simple mais ingénieuse.  
-Il utilise un **oscillateur électrique** composé de deux électrodes séparées par un petit espace.  
-Lorsqu’une haute tension est appliquée, une **étincelle** apparaît entre les électrodes.
+Cette décharge produit un courant oscillant très rapide, qui génère un
+\textbf{champ électromagnétique variable}.
 
-Cette décharge produit un courant oscillant très rapide, qui génère un **champ électromagnétique variable**.
+Autrement dit, une \textbf{onde électromagnétique} est émise dans
+l'espace.
 
-Autrement dit, une **onde électromagnétique** est émise dans l’espace.
-
-Pour détecter cette onde, Hertz utilise un dispositif tout aussi simple :
-\end{verbatim}
-
-antenne → boucle métallique → petite étincelle
+Pour détecter cette onde, Hertz utilise un dispositif tout aussi simple
+:
 
 \begin{verbatim}
 
-Lorsque l’onde électromagnétique atteint la boucle métallique, un courant est induit et une **minuscule étincelle** apparaît dans l’interrupteur de la boucle.
+antenne → boucle métallique → petite étincelle
+\end{verbatim}
 
-Cela prouve que l’énergie a voyagé **dans l’air, sans fil**.
+Lorsque l'onde électromagnétique atteint la boucle métallique, un
+courant est induit et une \textbf{minuscule étincelle} apparaît dans
+l'interrupteur de la boucle.
 
-Hertz réalise plusieurs expériences pour vérifier les propriétés de ces ondes :
+Cela prouve que l'énergie a voyagé \textbf{dans l'air, sans fil}.
 
-- **réflexion**
-- **réfraction**
-- **interférences**
-- **polarisation**
+Hertz réalise plusieurs expériences pour vérifier les propriétés de ces
+ondes :
 
-Les ondes qu’il observe se comportent exactement comme la **lumière**.
+\begin{itemize}
+\tightlist
+\item
+  \textbf{réflexion}
+\item
+  \textbf{réfraction}
+\item
+  \textbf{interférences}
+\item
+  \textbf{polarisation}
+\end{itemize}
+
+Les ondes qu'il observe se comportent exactement comme la
+\textbf{lumière}.
 
 La prédiction de Maxwell est donc confirmée.
 
-Cependant, Hertz lui-même ne voit pas d’application pratique à sa découverte.  
-Lorsqu’on lui demande à quoi peuvent servir ces ondes, il répond simplement :
+Cependant, Hertz lui-même ne voit pas d'application pratique à sa
+découverte.\\
+Lorsqu'on lui demande à quoi peuvent servir ces ondes, il répond
+simplement :
 
-> « Je suppose que cela n’a aucune utilité… c’est juste une expérience qui prouve que Maxwell avait raison. »
+\begin{quote}
+« Je suppose que cela n'a aucune utilité\ldots{} c'est juste une
+expérience qui prouve que Maxwell avait raison. »
+\end{quote}
 
-Comme souvent dans l’histoire des sciences, une découverte fondamentale attendra qu’un autre esprit en imagine l’usage.
+Comme souvent dans l'histoire des sciences, une découverte fondamentale
+attendra qu'un autre esprit en imagine l'usage.
 
-Quelques années plus tard, un ingénieur italien comprendra que ces ondes peuvent être utilisées pour **transmettre des messages à distance**.
+Quelques années plus tard, un ingénieur italien comprendra que ces ondes
+peuvent être utilisées pour \textbf{transmettre des messages à
+distance}.
 
-Cet ingénieur s’appelle **Guglielmo Marconi**.
+Cet ingénieur s'appelle \textbf{Guglielmo Marconi}.
 
-## De la radio à la communication mobile
+\subsection{De la radio à la communication
+mobile}\label{de-la-radio-uxe0-la-communication-mobile}
 
-La radio de Marconi permettait déjà de transmettre de l'information sans fil.  
-Mais ces systèmes restaient principalement **point à point** :
+La radio de Marconi permettait déjà de transmettre de l'information sans
+fil.\\
+Mais ces systèmes restaient principalement \textbf{point à point} :
 
-- navire ↔ station côtière  
-- station ↔ station  
-- émetteur ↔ récepteur
+\begin{itemize}
+\tightlist
+\item
+  navire ↔ station côtière\\
+\item
+  station ↔ station\\
+\item
+  émetteur ↔ récepteur
+\end{itemize}
 
-Ils ne formaient pas encore un **réseau structuré** capable de gérer des millions d'utilisateurs.
+Ils ne formaient pas encore un \textbf{réseau structuré} capable de
+gérer des millions d'utilisateurs.
 
-Pendant la première moitié du XX siècle, la radio évolue rapidement.  
-Les ingénieurs développent de nouvelles techniques pour transporter plus d'information et améliorer la qualité du signal.
+Pendant la première moitié du XX siècle, la radio évolue rapidement.\\
+Les ingénieurs développent de nouvelles techniques pour transporter plus
+d'information et améliorer la qualité du signal.
 
 Par exemple :
 
-- **modulation d’amplitude (AM)**  
-- **modulation de fréquence (FM)**  
-- **multiplexage fréquentiel**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{modulation d'amplitude (AM)}\\
+\item
+  \textbf{modulation de fréquence (FM)}\\
+\item
+  \textbf{multiplexage fréquentiel}
+\end{itemize}
 
 Ces techniques permettent de transporter :
 
-- de la **voix**
-- de la **musique**
-- des **signaux de contrôle**
+\begin{itemize}
+\tightlist
+\item
+  de la \textbf{voix}
+\item
+  de la \textbf{musique}
+\item
+  des \textbf{signaux de contrôle}
+\end{itemize}
 
-La radio devient alors un véritable **média de communication de masse**.
+La radio devient alors un véritable \textbf{média de communication de
+masse}.
 
 Cependant, un problème technique apparaît rapidement.
 
-Le spectre radio est une **ressource limitée**.
+Le spectre radio est une \textbf{ressource limitée}.
 
-Deux émetteurs utilisant la même fréquence dans la même zone produisent des **interférences**.
+Deux émetteurs utilisant la même fréquence dans la même zone produisent
+des \textbf{interférences}.
 
-Pour résoudre ce problème, les ingénieurs introduisent un concept fondamental :  
-la **cellularisation du réseau**.
+Pour résoudre ce problème, les ingénieurs introduisent un concept
+fondamental :\\
+la \textbf{cellularisation du réseau}.
 
-L’idée consiste à diviser le territoire en **cellules radio**.
-\end{verbatim}
-
-cellule A \textbar{} cellule B \textbar{} cellule C
+L'idée consiste à diviser le territoire en \textbf{cellules radio}.
 
 \begin{verbatim}
+
+cellule A | cellule B | cellule C
+\end{verbatim}
 
 Chaque cellule utilise un ensemble de fréquences spécifique.
 
-Lorsqu’un utilisateur se déplace :
+Lorsqu'un utilisateur se déplace :
 
-- le réseau détecte sa position
-- la communication est transférée vers une **nouvelle cellule**
+\begin{itemize}
+\tightlist
+\item
+  le réseau détecte sa position
+\item
+  la communication est transférée vers une \textbf{nouvelle cellule}
+\end{itemize}
 
-Ce mécanisme s’appelle le **handover**.
+Ce mécanisme s'appelle le \textbf{handover}.
 
 Cette architecture transforme complètement la communication radio.
 
-On ne parle plus simplement d’un émetteur et d’un récepteur, mais d’un **réseau distribué d’antennes** capable de :
+On ne parle plus simplement d'un émetteur et d'un récepteur, mais d'un
+\textbf{réseau distribué d'antennes} capable de :
 
-- gérer la mobilité
-- partager le spectre radio
-- connecter simultanément des millions d’utilisateurs
+\begin{itemize}
+\tightlist
+\item
+  gérer la mobilité
+\item
+  partager le spectre radio
+\item
+  connecter simultanément des millions d'utilisateurs
+\end{itemize}
 
-C’est la naissance du **réseau cellulaire**.
+C'est la naissance du \textbf{réseau cellulaire}.
 
-Dans les années 1980, cette architecture devient la base des premiers réseaux mobiles numériques.
+Dans les années 1980, cette architecture devient la base des premiers
+réseaux mobiles numériques.
 
-Le standard qui va s’imposer en Europe et dans une grande partie du monde s’appelle :
+Le standard qui va s'imposer en Europe et dans une grande partie du
+monde s'appelle :
 
-**GSM — Global System for Mobile Communications.**
+\textbf{GSM --- Global System for Mobile Communications.}
 
-Les réseaux cellulaires modernes reposent alors sur trois éléments essentiels :
+Les réseaux cellulaires modernes reposent alors sur trois éléments
+essentiels :
 
-- un **terminal mobile** (le téléphone)
-- une **station de base radio**
-- un **réseau cœur** qui gère les abonnés et les appels
+\begin{itemize}
+\tightlist
+\item
+  un \textbf{terminal mobile} (le téléphone)
+\item
+  une \textbf{station de base radio}
+\item
+  un \textbf{réseau cœur} qui gère les abonnés et les appels
+\end{itemize}
 
-Cette architecture constitue le fondement des systèmes mobiles modernes :
+Cette architecture constitue le fondement des systèmes mobiles modernes
+:
 
-- GSM (2G)
-- UMTS (3G)
-- LTE (4G)
-- 5G
+\begin{itemize}
+\tightlist
+\item
+  GSM (2G)
+\item
+  UMTS (3G)
+\item
+  LTE (4G)
+\item
+  5G
+\end{itemize}
 
-Cependant, pendant longtemps, ces réseaux sont restés **fermés et difficiles à étudier**.
+Cependant, pendant longtemps, ces réseaux sont restés \textbf{fermés et
+difficiles à étudier}.
 
-Les équipements radio nécessaires étaient extrêmement coûteux et réservés aux opérateurs ou aux laboratoires industriels.
+Les équipements radio nécessaires étaient extrêmement coûteux et
+réservés aux opérateurs ou aux laboratoires industriels.
 
-Cette situation va changer radicalement avec l'apparition d'une nouvelle technologie :
+Cette situation va changer radicalement avec l'apparition d'une nouvelle
+technologie :
 
-les **Software Defined Radios**.
+les \textbf{Software Defined Radios}.
 
-## Les Software Defined Radios
+\subsection{Les Software Defined
+Radios}\label{les-software-defined-radios}
 
-Pendant longtemps, étudier un réseau radio nécessitait des équipements spécialisés extrêmement coûteux.  
-Les analyseurs RF, les stations de base expérimentales ou les simulateurs de protocole étaient généralement réservés :
+Pendant longtemps, étudier un réseau radio nécessitait des équipements
+spécialisés extrêmement coûteux.\\
+Les analyseurs RF, les stations de base expérimentales ou les
+simulateurs de protocole étaient généralement réservés :
 
-- aux opérateurs télécom
-- aux fabricants d’équipements
-- aux laboratoires de recherche
+\begin{itemize}
+\tightlist
+\item
+  aux opérateurs télécom
+\item
+  aux fabricants d'équipements
+\item
+  aux laboratoires de recherche
+\end{itemize}
 
-Pour un ingénieur indépendant ou un étudiant, accéder à ces outils était pratiquement impossible.
+Pour un ingénieur indépendant ou un étudiant, accéder à ces outils était
+pratiquement impossible.
 
-La situation change profondément au début des années 2000 avec l’apparition des **Software Defined Radios (SDR)**.
+La situation change profondément au début des années 2000 avec
+l'apparition des \textbf{Software Defined Radios (SDR)}.
 
-Le principe est simple : déplacer la majorité des fonctions radio **du matériel vers le logiciel**.
+Le principe est simple : déplacer la majorité des fonctions radio
+\textbf{du matériel vers le logiciel}.
 
-Dans une radio traditionnelle, la chaîne de traitement est composée de circuits analogiques spécialisés :
-\end{verbatim}
+Dans une radio traditionnelle, la chaîne de traitement est composée de
+circuits analogiques spécialisés :
+
+\begin{verbatim}
 
 antenne → filtre RF → mélangeur → démodulateur → données
-
-\begin{verbatim}
-
-Chaque fonction est réalisée par un composant électronique dédié.  
-Le comportement du système est donc **figé par le matériel**.
-
-Avec un SDR, l’architecture est différente.
 \end{verbatim}
 
-antenne → convertisseur ADC/DAC → traitement logiciel
+Chaque fonction est réalisée par un composant électronique dédié.\\
+Le comportement du système est donc \textbf{figé par le matériel}.
+
+Avec un SDR, l'architecture est différente.
 
 \begin{verbatim}
 
-Le signal radio est numérisé très tôt, puis toutes les opérations sont réalisées par logiciel :
+antenne → convertisseur ADC/DAC → traitement logiciel
+\end{verbatim}
 
-- filtrage
-- modulation
-- démodulation
-- décodage de protocole
+Le signal radio est numérisé très tôt, puis toutes les opérations sont
+réalisées par logiciel :
 
-Cela transforme la radio en **système programmable**.
+\begin{itemize}
+\tightlist
+\item
+  filtrage
+\item
+  modulation
+\item
+  démodulation
+\item
+  décodage de protocole
+\end{itemize}
+
+Cela transforme la radio en \textbf{système programmable}.
 
 Le même matériel peut être utilisé pour :
 
-- écouter la radio FM
-- analyser un signal GSM
-- décoder des trames ADS-B
-- expérimenter avec LoRa
-- étudier les réseaux LTE
+\begin{itemize}
+\tightlist
+\item
+  écouter la radio FM
+\item
+  analyser un signal GSM
+\item
+  décoder des trames ADS-B
+\item
+  expérimenter avec LoRa
+\item
+  étudier les réseaux LTE
+\end{itemize}
 
-Autrement dit, la radio devient une **plateforme de recherche et d’expérimentation**.
+Autrement dit, la radio devient une \textbf{plateforme de recherche et
+d'expérimentation}.
 
-L’apparition de matériels relativement accessibles, comme :
+L'apparition de matériels relativement accessibles, comme :
 
-- **RTL-SDR**
-- **USRP**
-- **HackRF**
-- **LimeSDR**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{RTL-SDR}
+\item
+  \textbf{USRP}
+\item
+  \textbf{HackRF}
+\item
+  \textbf{LimeSDR}
+\end{itemize}
 
-a ouvert l’étude des systèmes radio à une communauté beaucoup plus large.
+a ouvert l'étude des systèmes radio à une communauté beaucoup plus
+large.
 
 Associés à des outils logiciels comme :
 
-- **GNU Radio**
-- **gr-gsm**
-- **srsRAN**
-- **Osmocom**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{GNU Radio}
+\item
+  \textbf{gr-gsm}
+\item
+  \textbf{srsRAN}
+\item
+  \textbf{Osmocom}
+\end{itemize}
 
-ces dispositifs permettent aujourd’hui de reconstruire des systèmes radio complexes avec un simple ordinateur.
+ces dispositifs permettent aujourd'hui de reconstruire des systèmes
+radio complexes avec un simple ordinateur.
 
-Les réseaux cellulaires, longtemps considérés comme des infrastructures opaques et inaccessibles, deviennent ainsi **des systèmes observables et reproductibles**.
+Les réseaux cellulaires, longtemps considérés comme des infrastructures
+opaques et inaccessibles, deviennent ainsi \textbf{des systèmes
+observables et reproductibles}.
 
-C’est précisément cette évolution qui rend possible le type d’expérimentation présenté dans ce livre.
+C'est précisément cette évolution qui rend possible le type
+d'expérimentation présenté dans ce livre.
 
-# Objectif du livre
+\section{Objectif du livre}\label{objectif-du-livre}
 
-Les télécommunications modernes reposent sur une infrastructure extraordinairement complexe.  
-Un simple appel téléphonique ou l’envoi d’un message implique en réalité de nombreux éléments techniques :
+Les télécommunications modernes reposent sur une infrastructure
+extraordinairement complexe.\\
+Un simple appel téléphonique ou l'envoi d'un message implique en réalité
+de nombreux éléments techniques :
 
-- transmission radio
-- protocoles réseau
-- authentification cryptographique
-- gestion de mobilité
-- routage dans le cœur de réseau
+\begin{itemize}
+\tightlist
+\item
+  transmission radio
+\item
+  protocoles réseau
+\item
+  authentification cryptographique
+\item
+  gestion de mobilité
+\item
+  routage dans le cœur de réseau
+\end{itemize}
 
-Pour la majorité des utilisateurs, ces mécanismes restent invisibles.  
-Les réseaux cellulaires apparaissent comme des **boîtes noires** dont le fonctionnement interne est difficile à observer.
+Pour la majorité des utilisateurs, ces mécanismes restent invisibles.\\
+Les réseaux cellulaires apparaissent comme des \textbf{boîtes noires}
+dont le fonctionnement interne est difficile à observer.
 
-L’un des objectifs de ce livre est de lever une partie de cette opacité.
+L'un des objectifs de ce livre est de lever une partie de cette opacité.
 
-Grâce aux **Software Defined Radios** et aux outils logiciels open source développés par la communauté, il est aujourd’hui possible de :
+Grâce aux \textbf{Software Defined Radios} et aux outils logiciels open
+source développés par la communauté, il est aujourd'hui possible de :
 
-- observer des signaux radio réels
-- analyser les protocoles utilisés par les réseaux mobiles
-- reconstruire des environnements expérimentaux
-- comprendre le fonctionnement interne des systèmes cellulaires
+\begin{itemize}
+\tightlist
+\item
+  observer des signaux radio réels
+\item
+  analyser les protocoles utilisés par les réseaux mobiles
+\item
+  reconstruire des environnements expérimentaux
+\item
+  comprendre le fonctionnement interne des systèmes cellulaires
+\end{itemize}
 
-L’approche adoptée dans ce livre est volontairement **expérimentale**.
+L'approche adoptée dans ce livre est volontairement
+\textbf{expérimentale}.
 
-Plutôt que de présenter uniquement la théorie des télécommunications, les chapitres suivants s’appuient sur :
+Plutôt que de présenter uniquement la théorie des télécommunications,
+les chapitres suivants s'appuient sur :
 
-- du matériel accessible
-- des logiciels open source
-- des expériences reproductibles
+\begin{itemize}
+\tightlist
+\item
+  du matériel accessible
+\item
+  des logiciels open source
+\item
+  des expériences reproductibles
+\end{itemize}
 
-L’objectif n’est pas seulement de décrire les technologies radio modernes, mais aussi de montrer **comment elles peuvent être étudiées concrètement**.
+L'objectif n'est pas seulement de décrire les technologies radio
+modernes, mais aussi de montrer \textbf{comment elles peuvent être
+étudiées concrètement}.
 
 Le lecteur découvrira ainsi progressivement :
 
-- comment observer le spectre radio
-- comment analyser les communications cellulaires
-- comment fonctionnent les protocoles de signalisation
-- quelles sont les limites et les vulnérabilités de ces systèmes
+\begin{itemize}
+\tightlist
+\item
+  comment observer le spectre radio
+\item
+  comment analyser les communications cellulaires
+\item
+  comment fonctionnent les protocoles de signalisation
+\item
+  quelles sont les limites et les vulnérabilités de ces systèmes
+\end{itemize}
 
-Les réseaux mobiles sont aujourd’hui l’une des infrastructures techniques les plus importantes de notre société.
+Les réseaux mobiles sont aujourd'hui l'une des infrastructures
+techniques les plus importantes de notre société.
 
-Comprendre leur fonctionnement constitue donc non seulement un exercice technique, mais aussi une manière d’explorer l’un des systèmes technologiques les plus complexes jamais construits.
+Comprendre leur fonctionnement constitue donc non seulement un exercice
+technique, mais aussi une manière d'explorer l'un des systèmes
+technologiques les plus complexes jamais construits.
 
-# Méthodologie et matériel utilisé
+\section{Méthodologie et matériel
+utilisé}\label{muxe9thodologie-et-matuxe9riel-utilisuxe9}
 
-L'objectif de ce livre n'est pas seulement de présenter des concepts théoriques, mais aussi de montrer **comment expérimenter concrètement les technologies radio et télécom**.
+L'objectif de ce livre n'est pas seulement de présenter des concepts
+théoriques, mais aussi de montrer \textbf{comment expérimenter
+concrètement les technologies radio et télécom}.
 
-Pour cela, l'ensemble des expérimentations décrites dans ce livre a été réalisé avec un **ordinateur personnel sous Linux** et des outils **open-source** largement disponibles.
+Pour cela, l'ensemble des expérimentations décrites dans ce livre a été
+réalisé avec un \textbf{ordinateur personnel sous Linux} et des outils
+\textbf{open-source} largement disponibles.
 
-L'environnement utilisé est volontairement simple afin de permettre à toute personne intéressée de **reproduire les expériences**.
+L'environnement utilisé est volontairement simple afin de permettre à
+toute personne intéressée de \textbf{reproduire les expériences}.
 
-## Configuration matérielle
+\subsection{Configuration matérielle}\label{configuration-matuxe9rielle}
 
-Les expérimentations ont été réalisées sur un **ordinateur portable classique**.
+Les expérimentations ont été réalisées sur un \textbf{ordinateur
+portable classique}.
 
 Configuration utilisée :
 
-- **Ordinateur** : PC portable
-- **Système d'exploitation** : Ubuntu 24.04 LTS
-- **Processeur** : architecture x86-64
-- **Interface radio** : SDR (Software Defined Radio)
-- **Antenne** : antenne large bande adaptée aux fréquences étudiées
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Ordinateur} : PC portable
+\item
+  \textbf{Système d'exploitation} : Ubuntu 24.04 LTS
+\item
+  \textbf{Processeur} : architecture x86-64
+\item
+  \textbf{Interface radio} : SDR (Software Defined Radio)
+\item
+  \textbf{Antenne} : antenne large bande adaptée aux fréquences étudiées
+\end{itemize}
 
 Les outils utilisés dans ce livre reposent principalement sur :
 
-- **logiciels open-source**
-- **outils de traitement du signal**
-- **outils d'analyse réseau**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{logiciels open-source}
+\item
+  \textbf{outils de traitement du signal}
+\item
+  \textbf{outils d'analyse réseau}
+\end{itemize}
 
-Cette approche permet d'éviter l'utilisation d'équipements propriétaires coûteux souvent utilisés dans l'industrie des télécommunications.
+Cette approche permet d'éviter l'utilisation d'équipements propriétaires
+coûteux souvent utilisés dans l'industrie des télécommunications.
 
-## Installation d'Ubuntu 24.04 à partir de Windows
+\subsection{Installation d'Ubuntu 24.04 à partir de
+Windows}\label{installation-dubuntu-24.04-uxe0-partir-de-windows}
 
-De nombreux lecteurs utilisent initialement **Windows**.  
-La première étape consiste donc à installer **Ubuntu Linux**, qui offre un environnement particulièrement adapté à l'expérimentation réseau et radio.
+De nombreux lecteurs utilisent initialement \textbf{Windows}.\\
+La première étape consiste donc à installer \textbf{Ubuntu Linux}, qui
+offre un environnement particulièrement adapté à l'expérimentation
+réseau et radio.
 
-### 1. Télécharger Ubuntu
+\subsubsection{1. Télécharger Ubuntu}\label{tuxe9luxe9charger-ubuntu}
 
 Télécharger l'image officielle :
 
-https://ubuntu.com/download
+\url{https://ubuntu.com/download}
 
 Choisir :
 
-**Ubuntu 24.04 LTS**
+\textbf{Ubuntu 24.04 LTS}
 
-Le fichier téléchargé est une image **ISO** du système.
+Le fichier téléchargé est une image \textbf{ISO} du système.
 
-### 2. Créer une clé USB bootable
+\subsubsection{2. Créer une clé USB
+bootable}\label{cruxe9er-une-cluxe9-usb-bootable}
 
 Sous Windows, utiliser un outil comme :
 
-- **Rufus**
-- **Balena Etcher**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rufus}
+\item
+  \textbf{Balena Etcher}
+\end{itemize}
 
 Procédure :
 
-- insérer une **clé USB (8 Go minimum)**
-- sélectionner l'image **ISO Ubuntu**
-- créer la **clé bootable**
+\begin{itemize}
+\tightlist
+\item
+  insérer une \textbf{clé USB (8 Go minimum)}
+\item
+  sélectionner l'image \textbf{ISO Ubuntu}
+\item
+  créer la \textbf{clé bootable}
+\end{itemize}
 
-### 3. Démarrer sur la clé USB
+\subsubsection{3. Démarrer sur la clé
+USB}\label{duxe9marrer-sur-la-cluxe9-usb}
 
-Redémarrer l'ordinateur et accéder au **menu de démarrage** (souvent avec une touche comme `F12`, `F10` ou `ESC`).
+Redémarrer l'ordinateur et accéder au \textbf{menu de démarrage}
+(souvent avec une touche comme \texttt{F12}, \texttt{F10} ou
+\texttt{ESC}).
 
 Sélectionner :
 
-**Boot sur la clé USB**
+\textbf{Boot sur la clé USB}
 
-### 4. Installer Ubuntu
+\subsubsection{4. Installer Ubuntu}\label{installer-ubuntu}
 
 L'installateur Ubuntu guide ensuite l'utilisateur.
 
 Les options recommandées :
 
-- installation complète
-- téléchargement des mises à jour pendant l'installation
-- installation des pilotes supplémentaires
+\begin{itemize}
+\tightlist
+\item
+  installation complète
+\item
+  téléchargement des mises à jour pendant l'installation
+\item
+  installation des pilotes supplémentaires
+\end{itemize}
 
 Deux options sont possibles :
 
-- **Dual boot** (Windows + Ubuntu)
-- **Ubuntu seul**
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Dual boot} (Windows + Ubuntu)
+\item
+  \textbf{Ubuntu seul}
+\end{itemize}
 
-Pour les expérimentations décrites dans ce livre, un système **Ubuntu seul** simplifie généralement la configuration.
+Pour les expérimentations décrites dans ce livre, un système
+\textbf{Ubuntu seul} simplifie généralement la configuration.
 
-### 5. Mise à jour du système
+\subsubsection{5. Mise à jour du
+système}\label{mise-uxe0-jour-du-systuxe8me}
 
 Une fois Ubuntu installé, ouvrir un terminal et exécuter :
 
-```bash
-sudo apt update
-sudo apt upgrade
-\end{verbatim}
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\FunctionTok{sudo}\NormalTok{ apt upgrade}
+\end{Highlighting}
+\end{Shaded}
 
 Cela garantit que le système est à jour avant l'installation des outils
 nécessaires.
@@ -5213,7 +5574,7 @@ Si le constructeur change, il suffit de :
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\section{Configuration matérielle}\label{configuration-matuxe9rielle}
+\section{Configuration matérielle}\label{configuration-matuxe9rielle-1}
 
 \begin{itemize}
 \item
