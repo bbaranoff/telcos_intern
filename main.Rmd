@@ -1,39 +1,79 @@
 ---
 title: "Telco's intern"
 author: "Bastien Baranoff"
-date: "`r Sys.Date()`"
 output:
   pdf_document:
     toc: true
     toc_depth: 3
     number_sections: true
     latex_engine: xelatex
-    extra_dependencies: ["adjustbox"]
 header-includes:
   - \usepackage[export]{adjustbox}
+  - \usepackage{graphicx}
+  - \usepackage{eso-pic}
+  - |
+    \AtBeginDocument{
+      \begin{titlepage}
+        \newgeometry{margin=0pt}
+        \parbox[b][\paperheight]{\paperwidth}{%
+          \vfill
+          \centering
+          \includegraphics[width=\paperwidth,height=\paperheight,keepaspectratio]{pictures/couverture.png}%
+          \vfill
+        }
+        \restoregeometry
+      \end{titlepage}
+    }
 lang: fr
 always_allow_html: true
 ---
 
-
-
-
-
-
-![](pictures/couverture.png)
-
-
-# Un livre sur mon expérience en radio-télécommunications
+# Un livre sur mon expérience en radio-télécommunications {.unnumbered}
 
 J'espère que vous apprécierez.
 
+# Résumé {.unnumbered}
+
+Les télécommunications modernes reposent sur une longue évolution scientifique et technologique reliant la physique fondamentale aux architectures de réseaux distribués. Cet ouvrage propose une exploration progressive de cet écosystème, depuis les premières tentatives de transmission d’information à distance jusqu’aux infrastructures radio numériques contemporaines.
+
+Après un rappel historique couvrant le télégraphe, le téléphone et les fondements électromagnétiques établis par Maxwell et confirmés expérimentalement par Hertz, le livre introduit les principes des communications radio et l’architecture des réseaux cellulaires. Il montre comment ces systèmes, initialement fermés et réservés aux opérateurs, sont devenus accessibles à l’expérimentation grâce à l’émergence des **Software Defined Radios (SDR)** et de l’écosystème open source des télécommunications.
+
+L’ouvrage adopte une approche pratique et expérimentale. Il présente la mise en place d’un laboratoire télécom complet permettant de reproduire et d’étudier différentes générations de réseaux mobiles : GSM/EDGE, LTE et 5G. Les infrastructures reposent notamment sur les projets open source **Osmocom**, **srsRAN** et **Open5GS**, ainsi que sur l’utilisation de conteneurs et d’environnements virtualisés.
+
+Plusieurs aspects essentiels des systèmes mobiles sont analysés : la signalisation SS7, les architectures multi-opérateurs, l’observabilité des flux réseau, ainsi que les mécanismes de sécurité et leurs vulnérabilités historiques. Des études de cas illustrent notamment l’analyse du chiffrement GSM **A5/1**, l’utilisation de tables arc-en-ciel pour son attaque, les mécanismes de redirection LTE vers 2G, ou encore les faiblesses cryptographiques de systèmes radio spécialisés comme **TETRA** et **DST80**.
+
+Enfin, l’ouvrage explore l’utilisation de l’émulation matérielle (QEMU) et de l’orchestration logicielle pour reproduire l’architecture interne de terminaux et de réseaux mobiles dans un environnement de laboratoire reproductible.
+
+À travers cette approche combinant **physique des ondes, ingénierie radio, protocoles réseau et sécurité**, ce livre vise à fournir aux ingénieurs, chercheurs et passionnés un cadre complet pour comprendre, expérimenter et analyser les infrastructures invisibles qui structurent les communications modernes.
+
+
+\newpage
 ```{r child='master/intro.Rmd'}
+```
+\newpage
 ```{r child='master/ubuntu_install.Rmd'}
+```
+\newpage
 ```{r child='telephony/methodo.Rmd'}
+```
+\newpage
 ```{r child='telephony/ss7.Rmd'}
+```
+\newpage
 ```{r child='telephony/networks.Rmd'}
+```
+\newpage
 ```{r child='telephony/qemu.Rmd'}
+```
+\newpage
 ```{r child='LoRa/lora.Rmd'}
+```
+\newpage
 ```{r child='telephony/attacks.Rmd'}
+```
+\newpage
 ```{r child='misc/dst80.Rmd'}
+```
+\newpage
 ```{r child='misc/tea1.Rmd'}
+```
