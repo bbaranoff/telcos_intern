@@ -75,6 +75,8 @@ cd <repo> && autoreconf -fi && ./configure && make -j$(nproc) && make install &&
 
 ## Stack cœur GSM/EDGE
 
+[](pictures/osmocom.png)
+
 **Osmocom fournit un module séparé pour chaque composant cœur de réseau :**
 
 * **osmo-hlr** : Home Location Register (base d’abonnés)
