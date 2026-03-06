@@ -359,7 +359,8 @@ Les systèmes cryptographiques doivent être **ouverts à l’analyse publique**
 
 ## TEA1 Key Brute-forcer (OpenCL Accelerated)
 
-[tea1 cracker](https://github.com/bbaranoff/tea1-cracker)
+Projet disponible ici [**Git : Tea1 Cracker**](https://github.com/bbaranoff/tea1-cracker) https://github.com/bbaranoff/tea1-cracker  
+
 Ce projet est un outil de recherche de clé pour l'algorithme de chiffrement **TEA1**. Il utilise la puissance de calcul parallèle des processeurs graphiques (**GPU**) via **OpenCL** pour tester l'intégralité de l'espace des clés (32 bits) en un temps record.
 
 ### Principe de fonctionnement

@@ -250,7 +250,9 @@ Dans le domaine des systèmes embarqués et des dispositifs RFID, ces recherches
 
 ## Suite de rétro-ingénierie et de brute-force DST80
 
-Basé sur **DST80 (non rétro-ingéniéré)** disponible ici [DST80 Revrsing](https://github.com/bbaranoff/dst80_reversing)
+Basé sur **DST80 (non rétro-ingéniéré)**  
+
+Projet disponible ici [**Git : DST80 Reversing**](https://github.com/bbaranoff/dst80_reversing) https://github.com/bbaranoff/dst80_reversing
 
 
 Ce projet fournit une implémentation **haute performance** pour récupérer les clés **TI DST80** (Digital Signature Transponder) en utilisant **OpenCL**.
