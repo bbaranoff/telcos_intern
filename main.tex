@@ -2092,6 +2092,297 @@ système : \texttt{libusb-1.0-0-dev}, \texttt{libedit-dev},
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
+\section{OsmocomBB}\label{osmocombb}
+
+\textbf{OsmocomBB} (Osmocom Baseband) est un projet open source qui
+implémente une pile GSM ``baseband'' pour certains téléphones Motorola
+et des configurations SDR.
+
+\subsection{Qu'est-ce qu'OsmocomBB\,?}\label{quest-ce-quosmocombb}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Pile protocolaire GSM côté mobile (MS, mobile station)}
+\item
+  Remplace le firmware d'origine pour donner accès aux couches GSM
+  1/2/3, journalisation des protocoles, sniffing et tests
+\item
+  Utilisations\,: analyse, tests de sécurité, recherche académique, IMSI
+  catchers, fuzzing radio
+\end{itemize}
+
+\subsection{Architecture}\label{architecture}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{host/osmocon}\,: Outil de chargement du firmware sur les
+  appareils compatibles
+\item
+  \textbf{src/host/layer23}\,: Pile GSM s'exécutant sur le PC (appels,
+  SMS, sniffing, capture de bursts, etc.)
+\item
+  \textbf{firmware/}\,: Code baseband à flasher sur les téléphones
+  compatibles
+\end{itemize}
+
+\subsection{Matériel supporté}\label{matuxe9riel-supportuxe9}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Série Motorola C1xx (C123, C118, C155, etc.)}
+\item
+  Certains autres modèles à chipset ``Calypso''
+\end{itemize}
+
+\subsection{Cas d'usage \& limitations}\label{cas-dusage-limitations}
+
+\begin{itemize}
+\tightlist
+\item
+  Peut se connecter à une vraie cellule 2G ou à une BTS Osmocom
+  (osmo-bts-trx)
+\item
+  Limité à la 2G pure (pas de support 3G/4G)
+\item
+  \textbf{Attention\,:} Émettre sans licence est illégal\,!\\
+  N'utilisez que pour la recherche ou en environnement contrôlé.
+\end{itemize}
+
+\subsection{Liens utiles}\label{liens-utiles}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://github.com/osmocom/osmocom-bb}{Dépôt GitHub OsmocomBB}
+\item
+  \href{https://osmocom.org/projects/baseband/wiki/OsmocomBB}{Wiki
+  officiel}
+\item
+  \href{https://www.lafabriquedunet.fr/blog/osmocombb-guide/}{Guide
+  d'installation (FR)}
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Pour SDR\,:} Un projet expérimental existe pour connecter
+OsmocomBB à un SDR (BladeRF, HackRF, etc.) via l'interface ``virtual
+layer1''.
+
+\subsection{OsmocomBB Mobile (MS) -- Installation rapide Ubuntu
+24.04}\label{osmocombb-mobile-ms-installation-rapide-ubuntu-24.04}
+
+\subsection{1. Prérequis}\label{pruxe9requis}
+
+\begin{itemize}
+\item
+  \textbf{Matériel\,:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Motorola C1xx (C115/C118/C123/C155, etc., baseband Calypso)
+  \item
+    Câble USB-série 2.5\,mm (PL2303 ou FTDI)
+  \end{itemize}
+\item
+  \textbf{Système\,:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ubuntu 24.04 x86\_64 (natif ou VM)
+  \item
+    Accès internet + droits sudo/root
+  \end{itemize}
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2. Installer les
+dépendances}\label{installer-les-duxe9pendances}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y} \DataTypeTok{\textbackslash{}}
+\NormalTok{  build{-}essential git cmake pkg{-}config autoconf automake libtool shtool }\DataTypeTok{\textbackslash{}}
+\NormalTok{  bison flex libtalloc{-}dev libpcsclite{-}dev zlib1g{-}dev libmpfr{-}dev libmpc{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libgmp{-}dev libncurses5{-}dev libncursesw5{-}dev libsofia{-}sip{-}ua{-}dev libxml2{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libfftw3{-}dev libgnutls28{-}dev libssl{-}dev python3 python3{-}pip }\DataTypeTok{\textbackslash{}}
+\NormalTok{  alsa{-}oss lemon libtinfo{-}dev}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3. Installer la toolchain ARM (cross-compile
+Calypso)}\label{installer-la-toolchain-arm-cross-compile-calypso}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ /opt}
+\FunctionTok{sudo}\NormalTok{ wget https://downloads.osmocom.org/binaries/toolchain/arm{-}2021.03.tar.bz2}
+\FunctionTok{sudo}\NormalTok{ tar }\AttributeTok{{-}xjf}\NormalTok{ arm{-}2021.03.tar.bz2}
+\BuiltInTok{export} \VariableTok{PATH}\OperatorTok{=}\VariableTok{$PATH}\NormalTok{:/opt/arm{-}2021.03/bin}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+\emph{(Ajoute ce dernier export à ton \texttt{\textasciitilde{}/.bashrc}
+pour qu'il soit permanent)}
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4. Cloner et compiler
+OsmocomBB}\label{cloner-et-compiler-osmocombb}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmocom{-}bb.git}
+\BuiltInTok{cd}\NormalTok{ osmocom{-}bb/src}
+\ExtensionTok{autoreconf} \AttributeTok{{-}i}
+\BuiltInTok{export} \VariableTok{PATH}\OperatorTok{=}\VariableTok{$PATH}\NormalTok{:/opt/arm{-}2021.03/bin}
+\ExtensionTok{./configure}
+\FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{5. Flasher le firmware Mobile (Compal/C123
+etc.)}\label{flasher-le-firmware-mobile-compalc123-etc.}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Branche le téléphone via le câble USB-série (sans la
+  batterie).}
+\item
+  \textbf{Dans un terminal\,:}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ host/osmocon}
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB0 }\AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/hello\_world.highram.bin}
+\CommentTok{\# (optionnel : tester hello\_world)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Pour le firmware mobile complet\,:}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB0 }\AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/layer1.highram.bin}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \textbf{Dans un autre terminal\,:}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ host/layer23/src/mobile}
+\ExtensionTok{./mobile}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{\texorpdfstring{6. Configurer \texttt{mobile.cfg} (SIM,
+PLMN, log,
+etc.)}{6. Configurer mobile.cfg (SIM, PLMN, log, etc.)}}\label{configurer-mobile.cfg-sim-plmn-log-etc.}
+
+Crée/édite le fichier \texttt{mobile.cfg} (exemple dans
+\texttt{osmocom-bb/src/host/layer23/src/mobile/})\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DataTypeTok{log gsmtap 127.0.0.1}
+\DataTypeTok{log stderr}
+\DataTypeTok{hlr}
+\DataTypeTok{  subscriber{-}list subscriber\_list.csv}
+\DataTypeTok{sim}
+\DataTypeTok{  driver sysmo}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{(Adapte la section SIM si tu utilises une vraie SIM ou une ``test
+SIM'')}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\#\#7. Lancer OsmocomBB Mobile
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Dans host/layer23/src/mobile/}
+\ExtensionTok{./mobile} \AttributeTok{{-}c}\NormalTok{ mobile.cfg}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Le téléphone démarre, tente de s'enregistrer sur le réseau configuré.
+\item
+  Regarde les logs\,: tu dois voir ``PLMN search'', ``network found'',
+  ``registration accepted'' (si SIM \& PLMN ok).
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{8. (Optionnel) Suivi GSMTAP dans
+Wireshark}\label{optionnel-suivi-gsmtap-dans-wireshark}
+
+Wireshark peut décoder en temps réel les trames GSMTAP envoyées en
+UDP\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{wireshark} \AttributeTok{{-}k} \AttributeTok{{-}Y}\NormalTok{ gsmtap }\AttributeTok{{-}i}\NormalTok{ udp:4729}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{(Pense à bien avoir \texttt{log\ gsmtap\ 127.0.0.1} dans ta config
+!)}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Liens utiles}\label{liens-utiles-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://osmocom.org/projects/baseband/wiki}{OsmocomBB Wiki}
+\item
+  \href{https://lists.osmocom.org/mailman/listinfo/baseband-devel}{Forum
+  OsmocomBB}
+\item
+  \href{https://downloads.osmocom.org/binaries/toolchain/}{Firmware
+  Toolchain}
+\item
+  \href{https://osmocom.org/projects/baseband/wiki/CalypsoBTS}{BTS
+  HowTo}
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 \subsection{Les réseaux mobiles : une infrastructure
 invisible}\label{les-ruxe9seaux-mobiles-une-infrastructure-invisible}
 
@@ -3378,6 +3669,186 @@ pratiques}\label{ruxe9sumuxe9-bonnes-pratiques}
   firmware BladeRF, règles udev\ldots)
 \end{itemize}
 
+\subsection{Installation d'une BTS OsmocomBB
+Calypso}\label{installation-dune-bts-osmocombb-calypso}
+
+\subsection{Matériel requis}\label{matuxe9riel-requis}
+
+\begin{itemize}
+\tightlist
+\item
+  1-2x Motorola C1xx (C115, C118, C123\ldots{} chipset Calypso)
+\item
+  2x Câbles USB-série jack 2.5\,mm (PL2303/FTDI)
+\item
+  Ubuntu 24.04 x86\_64 (VM ou natif)
+\item
+  Accès root
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{1. Dépendances système}\label{duxe9pendances-systuxe8me-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y} \DataTypeTok{\textbackslash{}}
+\NormalTok{  build{-}essential git cmake pkg{-}config autoconf automake libtool shtool }\DataTypeTok{\textbackslash{}}
+\NormalTok{  bison flex libtalloc{-}dev libpcsclite{-}dev zlib1g{-}dev libmpfr{-}dev libmpc{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libgmp{-}dev libncurses5{-}dev libncursesw5{-}dev libsofia{-}sip{-}ua{-}dev libxml2{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libfftw3{-}dev libgnutls28{-}dev libssl{-}dev python3 python3{-}pip }\DataTypeTok{\textbackslash{}}
+\NormalTok{  alsa{-}oss lemon libtinfo{-}dev}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+\textbf{Note}\,: Ubuntu 24.04 a GCC\,13+ par défaut, mais il faut
+parfois cross-compiler avec GCC 4.9 pour le firmware Calypso. S'il
+existe des binaires arm-elf précompilés pour Ubuntu 22.04, ils
+fonctionnent aussi sous 24.04. Pour l'ARM toolchain, voir plus bas
+(utilise de préférence un container/VM si souci d'incompatibilité).
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2. Installer la toolchain ARM-elf (cross-compiler
+Calypso)}\label{installer-la-toolchain-arm-elf-cross-compiler-calypso}
+
+\subsubsection{Option A\,: Téléchargement direct (prêt à
+l'emploi)}\label{option-a-tuxe9luxe9chargement-direct-pruxeat-uxe0-lemploi}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Depuis Osmocom (préconisé : ne pas compiler vous{-}même sous Ubuntu récent)}
+\BuiltInTok{cd}\NormalTok{ /opt}
+\FunctionTok{sudo}\NormalTok{ wget https://downloads.osmocom.org/binaries/toolchain/arm{-}2021.03.tar.bz2}
+\FunctionTok{sudo}\NormalTok{ tar }\AttributeTok{{-}xjf}\NormalTok{ arm{-}2021.03.tar.bz2}
+\BuiltInTok{export} \VariableTok{PATH}\OperatorTok{=}\VariableTok{$PATH}\NormalTok{:/opt/arm{-}2021.03/bin}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+\textbf{Ajoute l'export PATH à ton .bashrc pour persistance}
+\end{quote}
+
+\subsubsection{Option B\,: Compilation
+manuelle}\label{option-b-compilation-manuelle}
+
+\begin{quote}
+(non recommandé sur Ubuntu 24.04, c'est lent et casse souvent, préfère
+la méthode ci-dessus)
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3. Compiler et installer
+OsmocomBB}\label{compiler-et-installer-osmocombb}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 1. Cloner les sources}
+\FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmocom{-}bb.git}
+\BuiltInTok{cd}\NormalTok{ osmocom{-}bb}
+
+\CommentTok{\# 2. Préparer le build}
+\BuiltInTok{cd}\NormalTok{ src}
+\ExtensionTok{autoreconf} \AttributeTok{{-}i}
+
+\CommentTok{\# 3. Compiler le firmware (spécifie la toolchain si besoin)}
+\BuiltInTok{export} \VariableTok{PATH}\OperatorTok{=}\VariableTok{$PATH}\NormalTok{:/opt/arm{-}2021.03/bin}
+\ExtensionTok{./configure}
+\FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)}
+\FunctionTok{sudo}\NormalTok{ make install}
+\FunctionTok{sudo}\NormalTok{ ldconfig}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4. Flasher le firmware sur les
+téléphones}\label{flasher-le-firmware-sur-les-tuxe9luxe9phones}
+
+\textbf{Connecte les deux téléphones via USB-PL2303, batterie retirée.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ src/host/osmocon}
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB0 }\AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/rssi.highram.bin}
+\CommentTok{\# (Shell \#1 : RSSI scan, contrôle{-}C pour arrêter)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Trouve un ARFCN actif (fort signal GSM, ex.~: 900/1800 MHz).}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Pour charger le firmware TRX (BTS)}
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB0 }\AttributeTok{{-}s}\NormalTok{ /tmp/osmocom\_l2 }\DataTypeTok{\textbackslash{}}
+  \AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/trx.highram.bin }\AttributeTok{{-}r}\NormalTok{ 99}
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB1 }\AttributeTok{{-}s}\NormalTok{ /tmp/osmocom\_l2.2 }\DataTypeTok{\textbackslash{}}
+  \AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/trx.highram.bin }\AttributeTok{{-}r}\NormalTok{ 99}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{5. Lancer le transceiver et la stack
+BTS}\label{lancer-le-transceiver-et-la-stack-bts}
+
+Dans d'autres shells\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Shell \#3 : transceiver Calypso (remplace ARFCN trouvé)}
+\BuiltInTok{cd}\NormalTok{ src/host/layer23/src/transceiver/}
+\FunctionTok{sudo}\NormalTok{ ./transceiver }\AttributeTok{{-}a} \PreprocessorTok{[}\SpecialStringTok{ARFCN}\PreprocessorTok{]} \AttributeTok{{-}2} \AttributeTok{{-}r}\NormalTok{ 99}
+
+\CommentTok{\# Shell \#4 : osmo{-}nitb (NITB = core minimal)}
+\ExtensionTok{osmo{-}nitb} \AttributeTok{{-}c}\NormalTok{ \textasciitilde{}/.osmocom/open{-}bsc.cfg }\AttributeTok{{-}l}\NormalTok{ \textasciitilde{}/.osmocom/hlr.sqlite3 }\AttributeTok{{-}P} \AttributeTok{{-}m} \AttributeTok{{-}C} \AttributeTok{{-}{-}debug}\OperatorTok{=}\NormalTok{DRLL:DCC:DMM:DRR:DRSL:DNM}
+
+\CommentTok{\# Shell \#5 : osmobts{-}trx}
+\ExtensionTok{osmobts{-}trx} \AttributeTok{{-}c}\NormalTok{ \textasciitilde{}/.osmocom/osmo{-}bts.cfg }\AttributeTok{{-}r}\NormalTok{ 99}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{6. (Optionnel) Installer Asterisk + LCR pour appels
+SIP}\label{optionnel-installer-asterisk-lcr-pour-appels-sip}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y}\NormalTok{ asterisk asterisk{-}dev}
+\FunctionTok{git}\NormalTok{ clone https://github.com/fairwaves/lcr}
+\BuiltInTok{cd}\NormalTok{ lcr}
+\ExtensionTok{autoreconf} \AttributeTok{{-}i}
+\ExtensionTok{./configure} \AttributeTok{{-}{-}with{-}sip} \AttributeTok{{-}{-}with{-}gsm{-}bs} \AttributeTok{{-}{-}with{-}gsm{-}ms} \AttributeTok{{-}{-}with{-}asterisk}
+\FunctionTok{make}
+\FunctionTok{sudo}\NormalTok{ make install}
+\FunctionTok{sudo}\NormalTok{ cp chan\_lcr.so /usr/lib/asterisk/modules/}
+\end{Highlighting}
+\end{Shaded}
+
+Configurer \texttt{/etc/asterisk/sip.conf} avec tes identifiants SIP.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{7. Vérifier le setup et
+logs}\label{vuxe9rifier-le-setup-et-logs}
+
+\begin{itemize}
+\tightlist
+\item
+  Vérifie les logs dans chaque shell\,: recherche ``registered'',
+  ``attach'', etc.
+\item
+  Lancer l'attachement avec un mobile (SIM Osmocom ou Free avec accès
+  PLMN custom).
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
 \section{Installation de srsRAN 4G (via PPA ou
 sources)}\label{installation-de-srsran-4g-via-ppa-ou-sources}
 
@@ -3699,7 +4170,7 @@ ultra-connecté, piloté en temps réel.
 \section{5G SA labo\,: srsRAN Project + Open5GS (Ubuntu
 2024)}\label{g-sa-labo-srsran-project-open5gs-ubuntu-2024}
 
-\subsection{1. Prérequis}\label{pruxe9requis}
+\subsection{1. Prérequis}\label{pruxe9requis-1}
 
 \begin{itemize}
 \tightlist
@@ -3973,7 +4444,7 @@ Ou utiliser un vrai smartphone 5G + SDR côté réseau.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Liens utiles}\label{liens-utiles}
+\subsection{Liens utiles}\label{liens-utiles-2}
 
 \begin{itemize}
 \tightlist
@@ -4593,7 +5064,7 @@ l'infrastructure ou au workflow de chaque équipe de recherche ou CTF.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsubsection{Liens utiles}\label{liens-utiles-1}
+\subsubsection{Liens utiles}\label{liens-utiles-3}
 
 \begin{itemize}
 \tightlist
@@ -4811,7 +5282,7 @@ pipeline/parallèle)}\label{b.-utiliser-behemoth.py-pour-des-batchs-mode-pipelin
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\subsection{Liens utiles}\label{liens-utiles-2}
+\subsection{Liens utiles}\label{liens-utiles-4}
 
 \begin{itemize}
 \tightlist
@@ -4832,7 +5303,7 @@ pipeline/parallèle)}\label{b.-utiliser-behemoth.py-pour-des-batchs-mode-pipelin
 \subsection{Installation Deka (cracker Kraken
 OpenCL)}\label{installation-deka-cracker-kraken-opencl}
 
-\subsubsection{1. Prérequis}\label{pruxe9requis-1}
+\subsubsection{1. Prérequis}\label{pruxe9requis-2}
 
 \begin{itemize}
 \tightlist
@@ -6732,7 +7203,7 @@ recherche}\label{algorithme-de-recherche}
 
 \subsection{Utilisation}\label{utilisation-1}
 
-\subsubsection{Prérequis}\label{pruxe9requis-2}
+\subsubsection{Prérequis}\label{pruxe9requis-3}
 
 \begin{itemize}
 \tightlist
