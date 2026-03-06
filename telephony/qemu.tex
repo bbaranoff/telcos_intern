@@ -1,0 +1,904 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\section{Qemu Calypso}\label{qemu-calypso}
+
+Ce document décrit l'émulation complète du SoC \textbf{TI Calypso DBB}
+(Digital Baseband) dans QEMU, permettant d'exécuter les firmwares
+OsmocomBB (loader, layer1) sans matériel physique (Motorola C123/C118).
+
+Le Calypso est un ARM946E-S avec un ensemble de périphériques
+spécifiques à la téléphonie GSM. Aucune émulation publique complète
+n'existait avant ce travail.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Architecture globale}\label{architecture-globale}
+
+\paragraph{Vue d'ensemble de la pile GSM
+émulée}\label{vue-densemble-de-la-pile-gsm-uxe9muluxe9e}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph gsm\_stack \{}
+\StringTok{  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica, pad="0.5"]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=11]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  subgraph cluster\_host \{}
+\StringTok{    label="Host Linux"}
+\StringTok{    style=dashed; color="\#666666"; fontcolor="\#666666"}
+
+\StringTok{    wireshark [label="Wireshark}\SpecialCharTok{\textbackslash{}n}\StringTok{(GSMTAP)", fillcolor="\#E8F5E9"]}
+\StringTok{    osmocon [label="osmocon}\SpecialCharTok{\textbackslash{}n}\StringTok{(sercomm bridge)", fillcolor="\#FFF9C4"]}
+\StringTok{    mobile [label="mobile / cell\_log}\SpecialCharTok{\textbackslash{}n}\StringTok{(layer23)", fillcolor="\#FFF9C4"]}
+\StringTok{    nitb [label="osmo{-}nitb}\SpecialCharTok{\textbackslash{}n}\StringTok{(MSC+HLR+BSC)", fillcolor="\#BBDEFB"]}
+\StringTok{    bts [label="osmo{-}bts{-}trx}\SpecialCharTok{\textbackslash{}n}\StringTok{(BTS)", fillcolor="\#BBDEFB"]}
+\StringTok{    transceiver [label="transceiver}\SpecialCharTok{\textbackslash{}n}\StringTok{(L1→TRX bridge)", fillcolor="\#FFE0B2"]}
+\StringTok{  \}}
+
+\StringTok{  subgraph cluster\_qemu \{}
+\StringTok{    label="QEMU — TI Calypso SoC"}
+\StringTok{    style=filled; fillcolor="\#F3E5F5"; color="\#7B1FA2"; fontcolor="\#7B1FA2"}
+
+\StringTok{    firmware [label="layer1.highram.elf}\SpecialCharTok{\textbackslash{}n}\StringTok{(OsmocomBB L1)", fillcolor="\#CE93D8"]}
+\StringTok{    uart [label="UART Modem}\SpecialCharTok{\textbackslash{}n}\StringTok{0xFFFF5800", fillcolor="\#E1BEE7"]}
+\StringTok{    trx [label="TRX Bridge}\SpecialCharTok{\textbackslash{}n}\StringTok{(UDP 4729)", fillcolor="\#E1BEE7"]}
+\StringTok{    inth [label="INTH}\SpecialCharTok{\textbackslash{}n}\StringTok{0xFFFFFA00", fillcolor="\#E1BEE7"]}
+\StringTok{  \}}
+
+\StringTok{  firmware {-}\textgreater{} uart [label="sercomm}\SpecialCharTok{\textbackslash{}n}\StringTok{frames"]}
+\StringTok{  uart {-}\textgreater{} osmocon [label="pty}\SpecialCharTok{\textbackslash{}n}\StringTok{(serial)"]}
+\StringTok{  osmocon {-}\textgreater{} mobile [label="L1CTL}\SpecialCharTok{\textbackslash{}n}\StringTok{/tmp/osmocom\_l2"]}
+\StringTok{  transceiver {-}\textgreater{} trx [label="UDP}\SpecialCharTok{\textbackslash{}n}\StringTok{4729"]}
+\StringTok{  transceiver {-}\textgreater{} osmocon [label="L1CTL", style=dashed]}
+\StringTok{  bts {-}\textgreater{} transceiver [label="TRX}\SpecialCharTok{\textbackslash{}n}\StringTok{protocol"]}
+\StringTok{  bts {-}\textgreater{} nitb [label="Abis/IP"]}
+\StringTok{  nitb {-}\textgreater{} wireshark [label="GSMTAP}\SpecialCharTok{\textbackslash{}n}\StringTok{UDP 4729", style=dashed, color="\#4CAF50"]}
+\StringTok{  firmware {-}\textgreater{} trx [label="DSP API}\SpecialCharTok{\textbackslash{}n}\StringTok{(shared RAM)"]}
+\StringTok{  firmware {-}\textgreater{} inth [label="IRQs"]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=4.51in]{../../../../tmp/RtmpZyT17y/file2730a5eec7a3a} \end{center}
+
+\paragraph{Architecture interne du SoC Calypso
+émulé}\label{architecture-interne-du-soc-calypso-uxe9muluxe9}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph calypso\_soc \{}
+\StringTok{  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=record, style=filled, fontname="Courier", fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  cpu [label="\{ARM946E{-}S|PC, CPSR, R0{-}R15|Modes: SVC/IRQ/FIQ/ABT/UND\}",}
+\StringTok{       fillcolor="\#FFCDD2"]}
+
+\StringTok{  inth [label="\{INTH|0xFFFFFA00|32 IRQ lines|Mask, Pending, Priority\}",}
+\StringTok{        fillcolor="\#F8BBD0"]}
+
+\StringTok{  subgraph cluster\_periphs \{}
+\StringTok{    label="Peripherals"; style=dashed; color="\#999"}
+
+\StringTok{    timer1 [label="\{Timer 1|0xFFFE3800|IRQ 1\}", fillcolor="\#C8E6C9"]}
+\StringTok{    timer2 [label="\{Timer 2|0xFFFE3C00|IRQ 2\}", fillcolor="\#C8E6C9"]}
+\StringTok{    uart\_m [label="\{UART Modem|0xFFFF5800|IRQ 7|16550{-}like\}", fillcolor="\#B3E5FC"]}
+\StringTok{    uart\_i [label="\{UART IrDA|0xFFFF5000|IRQ 18\}", fillcolor="\#B3E5FC"]}
+\StringTok{    spi    [label="\{SPI (ABB)|0xFFFE3000|IRQ 13|TWL3025\}", fillcolor="\#DCEDC8"]}
+\StringTok{    i2c    [label="\{I2C stub|0xFFFE1800\}", fillcolor="\#F0F4C3"]}
+\StringTok{    keypad [label="\{Keypad|0xFFFE4800|Active{-}low|POWER pulse\}", fillcolor="\#FFE0B2"]}
+\StringTok{    trx    [label="\{TRX Bridge|TPU+DSP API|UDP 4729\}", fillcolor="\#D1C4E9"]}
+\StringTok{  \}}
+
+\StringTok{  memory [label="\{Memory Map|IRAM 0x00800000 (256K)|Alias → 0x00000000|Catch{-}all 0xFFF00000\}",}
+\StringTok{          fillcolor="\#FFF9C4"]}
+
+\StringTok{  cpu {-}\textgreater{} inth [label="IRQ/FIQ"]}
+\StringTok{  inth {-}\textgreater{} timer1 [label="IRQ 1", dir=back]}
+\StringTok{  inth {-}\textgreater{} timer2 [label="IRQ 2", dir=back]}
+\StringTok{  inth {-}\textgreater{} uart\_m [label="IRQ 7", dir=back]}
+\StringTok{  inth {-}\textgreater{} uart\_i [label="IRQ 18", dir=back]}
+\StringTok{  inth {-}\textgreater{} spi [label="IRQ 13", dir=back]}
+\StringTok{  cpu {-}\textgreater{} memory [label="bus"]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=9in]{../../../../tmp/RtmpZyT17y/file2730a7c543b09} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Carte mémoire}\label{carte-muxe9moire}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph memmap \{}
+\StringTok{  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=record, style=filled, fontname="Courier", fontsize=9,}
+\StringTok{        fillcolor="\#E3F2FD"]}
+\StringTok{  edge [style=invis]}
+
+\StringTok{  title [label="Calypso Memory Map", shape=plaintext,}
+\StringTok{         fontsize=14, fontname="Helvetica Bold"]}
+
+\StringTok{  m0 [label="\{0x00000000|IRAM Alias (256K)|Miroir de 0x00800000\}"]}
+\StringTok{  m1 [label="\{0x00000300|Stub MMIO (16{-}bit)\}"]}
+\StringTok{  m2 [label="\{0x00800000|IRAM (256K)|Code + Data|loader / layer1 @ 0x00820000\}",}
+\StringTok{      fillcolor="\#C8E6C9"]}
+\StringTok{  m3 [label="\{0xFFFE1800|I2C stub\}"]}
+\StringTok{  m4 [label="\{0xFFFE3000|SPI (ABB TWL3025)\}"]}
+\StringTok{  m5 [label="\{0xFFFE3800|Timer 1\}"]}
+\StringTok{  m6 [label="\{0xFFFE3C00|Timer 2\}"]}
+\StringTok{  m7 [label="\{0xFFFE4800|Keypad (active{-}low)\}"]}
+\StringTok{  m8 [label="\{0xFFFF5000|UART IrDA\}"]}
+\StringTok{  m9 [label="\{0xFFFF5800|UART Modem (osmocon)\}",}
+\StringTok{      fillcolor="\#FFECB3"]}
+\StringTok{  m10 [label="\{0xFFFFF000|DPLL stub\}"]}
+\StringTok{  m11 [label="\{0xFFFFFA00|INTH (Interrupt Handler)\}",}
+\StringTok{       fillcolor="\#F8BBD0"]}
+\StringTok{  m12 [label="\{0xFFFFFB00|CLKM stub\}"]}
+\StringTok{  m13 [label="\{0xFFF00000|Catch{-}all (1MB, lowest prio)\}",}
+\StringTok{       fillcolor="\#FFCDD2"]}
+
+\StringTok{  title {-}\textgreater{} m0 {-}\textgreater{} m1 {-}\textgreater{} m2 {-}\textgreater{} m3 {-}\textgreater{} m4 {-}\textgreater{} m5 {-}\textgreater{} m6 {-}\textgreater{} m7 {-}\textgreater{} m8 {-}\textgreater{} m9 {-}\textgreater{} m10 {-}\textgreater{} m11 {-}\textgreater{} m12 {-}\textgreater{} m13}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=1.19in]{../../../../tmp/RtmpZyT17y/file2730a2bae9bdd} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Périphériques
+implémentés}\label{puxe9riphuxe9riques-impluxe9mentuxe9s}
+
+\paragraph{INTH --- Interrupt Controller
+(0xFFFFFA00)}\label{inth-interrupt-controller-0xfffffa00}
+
+Le contrôleur d'interruptions Calypso gère 32 lignes d'IRQ avec masquage
+et priorités.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph inth \{}
+\StringTok{  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  subgraph cluster\_sources \{}
+\StringTok{    label="IRQ Sources"; style=dashed}
+\StringTok{    t1 [label="Timer1}\SpecialCharTok{\textbackslash{}n}\StringTok{IRQ 1", fillcolor="\#C8E6C9"]}
+\StringTok{    t2 [label="Timer2}\SpecialCharTok{\textbackslash{}n}\StringTok{IRQ 2", fillcolor="\#C8E6C9"]}
+\StringTok{    uart [label="UART Modem}\SpecialCharTok{\textbackslash{}n}\StringTok{IRQ 7", fillcolor="\#B3E5FC"]}
+\StringTok{    spi [label="SPI/ABB}\SpecialCharTok{\textbackslash{}n}\StringTok{IRQ 13", fillcolor="\#DCEDC8"]}
+\StringTok{    irda [label="UART IrDA}\SpecialCharTok{\textbackslash{}n}\StringTok{IRQ 18", fillcolor="\#B3E5FC"]}
+\StringTok{    tdma [label="TDMA Frame}\SpecialCharTok{\textbackslash{}n}\StringTok{IRQ (TRX)", fillcolor="\#D1C4E9"]}
+\StringTok{  \}}
+
+\StringTok{  subgraph cluster\_inth \{}
+\StringTok{    label="INTH Registers"; style=filled; fillcolor="\#FCE4EC"}
+\StringTok{    itr [label="ITR}\SpecialCharTok{\textbackslash{}n}\StringTok{(Pending)", shape=record]}
+\StringTok{    mir [label="MIR}\SpecialCharTok{\textbackslash{}n}\StringTok{(Mask)", shape=record]}
+\StringTok{    ilr [label="ILR0{-}31}\SpecialCharTok{\textbackslash{}n}\StringTok{(Priority+FIQ)", shape=record]}
+\StringTok{    irq\_out [label="IRQ out", shape=diamond, fillcolor="\#EF9A9A"]}
+\StringTok{    fiq\_out [label="FIQ out", shape=diamond, fillcolor="\#EF9A9A"]}
+\StringTok{  \}}
+
+\StringTok{  cpu [label="ARM946E{-}S}\SpecialCharTok{\textbackslash{}n}\StringTok{CPU", fillcolor="\#FFCDD2"]}
+
+\StringTok{  t1 {-}\textgreater{} itr}
+\StringTok{  t2 {-}\textgreater{} itr}
+\StringTok{  uart {-}\textgreater{} itr}
+\StringTok{  spi {-}\textgreater{} itr}
+\StringTok{  irda {-}\textgreater{} itr}
+\StringTok{  tdma {-}\textgreater{} itr}
+\StringTok{  itr {-}\textgreater{} mir [label="\& \textasciitilde{}mask"]}
+\StringTok{  mir {-}\textgreater{} ilr [label="priority}\SpecialCharTok{\textbackslash{}n}\StringTok{select"]}
+\StringTok{  ilr {-}\textgreater{} irq\_out [label="IRQ"]}
+\StringTok{  ilr {-}\textgreater{} fiq\_out [label="FIQ"]}
+\StringTok{  irq\_out {-}\textgreater{} cpu}
+\StringTok{  fiq\_out {-}\textgreater{} cpu}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=5.63in]{../../../../tmp/RtmpZyT17y/file2730a5f0a073f} \end{center}
+
+\textbf{Registres clés :}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Offset & Registre & Description \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0x00 & ITR & Interrupts pending (raw) \\
+0x04 & MIR & Mask --- bit=1 masque l'IRQ \\
+0x08 & SIR\_IRQ\_CODE & Numéro de l'IRQ la plus prioritaire \\
+0x0C & SIR\_FIQ\_CODE & Numéro de la FIQ la plus prioritaire \\
+0x10 & CTRL & Contrôle global (new IRQ agreement) \\
+0x20+ & ILR{[}0..31{]} & Priority + FIQ/IRQ select par ligne \\
+\end{longtable}
+
+\paragraph{UART --- 16550-like (Modem +
+IrDA)}\label{uart-16550-like-modem-irda}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph uart\_flow \{}
+\StringTok{  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  subgraph cluster\_uart \{}
+\StringTok{    label="UART Modem — 0xFFFF5800"; style=filled; fillcolor="\#E3F2FD"}
+
+\StringTok{    regs [label="Registers}\SpecialCharTok{\textbackslash{}n}\StringTok{THR/RHR/IER/IIR}\SpecialCharTok{\textbackslash{}n}\StringTok{LCR/MCR/LSR/MSR}\SpecialCharTok{\textbackslash{}n}\StringTok{DLL/DLH", shape=record,}
+\StringTok{          fillcolor="\#BBDEFB"]}
+\StringTok{    txfifo [label="TX FIFO}\SpecialCharTok{\textbackslash{}n}\StringTok{(64 bytes)", fillcolor="\#B3E5FC"]}
+\StringTok{    rxfifo [label="RX FIFO}\SpecialCharTok{\textbackslash{}n}\StringTok{(64 bytes)", fillcolor="\#B3E5FC"]}
+\StringTok{    irq [label="IRQ}\SpecialCharTok{\textbackslash{}n}\StringTok{logic", shape=diamond, fillcolor="\#81D4FA"]}
+\StringTok{  \}}
+
+\StringTok{  firmware [label="OsmocomBB}\SpecialCharTok{\textbackslash{}n}\StringTok{firmware", fillcolor="\#CE93D8"]}
+\StringTok{  chardev [label="QEMU chardev}\SpecialCharTok{\textbackslash{}n}\StringTok{(pty)", fillcolor="\#FFF9C4"]}
+\StringTok{  osmocon [label="osmocon}\SpecialCharTok{\textbackslash{}n}\StringTok{(host)", fillcolor="\#FFE0B2"]}
+\StringTok{  inth [label="INTH}\SpecialCharTok{\textbackslash{}n}\StringTok{IRQ 7", fillcolor="\#F8BBD0"]}
+
+\StringTok{  firmware {-}\textgreater{} regs [label="MMIO}\SpecialCharTok{\textbackslash{}n}\StringTok{write THR"]}
+\StringTok{  regs {-}\textgreater{} txfifo [label="TX"]}
+\StringTok{  txfifo {-}\textgreater{} chardev [label="chr\_fe\_write"]}
+\StringTok{  chardev {-}\textgreater{} osmocon [label="pty bytes"]}
+\StringTok{  osmocon {-}\textgreater{} chardev [label="pty bytes", style=dashed]}
+\StringTok{  chardev {-}\textgreater{} rxfifo [label="chr\_fe\_handler"]}
+\StringTok{  rxfifo {-}\textgreater{} regs [label="RX"]}
+\StringTok{  regs {-}\textgreater{} firmware [label="MMIO}\SpecialCharTok{\textbackslash{}n}\StringTok{read RHR", style=dashed]}
+\StringTok{  irq {-}\textgreater{} inth [label="pulse"]}
+\StringTok{  regs {-}\textgreater{} irq [label="IER}\SpecialCharTok{\textbackslash{}n}\StringTok{conditions"]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=6.35in]{../../../../tmp/RtmpZyT17y/file2730a14c8c475} \end{center}
+
+\textbf{Points clés de l'implémentation :}
+
+\begin{itemize}
+\tightlist
+\item
+  Le chardev est attaché via \texttt{qdev\_prop\_set\_chr()}
+  \textbf{avant} \texttt{realize()}
+\item
+  Les handlers RX sont configurés dans \texttt{calypso\_uart\_realize()}
+\item
+  Protocole sercomm encapsulé dans les trames UART
+\item
+  Le loader utilise le protocole HDLC pour le handshake osmocon
+\item
+  Le layer1 utilise sercomm pour L1CTL
+\end{itemize}
+
+\paragraph{Timers (Timer1 @ 0xFFFE3800, Timer2 @
+0xFFFE3C00)}\label{timers-timer1-0xfffe3800-timer2-0xfffe3c00}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph timer \{}
+\StringTok{  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=record, style=filled, fontname="Courier", fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  regs [label="\{Timer Registers|CNTL (mode, start/stop)|LOAD (reload value)|READ (current count)\}",}
+\StringTok{        fillcolor="\#C8E6C9"]}
+\StringTok{  qemu\_timer [label="\{QEMUTimer|QEMU\_CLOCK\_VIRTUAL|callback on expiry\}",}
+\StringTok{               fillcolor="\#FFF9C4"]}
+\StringTok{  irq [label="IRQ → INTH", shape=diamond, fillcolor="\#F8BBD0"]}
+
+\StringTok{  regs {-}\textgreater{} qemu\_timer [label="timer\_mod()}\SpecialCharTok{\textbackslash{}n}\StringTok{on CNTL write"]}
+\StringTok{  qemu\_timer {-}\textgreater{} irq [label="fire on}\SpecialCharTok{\textbackslash{}n}\StringTok{expiry"]}
+\StringTok{  qemu\_timer {-}\textgreater{} regs [label="auto{-}reload}\SpecialCharTok{\textbackslash{}n}\StringTok{if AR bit set", style=dashed]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=1.13in]{../../../../tmp/RtmpZyT17y/file2730a3ff986ab} \end{center}
+
+\paragraph{SPI / ABB TWL3025}\label{spi-abb-twl3025}
+
+Le SPI communique avec l'ABB (Analog Baseband) TWL3025 qui gère la
+radio, le VCXO, l'ADC batterie, etc.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph spi\_abb \{}
+\StringTok{  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]}
+
+\StringTok{  spi [label="SPI Controller}\SpecialCharTok{\textbackslash{}n}\StringTok{0xFFFE3000}\SpecialCharTok{\textbackslash{}n}\StringTok{IRQ 13", fillcolor="\#DCEDC8"]}
+\StringTok{  abb [label="ABB TWL3025}\SpecialCharTok{\textbackslash{}n}\StringTok{(émulé en registres)}\SpecialCharTok{\textbackslash{}n}\StringTok{VRPCDEV=0x01}\SpecialCharTok{\textbackslash{}n}\StringTok{VRPCSTEN=0x13",}
+\StringTok{       fillcolor="\#FFF9C4"]}
+\StringTok{  firmware [label="Firmware}\SpecialCharTok{\textbackslash{}n}\StringTok{abb\_reg\_write()}\SpecialCharTok{\textbackslash{}n}\StringTok{abb\_reg\_read()", fillcolor="\#CE93D8"]}
+
+\StringTok{  firmware {-}\textgreater{} spi [label="MMIO"]}
+\StringTok{  spi {-}\textgreater{} abb [label="page/addr/data}\SpecialCharTok{\textbackslash{}n}\StringTok{10{-}bit words"]}
+\StringTok{  abb {-}\textgreater{} spi [label="read data", style=dashed]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=3.66in]{../../../../tmp/RtmpZyT17y/file2730a2f9a084c} \end{center}
+
+\paragraph{Keypad (0xFFFE4800)}\label{keypad-0xfffe4800}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph keypad \{}
+\StringTok{  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  monitor [label="QEMU Monitor}\SpecialCharTok{\textbackslash{}n}\StringTok{write 0xFFFE4800 0xDEAD}\SpecialCharTok{\textbackslash{}n}\StringTok{write 0xFFFE4800 0xBEEF",}
+\StringTok{           fillcolor="\#FFF9C4"]}
+\StringTok{  kp [label="CalypsoKeypad}\SpecialCharTok{\textbackslash{}n}\StringTok{keys: uint16 (active{-}low)}\SpecialCharTok{\textbackslash{}n}\StringTok{0xFF = all released}\SpecialCharTok{\textbackslash{}n}\StringTok{bit clear = pressed",}
+\StringTok{      fillcolor="\#FFE0B2"]}
+\StringTok{  timer\_r [label="QEMUTimer}\SpecialCharTok{\textbackslash{}n}\StringTok{release (500ms)", fillcolor="\#C8E6C9"]}
+\StringTok{  timer\_2p [label="QEMUTimer}\SpecialCharTok{\textbackslash{}n}\StringTok{2nd press (+700ms)", fillcolor="\#C8E6C9"]}
+\StringTok{  timer\_2r [label="QEMUTimer}\SpecialCharTok{\textbackslash{}n}\StringTok{2nd release (+1200ms)", fillcolor="\#C8E6C9"]}
+\StringTok{  firmware [label="Firmware}\SpecialCharTok{\textbackslash{}n}\StringTok{keypad scan}\SpecialCharTok{\textbackslash{}n}\StringTok{read 0xFFFE4800", fillcolor="\#CE93D8"]}
+
+\StringTok{  monitor {-}\textgreater{} kp [label="magic write"]}
+\StringTok{  kp {-}\textgreater{} timer\_r [label="0xDEAD}\SpecialCharTok{\textbackslash{}n}\StringTok{single press"]}
+\StringTok{  kp {-}\textgreater{} timer\_2p [label="0xBEEF}\SpecialCharTok{\textbackslash{}n}\StringTok{double press"]}
+\StringTok{  timer\_r {-}\textgreater{} kp [label="set bit}\SpecialCharTok{\textbackslash{}n}\StringTok{(release)"]}
+\StringTok{  timer\_2p {-}\textgreater{} kp [label="clear bit}\SpecialCharTok{\textbackslash{}n}\StringTok{(2nd press)"]}
+\StringTok{  timer\_2p {-}\textgreater{} timer\_2r [label="schedule"]}
+\StringTok{  timer\_2r {-}\textgreater{} kp [label="set bit}\SpecialCharTok{\textbackslash{}n}\StringTok{(2nd release)"]}
+\StringTok{  kp {-}\textgreater{} firmware [label="MMIO read", style=dashed]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=3.17in]{../../../../tmp/RtmpZyT17y/file2730a71332e23} \end{center}
+
+\textbf{Séquence double appui (0xBEEF) :}
+
+\begin{verbatim}
+t=0ms         t=500ms       t=700ms        t=1200ms
+│─ press 1 ──│── gap ──────│── press 2 ───│
+keys=0xFE     keys=0xFF     keys=0xFE      keys=0xFF
+\end{verbatim}
+
+\paragraph{TRX Bridge --- DSP API \& TPU}\label{trx-bridge-dsp-api-tpu}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph trx\_bridge \{}
+\StringTok{  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  subgraph cluster\_qemu \{}
+\StringTok{    label="QEMU Calypso"; style=filled; fillcolor="\#F3E5F5"}
+
+\StringTok{    tpu [label="TPU Emulation}\SpecialCharTok{\textbackslash{}n}\StringTok{RAM: 0xFFFE8000}\SpecialCharTok{\textbackslash{}n}\StringTok{Reg: 0xFFFF1000", fillcolor="\#D1C4E9"]}
+\StringTok{    dsp [label="DSP API}\SpecialCharTok{\textbackslash{}n}\StringTok{Shared RAM}\SpecialCharTok{\textbackslash{}n}\StringTok{0xFFD00000", fillcolor="\#D1C4E9"]}
+\StringTok{    trx [label="calypso\_trx}\SpecialCharTok{\textbackslash{}n}\StringTok{UDP socket}\SpecialCharTok{\textbackslash{}n}\StringTok{port 4729", fillcolor="\#CE93D8"]}
+\StringTok{    irq [label="TDMA Frame IRQ", shape=diamond, fillcolor="\#F8BBD0"]}
+\StringTok{  \}}
+
+\StringTok{  subgraph cluster\_host \{}
+\StringTok{    label="Host"; style=dashed; color="\#666"}
+\StringTok{    transceiver [label="transceiver}\SpecialCharTok{\textbackslash{}n}\StringTok{(layer23)", fillcolor="\#FFE0B2"]}
+\StringTok{    bts [label="osmo{-}bts{-}trx", fillcolor="\#BBDEFB"]}
+\StringTok{  \}}
+
+\StringTok{  tpu {-}\textgreater{} trx [label="burst data"]}
+\StringTok{  dsp {-}\textgreater{} trx [label="DSP params"]}
+\StringTok{  trx {-}\textgreater{} transceiver [label="TRXD}\SpecialCharTok{\textbackslash{}n}\StringTok{UDP 5700+"]}
+\StringTok{  transceiver {-}\textgreater{} bts [label="TRX}\SpecialCharTok{\textbackslash{}n}\StringTok{protocol"]}
+\StringTok{  trx {-}\textgreater{} irq [label="TDMA tick"]}
+\StringTok{  irq {-}\textgreater{} tpu [label="schedule}\SpecialCharTok{\textbackslash{}n}\StringTok{next frame", style=dashed]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=2.4in]{../../../../tmp/RtmpZyT17y/file2730a5f9d3dee} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Boot sequence}\label{boot-sequence}
+
+\paragraph{Flux de démarrage}\label{flux-de-duxe9marrage}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph boot \{}
+\StringTok{  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica, nodesep=0.3]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  start [label="QEMU start}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}kernel layer1.highram.elf}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}serial pty", fillcolor="\#FFCDD2"]}
+
+\StringTok{  load [label="QEMU loads ELF}\SpecialCharTok{\textbackslash{}n}\StringTok{at 0x00820000}\SpecialCharTok{\textbackslash{}n}\StringTok{(entry point = \_start)", fillcolor="\#FFE0B2"]}
+
+\StringTok{  bss [label="\_start:}\SpecialCharTok{\textbackslash{}n}\StringTok{Clear BSS}\SpecialCharTok{\textbackslash{}n}\StringTok{(loop\_bss)", fillcolor="\#FFF9C4"]}
+
+\StringTok{  stacks [label="Init stacks}\SpecialCharTok{\textbackslash{}n}\StringTok{FIQ sp, IRQ sp}\SpecialCharTok{\textbackslash{}n}\StringTok{SVC sp, ABT sp", fillcolor="\#FFF9C4"]}
+
+\StringTok{  ctors [label="do\_global\_ctors()}\SpecialCharTok{\textbackslash{}n}\StringTok{C++ init", fillcolor="\#FFF9C4"]}
+
+\StringTok{  main [label="\_jump\_main}\SpecialCharTok{\textbackslash{}n}\StringTok{→ main()", fillcolor="\#C8E6C9"]}
+
+\StringTok{  hw\_init [label="Hardware init:}\SpecialCharTok{\textbackslash{}n}\StringTok{UART, SPI/ABB}\SpecialCharTok{\textbackslash{}n}\StringTok{Timer, INTH}\SpecialCharTok{\textbackslash{}n}\StringTok{Keypad, TPU", fillcolor="\#B3E5FC"]}
+
+\StringTok{  l1\_loop [label="Layer1 main loop}\SpecialCharTok{\textbackslash{}n}\StringTok{TDMA frame IRQ handler}\SpecialCharTok{\textbackslash{}n}\StringTok{L1CTL via sercomm", fillcolor="\#CE93D8"]}
+
+\StringTok{  osmocon [label="osmocon connects}\SpecialCharTok{\textbackslash{}n}\StringTok{via pty → sercomm}\SpecialCharTok{\textbackslash{}n}\StringTok{→ /tmp/osmocom\_l2", fillcolor="\#FFE0B2"]}
+
+\StringTok{  start {-}\textgreater{} load {-}\textgreater{} bss {-}\textgreater{} stacks {-}\textgreater{} ctors {-}\textgreater{} main {-}\textgreater{} hw\_init {-}\textgreater{} l1\_loop}
+\StringTok{  l1\_loop {-}\textgreater{} osmocon [label="L1CTL}\SpecialCharTok{\textbackslash{}n}\StringTok{ready", style=dashed]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=1.05in]{../../../../tmp/RtmpZyT17y/file2730a6c0b9cb9} \end{center}
+
+\textbf{Point critique :} Le layer1 est chargé \textbf{directement} par
+QEMU (\texttt{-kernel}), sans passer par le loader + osmocon upload. Le
+protocole \texttt{osmoload\ memwrite} n'est pas implémenté dans
+l'émulation UART, donc le chargement via loader échoue (le code reste
+celui du loader à 0x820044).
+
+\textbf{Diagnostic :} \texttt{xp\ /1xw\ 0x00820044} via le monitor QEMU
+permet de distinguer les deux :
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{0xeb002876} → \textbf{layer1} (bl 0x82a224)
+\item
+  \texttt{0xeb000ea3} → \textbf{loader} (bl 0x823ad8)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Orchestration --- tmux \&
+Docker}\label{orchestration-tmux-docker}
+
+\paragraph{Architecture de
+déploiement}\label{architecture-de-duxe9ploiement}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph deployment \{}
+\StringTok{  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica, compound=true]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  subgraph cluster\_docker \{}
+\StringTok{    label="Docker Container (openbsc{-}nitb)}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}{-}privileged {-}{-}network=host"}
+\StringTok{    style=filled; fillcolor="\#E8EAF6"; color="\#3F51B5"}
+
+\StringTok{    subgraph cluster\_tmux \{}
+\StringTok{      label="tmux session: gsm"; style=dashed; color="\#666"}
+
+\StringTok{      w0 [label="Window 0: nitb}\SpecialCharTok{\textbackslash{}n}\StringTok{cd /etc/osmocom}\SpecialCharTok{\textbackslash{}n}\StringTok{osmo{-}nitb {-}{-}yes{-}i{-}really{-}}\SpecialCharTok{\textbackslash{}n}\StringTok{want{-}to{-}run{-}prehistoric{-}software",}
+\StringTok{          fillcolor="\#BBDEFB"]}
+\StringTok{      w1 [label="Window 1: calypso}\SpecialCharTok{\textbackslash{}n}\StringTok{cd /src/qemu}\SpecialCharTok{\textbackslash{}n}\StringTok{bash launch\_calypso.sh",}
+\StringTok{          fillcolor="\#CE93D8"]}
+\StringTok{      w2 [label="Window 2: trx}\SpecialCharTok{\textbackslash{}n}\StringTok{cd .../transceiver}\SpecialCharTok{\textbackslash{}n}\StringTok{./transceiver",}
+\StringTok{          fillcolor="\#FFE0B2"]}
+\StringTok{      w3 [label="Window 3: bts}\SpecialCharTok{\textbackslash{}n}\StringTok{cd /etc/osmocom}\SpecialCharTok{\textbackslash{}n}\StringTok{osmo{-}bts{-}trx {-}i 0.0.0.0",}
+\StringTok{          fillcolor="\#C8E6C9"]}
+\StringTok{    \}}
+
+\StringTok{    entrypoint [label="entrypoint.sh}\SpecialCharTok{\textbackslash{}n}\StringTok{TUN setup (apn0)}\SpecialCharTok{\textbackslash{}n}\StringTok{ip\_forward}\SpecialCharTok{\textbackslash{}n}\StringTok{→ exec run.sh",}
+\StringTok{                fillcolor="\#FFF9C4"]}
+
+\StringTok{    tun [label="apn0}\SpecialCharTok{\textbackslash{}n}\StringTok{192.168.100.1/24}\SpecialCharTok{\textbackslash{}n}\StringTok{(GPRS NAT)", shape=ellipse, fillcolor="\#DCEDC8"]}
+\StringTok{  \}}
+
+\StringTok{  subgraph cluster\_host \{}
+\StringTok{    label="Host Linux"; style=dashed; color="\#999"}
+\StringTok{    wireshark [label="Wireshark}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}i lo {-}k}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}f udp port 4729}\SpecialCharTok{\textbackslash{}n}\StringTok{{-}Y gsmtap", fillcolor="\#E8F5E9"]}
+\StringTok{    start\_sh [label="start.sh}\SpecialCharTok{\textbackslash{}n}\StringTok{wireshark \&}\SpecialCharTok{\textbackslash{}n}\StringTok{docker run ...", fillcolor="\#FFF9C4"]}
+\StringTok{  \}}
+
+\StringTok{  start\_sh {-}\textgreater{} wireshark [label="lance"]}
+\StringTok{  start\_sh {-}\textgreater{} entrypoint [label="docker run"]}
+\StringTok{  entrypoint {-}\textgreater{} tun [label="TUN/NAT"]}
+\StringTok{  entrypoint {-}\textgreater{} w0 [label="run.sh", lhead=cluster\_tmux]}
+
+\StringTok{  w0 {-}\textgreater{} w3 [style=invis]}
+\StringTok{  w1 {-}\textgreater{} w2 [style=invis]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=4.54in]{../../../../tmp/RtmpZyT17y/file2730ac004e8d} \end{center}
+
+\paragraph{Séquence de démarrage
+temporel}\label{suxe9quence-de-duxe9marrage-temporel}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph timeline \{}
+\StringTok{  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=record, style=filled, fontname=Helvetica, fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  t0 [label="\{t=0s|start.sh|Wireshark → background}\SpecialCharTok{\textbackslash{}n}\StringTok{docker run → entrypoint.sh\}", fillcolor="\#FFF9C4"]}
+\StringTok{  t1 [label="\{t=1s|entrypoint.sh|TUN apn0 + ip\_forward}\SpecialCharTok{\textbackslash{}n}\StringTok{exec run.sh\}", fillcolor="\#FFE0B2"]}
+\StringTok{  t2 [label="\{t=2s|run.sh — Window 0|osmo{-}nitb démarre}\SpecialCharTok{\textbackslash{}n}\StringTok{Écoute Abis, GSUP\}", fillcolor="\#BBDEFB"]}
+\StringTok{  t3 [label="\{t=5s|run.sh — Window 1|QEMU Calypso + osmocon}\SpecialCharTok{\textbackslash{}n}\StringTok{layer1 boot → L1CTL socket\}", fillcolor="\#CE93D8"]}
+\StringTok{  t4 [label="\{t=8s|run.sh — Window 2|transceiver}\SpecialCharTok{\textbackslash{}n}\StringTok{Attend /tmp/osmocom\_l2 (30s max)}\SpecialCharTok{\textbackslash{}n}\StringTok{Puis bridge L1→TRX\}", fillcolor="\#FFE0B2"]}
+\StringTok{  t5 [label="\{t=11s|run.sh — Window 3|osmo{-}bts{-}trx}\SpecialCharTok{\textbackslash{}n}\StringTok{Connecte au transceiver + nitb\}", fillcolor="\#C8E6C9"]}
+\StringTok{  t6 [label="\{t=\textasciitilde{}15s|Stack opérationnelle|BTS radiating}\SpecialCharTok{\textbackslash{}n}\StringTok{GSMTAP → Wireshark\}", fillcolor="\#E8F5E9"]}
+
+\StringTok{  t0 {-}\textgreater{} t1 {-}\textgreater{} t2 {-}\textgreater{} t3 {-}\textgreater{} t4 {-}\textgreater{} t5 {-}\textgreater{} t6}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=2.44in]{../../../../tmp/RtmpZyT17y/file2730a55659312} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Scripts de lancement}\label{scripts-de-lancement}
+
+\paragraph{launch\_calypso.sh --- QEMU +
+osmocon}\label{launch_calypso.sh-qemu-osmocon}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#!/bin/bash}
+\VariableTok{QEMU}\OperatorTok{=}\NormalTok{./build/qemu{-}system{-}arm}
+\VariableTok{FIRMWARE}\OperatorTok{=}\VariableTok{$\{1}\OperatorTok{:{-}}\NormalTok{\textasciitilde{}/compal\_e88/layer1.highram.elf}\VariableTok{\}}
+\VariableTok{MONSOCK}\OperatorTok{=}\NormalTok{/tmp/qemu{-}calypso{-}mon.sock}
+\VariableTok{LOGFILE}\OperatorTok{=}\NormalTok{/tmp/qemu{-}calypso.log}
+\FunctionTok{rm} \AttributeTok{{-}f} \StringTok{"}\VariableTok{$MONSOCK}\StringTok{"} \StringTok{"}\VariableTok{$LOGFILE}\StringTok{"}
+\FunctionTok{killall} \AttributeTok{{-}q}\NormalTok{ qemu{-}system{-}arm }\DecValTok{2}\OperatorTok{\textgreater{}}\NormalTok{/dev/null}\KeywordTok{;} \FunctionTok{sleep}\NormalTok{ 0.3}
+
+\VariableTok{$QEMU} \AttributeTok{{-}M}\NormalTok{ calypso }\DataTypeTok{\textbackslash{}}
+  \AttributeTok{{-}kernel} \StringTok{"}\VariableTok{$FIRMWARE}\StringTok{"} \DataTypeTok{\textbackslash{}}
+  \AttributeTok{{-}serial}\NormalTok{ pty }\DataTypeTok{\textbackslash{}}
+  \AttributeTok{{-}monitor}\NormalTok{ unix:}\VariableTok{$MONSOCK}\NormalTok{,server,nowait }\DataTypeTok{\textbackslash{}}
+  \OperatorTok{\textgreater{}}\StringTok{"}\VariableTok{$LOGFILE}\StringTok{"} \DecValTok{2}\OperatorTok{\textgreater{}\&}\DecValTok{1} \KeywordTok{\&}
+\VariableTok{QEMU\_PID}\OperatorTok{=}\VariableTok{$!}
+
+\CommentTok{\# Attendre le pty}
+\VariableTok{PTS}\OperatorTok{=}\StringTok{""}
+\ControlFlowTok{for}\NormalTok{ i }\KeywordTok{in} \VariableTok{$(}\FunctionTok{seq}\NormalTok{ 1 50}\VariableTok{)}\KeywordTok{;} \ControlFlowTok{do}
+    \BuiltInTok{[} \OtherTok{{-}f} \StringTok{"}\VariableTok{$LOGFILE}\StringTok{"} \BuiltInTok{]} \KeywordTok{\&\&} \VariableTok{PTS}\OperatorTok{=}\VariableTok{$(}\FunctionTok{grep} \AttributeTok{{-}o} \StringTok{\textquotesingle{}/dev/pts/[0{-}9]*\textquotesingle{}} \StringTok{"}\VariableTok{$LOGFILE}\StringTok{"} \KeywordTok{|} \FunctionTok{head} \AttributeTok{{-}1}\VariableTok{)}
+    \BuiltInTok{[} \OtherTok{{-}n} \StringTok{"}\VariableTok{$PTS}\StringTok{"} \BuiltInTok{]} \KeywordTok{\&\&} \ControlFlowTok{break}
+    \FunctionTok{sleep}\NormalTok{ 0.1}
+\ControlFlowTok{done}
+
+\CommentTok{\# osmocon comme bridge L1CTL (pas d\textquotesingle{}upload, direct boot)}
+\ExtensionTok{osmocon} \AttributeTok{{-}p} \StringTok{"}\VariableTok{$PTS}\StringTok{"} \AttributeTok{{-}m}\NormalTok{ c123xor }\KeywordTok{\&}
+\VariableTok{OSMO\_PID}\OperatorTok{=}\VariableTok{$!}
+
+\BuiltInTok{trap} \StringTok{"kill }\VariableTok{$QEMU\_PID}\StringTok{ }\VariableTok{$OSMO\_PID}\StringTok{ 2\textgreater{}/dev/null; rm {-}f }\VariableTok{$MONSOCK}\StringTok{; exit"}\NormalTok{ INT TERM}
+\BuiltInTok{wait} \VariableTok{$QEMU\_PID}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Commandes de diagnostic}\label{commandes-de-diagnostic}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Vérifier quel firmware est en RAM (loader vs layer1)}
+\BuiltInTok{echo} \StringTok{"xp /1xw 0x00820044"} \KeywordTok{|} \ExtensionTok{socat} \AttributeTok{{-}}\NormalTok{ UNIX{-}CONNECT:/tmp/qemu{-}calypso{-}mon.sock}
+\CommentTok{\# 0xeb002876 → layer1 | 0xeb000ea3 → loader}
+
+\CommentTok{\# Dump des premières instructions}
+\BuiltInTok{echo} \StringTok{"xp /16xw 0x00820000"} \KeywordTok{|} \ExtensionTok{socat} \AttributeTok{{-}}\NormalTok{ UNIX{-}CONNECT:/tmp/qemu{-}calypso{-}mon.sock}
+
+\CommentTok{\# Vérifier que le CPU progresse}
+\BuiltInTok{echo} \StringTok{"info registers"} \KeywordTok{|} \ExtensionTok{socat} \AttributeTok{{-}}\NormalTok{ UNIX{-}CONNECT:/tmp/qemu{-}calypso{-}mon.sock}
+
+\CommentTok{\# Power button pulse}
+\BuiltInTok{echo} \StringTok{"write 0xFFFE4800 0xDEAD"} \KeywordTok{|} \ExtensionTok{socat} \AttributeTok{{-}}\NormalTok{ UNIX{-}CONNECT:/tmp/qemu{-}calypso{-}mon.sock}
+
+\CommentTok{\# Double power press}
+\BuiltInTok{echo} \StringTok{"write 0xFFFE4800 0xBEEF"} \KeywordTok{|} \ExtensionTok{socat} \AttributeTok{{-}}\NormalTok{ UNIX{-}CONNECT:/tmp/qemu{-}calypso{-}mon.sock}
+
+\CommentTok{\# Hexdump série (vérifier que layer1 envoie des trames sercomm)}
+\FunctionTok{hexdump} \AttributeTok{{-}C} \StringTok{"}\VariableTok{$PTS}\StringTok{"} \KeywordTok{|} \FunctionTok{head} \AttributeTok{{-}20}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Stubs et périphériques non
+implémentés}\label{stubs-et-puxe9riphuxe9riques-non-impluxe9mentuxe9s}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph stubs \{}
+\StringTok{  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]}
+
+\StringTok{  subgraph cluster\_impl \{}
+\StringTok{    label="Implémentés"; style=filled; fillcolor="\#E8F5E9"}
+\StringTok{    n1 [label="INTH (IRQ ctrl)", fillcolor="\#C8E6C9"]}
+\StringTok{    n2 [label="Timer 1 \& 2", fillcolor="\#C8E6C9"]}
+\StringTok{    n3 [label="UART Modem + IrDA", fillcolor="\#C8E6C9"]}
+\StringTok{    n4 [label="SPI / ABB TWL3025", fillcolor="\#C8E6C9"]}
+\StringTok{    n5 [label="I2C", fillcolor="\#C8E6C9"]}
+\StringTok{    n6 [label="Keypad (stateful)", fillcolor="\#C8E6C9"]}
+\StringTok{    n7 [label="TRX Bridge", fillcolor="\#C8E6C9"]}
+\StringTok{    n8 [label="IRAM + Alias", fillcolor="\#C8E6C9"]}
+\StringTok{  \}}
+
+\StringTok{  subgraph cluster\_stub \{}
+\StringTok{    label="Stubs (retourne 0)"; style=filled; fillcolor="\#FFF3E0"}
+\StringTok{    s1 [label="0xFFFE6800 — tmr6800 (8{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s2 [label="0xFFFE8000 — mmio\_80xx (8{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s3 [label="0xFFFEF000 — conf (16{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s4 [label="0xFFFF9800 — mmio\_98xx (16{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s5 [label="0xFFFFF000 — DPLL (16{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s6 [label="0xFFFFF900 — Rhea bridge (16{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s7 [label="0xFFFFFB00 — CLKM (16{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s8 [label="0xFFFFFC00 — mmio\_fcxx (16{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s9 [label="0xFFFFFD00 — cntl (16{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s10 [label="0xFFFFFF00 — DIO (8{-}bit)", fillcolor="\#FFE0B2"]}
+\StringTok{    s11 [label="0xFFF00000 — catch{-}all (1MB)", fillcolor="\#FFCCBC"]}
+\StringTok{  \}}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=20.22in]{../../../../tmp/RtmpZyT17y/file2730a4a98a722} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Problèmes connus et
+solutions}\label{probluxe8mes-connus-et-solutions}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3704}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2593}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3704}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Problème
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Cause
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Solution
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+``Powering off due to keypress'' & Keypad initialisé à 0x00 (toutes
+touches pressées) & Init \texttt{kp.keys\ =\ 0xFF} (active-low) \\
+Layer1 jamais uploadé via osmocon & Protocole
+\texttt{osmoload\ memwrite} non émulé dans UART & Charger layer1
+directement via \texttt{-kernel} \\
+\texttt{xp\ /16xi} → ``not supported on this arch'' & Désassemblage ARM
+non supporté dans monitor & Utiliser \texttt{xp\ /16xw} (dump hex
+brut) \\
+Loader re-exécuté après \texttt{osmoload\ jump} & Code loader et layer1
+à la même adresse 0x820000 & Comparer l'opcode à 0x820044 pour
+distinguer \\
+Flash init fail & Pas d'émulation flash NOR & Non bloquant, le firmware
+continue \\
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Prochaines étapes}\label{prochaines-uxe9tapes}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dot\_code }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}digraph roadmap \{}
+\StringTok{  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]}
+\StringTok{  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]}
+\StringTok{  edge [fontname=Helvetica, fontsize=9]}
+
+\StringTok{  done [label="Fait", shape=plaintext, fontsize=12, fontcolor="\#4CAF50"]}
+\StringTok{  next [label="Prochaines}\SpecialCharTok{\textbackslash{}n}\StringTok{étapes", shape=plaintext, fontsize=12, fontcolor="\#FF9800"]}
+\StringTok{  future [label="Long terme", shape=plaintext, fontsize=12, fontcolor="\#9C27B0"]}
+
+\StringTok{  d1 [label="SoC complet}\SpecialCharTok{\textbackslash{}n}\StringTok{INTH+UART+SPI}\SpecialCharTok{\textbackslash{}n}\StringTok{+Timer+I2C", fillcolor="\#C8E6C9"]}
+\StringTok{  d2 [label="TRX bridge}\SpecialCharTok{\textbackslash{}n}\StringTok{UDP 4729", fillcolor="\#C8E6C9"]}
+\StringTok{  d3 [label="Keypad}\SpecialCharTok{\textbackslash{}n}\StringTok{stateful", fillcolor="\#C8E6C9"]}
+\StringTok{  d4 [label="Boot direct}\SpecialCharTok{\textbackslash{}n}\StringTok{layer1 {-}kernel", fillcolor="\#C8E6C9"]}
+
+\StringTok{  n1 [label="IRQ keypad}\SpecialCharTok{\textbackslash{}n}\StringTok{press/release", fillcolor="\#FFE0B2"]}
+\StringTok{  n2 [label="Watchdog}\SpecialCharTok{\textbackslash{}n}\StringTok{timer", fillcolor="\#FFE0B2"]}
+\StringTok{  n3 [label="osmoload}\SpecialCharTok{\textbackslash{}n}\StringTok{memwrite}\SpecialCharTok{\textbackslash{}n}\StringTok{(UART proto)", fillcolor="\#FFE0B2"]}
+\StringTok{  n4 [label="GPRS}\SpecialCharTok{\textbackslash{}n}\StringTok{PCU+SGSN+GGSN", fillcolor="\#FFE0B2"]}
+
+\StringTok{  f1 [label="Multi{-}MS}\SpecialCharTok{\textbackslash{}n}\StringTok{(N phones)", fillcolor="\#E1BEE7"]}
+\StringTok{  f2 [label="Flash NOR}\SpecialCharTok{\textbackslash{}n}\StringTok{emulation", fillcolor="\#E1BEE7"]}
+\StringTok{  f3 [label="Audio}\SpecialCharTok{\textbackslash{}n}\StringTok{osmo{-}gapk}\SpecialCharTok{\textbackslash{}n}\StringTok{ALSA", fillcolor="\#E1BEE7"]}
+\StringTok{  f4 [label="Upstream}\SpecialCharTok{\textbackslash{}n}\StringTok{QEMU merge", fillcolor="\#E1BEE7"]}
+
+\StringTok{  done {-}\textgreater{} d1 {-}\textgreater{} d2 {-}\textgreater{} d3 {-}\textgreater{} d4 [style=invis]}
+\StringTok{  next {-}\textgreater{} n1 {-}\textgreater{} n2 {-}\textgreater{} n3 {-}\textgreater{} n4 [style=invis]}
+\StringTok{  future {-}\textgreater{} f1 {-}\textgreater{} f2 {-}\textgreater{} f3 {-}\textgreater{} f4 [style=invis]}
+
+\StringTok{  d4 {-}\textgreater{} n1 [style=dashed, color="\#999"]}
+\StringTok{  n4 {-}\textgreater{} f1 [style=dashed, color="\#999"]}
+\StringTok{\}\textquotesingle{}}
+\FunctionTok{render\_graphviz}\NormalTok{(dot\_code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics[width=9.91in]{../../../../tmp/RtmpZyT17y/file2730a5bff088} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Annexe --- Fichiers source
+QEMU}\label{annexe-fichiers-source-qemu}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Fichier
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rôle
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{hw/arm/calypso/calypso\_soc.c} & SoC principal, init de tous les
+périphériques \\
+\texttt{hw/arm/calypso/calypso\_uart.c} & UART 16550-like avec
+chardev \\
+\texttt{hw/arm/calypso/calypso\_inth.c} & Contrôleur d'interruptions 32
+lignes \\
+\texttt{hw/arm/calypso/calypso\_timer.c} & Timer avec auto-reload \\
+\texttt{hw/arm/calypso/calypso\_spi.c} & SPI + registres ABB TWL3025 \\
+\texttt{hw/arm/calypso/calypso\_i2c.c} & I2C stub \\
+\texttt{hw/arm/calypso/calypso\_trx.c} & TRX bridge UDP (DSP API +
+TPU) \\
+\texttt{hw/arm/calypso/calypso\_machine.c} & Définition machine QEMU
+\texttt{-M\ calypso} \\
+\texttt{include/hw/arm/calypso/calypso\_soc.h} & Header SoC
+(CalypsoSoCState) \\
+\texttt{include/hw/arm/calypso/calypso\_trx.h} & Header TRX (IRQ
+numbers, API) \\
+\texttt{include/hw/arm/calypso/calypso\_uart.h} & Header UART
+(TYPE\_CALYPSO\_UART) \\
+\end{longtable}
+
+\end{document}

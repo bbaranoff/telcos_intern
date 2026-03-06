@@ -5,46 +5,19 @@ date: "`r Sys.Date()`"
 output:
   pdf_document:
     toc: true
-    latex_engine: xelatex
-    keep_tex: true
+    toc_depth: 3
     number_sections: true
-  html_document:
-    toc: true
-    df_print: paged
+    latex_engine: xelatex
+    extra_dependencies: ["adjustbox"]
+header-includes:
+  - \usepackage[export]{adjustbox}
 lang: fr
 always_allow_html: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = FALSE,
-  warning = FALSE,
-  message = FALSE,
-  fig.width = 18,
-  fig.height = 14,
-  dpi = 150,
-  fig.align = "center"
-)
 
-library(DiagrammeR)
 
-# Fonction pour convertir DOT en PNG pour PDF
-render_graphviz <- function(dot_code) {
-  if (knitr::is_latex_output()) {
-    temp_dot <- tempfile(fileext = ".dot")
-    temp_png <- tempfile(fileext = ".png")
-    
-    writeLines(dot_code, temp_dot)
-    system(paste("dot -Tpng", shQuote(temp_dot), "-o", shQuote(temp_png)))
-    
-    if (file.exists(temp_png)) {
-      knitr::include_graphics(temp_png)
-    }
-  } else {
-    grViz(dot_code)
-  }
-}
-```
+
 
 
 ![](pictures/couverture.png)
@@ -57,8 +30,9 @@ J'espère que vous apprécierez.
 ```{r child='master/intro.Rmd'}
 ```{r child='master/ubuntu_install.Rmd'}
 ```{r child='telephony/methodo.Rmd'}
-```{r child='telephony/networks.Rmd'}
 ```{r child='telephony/ss7.Rmd'}
+```{r child='telephony/networks.Rmd'}
+```{r child='telephony/qemu.Rmd'}
 ```{r child='LoRa/lora.Rmd'}
 ```{r child='telephony/attacks.Rmd'}
 ```{r child='misc/dst80.Rmd'}

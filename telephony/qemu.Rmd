@@ -1,0 +1,689 @@
+```{r qemu_setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo        = FALSE,
+  warning     = FALSE,
+  message     = FALSE,
+  fig.width   = 12,
+  fig.height  = 8,
+  dpi         = 300,
+  fig.align   = "center"
+)
+
+.gv_counter <- new.env(parent = emptyenv())
+.gv_counter$n <- 0L
+
+render_graphviz <- function(dot_code, width = "100%") {
+  .gv_counter$n <- .gv_counter$n + 1L
+  uid <- paste0("gv", .gv_counter$n)
+  tmp_dot <- tempfile(fileext = ".dot")
+  writeLines(dot_code, tmp_dot)
+
+  if (knitr::is_latex_output()) {
+    tmp_png <- tempfile(fileext = ".png")
+    system2("dot", c("-Tpng", "-Gdpi=150", shQuote(tmp_dot), "-o", shQuote(tmp_png)))
+    # max width = ne grossit pas les petits, réduit les grands
+    cat(paste0("\n\\begin{center}\\includegraphics[max width=0.95\\textwidth, max height=0.45\\textheight]{",
+              tmp_png, "}\\end{center}\n"))
+  } else {
+    tmp_svg <- tempfile(fileext = ".svg")
+    system2("dot", c("-Tsvg", shQuote(tmp_dot), "-o", shQuote(tmp_svg)))
+    svg <- readLines(tmp_svg, warn = FALSE)
+    svg <- svg[!grepl("^<\\?xml|^<!DOCTYPE", svg)]
+    svg <- gsub('id="', paste0('id="', uid, '_'), svg)
+    svg <- gsub('#graph0', paste0('#', uid, '_graph0'), svg)
+    svg <- gsub('xlink:href="#', paste0('xlink:href="#', uid, '_'), svg)
+    svg <- sub('<svg ', paste0('<svg style="max-width:', width, '; height:auto;" '), svg)
+    cat(paste0('<div style="text-align:center; width:', width, '; margin:auto;">\n'))
+    cat(paste(svg, collapse = "\n"))
+    cat('\n</div>\n')
+  }
+}
+```
+
+---
+
+## Introduction
+
+Ce document décrit l'émulation complète du SoC **TI Calypso DBB** (Digital Baseband) dans QEMU,
+permettant d'exécuter les firmwares OsmocomBB (loader, layer1) sans matériel physique (Motorola C123/C118).
+
+Le Calypso est un ARM946E-S avec un ensemble de périphériques spécifiques à la téléphonie GSM.
+Aucune émulation publique complète n'existait avant ce travail.
+
+---
+
+## Architecture globale
+
+#### Vue d'ensemble de la pile GSM émulée
+
+```{r gsm_stack_overview, results="asis"}
+dot_code <- 'digraph gsm_stack {
+  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica, pad="0.5"]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=11]
+  edge [fontname=Helvetica, fontsize=9]
+
+  subgraph cluster_host {
+    label="Host Linux"
+    style=dashed; color="#666666"; fontcolor="#666666"
+
+    wireshark [label="Wireshark\n(GSMTAP)", fillcolor="#E8F5E9"]
+    osmocon [label="osmocon\n(sercomm bridge)", fillcolor="#FFF9C4"]
+    mobile [label="mobile / cell_log\n(layer23)", fillcolor="#FFF9C4"]
+    nitb [label="osmo-nitb\n(MSC+HLR+BSC)", fillcolor="#BBDEFB"]
+    bts [label="osmo-bts-trx\n(BTS)", fillcolor="#BBDEFB"]
+    transceiver [label="transceiver\n(L1→TRX bridge)", fillcolor="#FFE0B2"]
+  }
+
+  subgraph cluster_qemu {
+    label="QEMU — TI Calypso SoC"
+    style=filled; fillcolor="#F3E5F5"; color="#7B1FA2"; fontcolor="#7B1FA2"
+
+    firmware [label="layer1.highram.elf\n(OsmocomBB L1)", fillcolor="#CE93D8"]
+    uart [label="UART Modem\n0xFFFF5800", fillcolor="#E1BEE7"]
+    trx [label="TRX Bridge\n(UDP 4729)", fillcolor="#E1BEE7"]
+    inth [label="INTH\n0xFFFFFA00", fillcolor="#E1BEE7"]
+  }
+
+  firmware -> uart [label="sercomm\nframes"]
+  uart -> osmocon [label="pty\n(serial)"]
+  osmocon -> mobile [label="L1CTL\n/tmp/osmocom_l2"]
+  transceiver -> trx [label="UDP\n4729"]
+  transceiver -> osmocon [label="L1CTL", style=dashed]
+  bts -> transceiver [label="TRX\nprotocol"]
+  bts -> nitb [label="Abis/IP"]
+  nitb -> wireshark [label="GSMTAP\nUDP 4729", style=dashed, color="#4CAF50"]
+  firmware -> trx [label="DSP API\n(shared RAM)"]
+  firmware -> inth [label="IRQs"]
+}'
+render_graphviz(dot_code)
+```
+
+#### Architecture interne du SoC Calypso émulé
+
+```{r calypso_soc_map, results="asis"}
+dot_code <- 'digraph calypso_soc {
+  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]
+  node [shape=record, style=filled, fontname="Courier", fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  cpu [label="{ARM946E-S|PC, CPSR, R0-R15|Modes: SVC/IRQ/FIQ/ABT/UND}",
+       fillcolor="#FFCDD2"]
+
+  inth [label="{INTH|0xFFFFFA00|32 IRQ lines|Mask, Pending, Priority}",
+        fillcolor="#F8BBD0"]
+
+  subgraph cluster_periphs {
+    label="Peripherals"; style=dashed; color="#999"
+
+    timer1 [label="{Timer 1|0xFFFE3800|IRQ 1}", fillcolor="#C8E6C9"]
+    timer2 [label="{Timer 2|0xFFFE3C00|IRQ 2}", fillcolor="#C8E6C9"]
+    uart_m [label="{UART Modem|0xFFFF5800|IRQ 7|16550-like}", fillcolor="#B3E5FC"]
+    uart_i [label="{UART IrDA|0xFFFF5000|IRQ 18}", fillcolor="#B3E5FC"]
+    spi    [label="{SPI (ABB)|0xFFFE3000|IRQ 13|TWL3025}", fillcolor="#DCEDC8"]
+    i2c    [label="{I2C stub|0xFFFE1800}", fillcolor="#F0F4C3"]
+    keypad [label="{Keypad|0xFFFE4800|Active-low|POWER pulse}", fillcolor="#FFE0B2"]
+    trx    [label="{TRX Bridge|TPU+DSP API|UDP 4729}", fillcolor="#D1C4E9"]
+  }
+
+  memory [label="{Memory Map|IRAM 0x00800000 (256K)|Alias → 0x00000000|Catch-all 0xFFF00000}",
+          fillcolor="#FFF9C4"]
+
+  cpu -> inth [label="IRQ/FIQ"]
+  inth -> timer1 [label="IRQ 1", dir=back]
+  inth -> timer2 [label="IRQ 2", dir=back]
+  inth -> uart_m [label="IRQ 7", dir=back]
+  inth -> uart_i [label="IRQ 18", dir=back]
+  inth -> spi [label="IRQ 13", dir=back]
+  cpu -> memory [label="bus"]
+}'
+render_graphviz(dot_code)
+```
+
+---
+
+## Carte mémoire
+
+```{r memory_map, results="asis"}
+dot_code <- 'digraph memmap {
+  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]
+  node [shape=record, style=filled, fontname="Courier", fontsize=9,
+        fillcolor="#E3F2FD"]
+  edge [style=invis]
+
+  title [label="Calypso Memory Map", shape=plaintext,
+         fontsize=14, fontname="Helvetica Bold"]
+
+  m0 [label="{0x00000000|IRAM Alias (256K)|Miroir de 0x00800000}"]
+  m1 [label="{0x00000300|Stub MMIO (16-bit)}"]
+  m2 [label="{0x00800000|IRAM (256K)|Code + Data|loader / layer1 @ 0x00820000}",
+      fillcolor="#C8E6C9"]
+  m3 [label="{0xFFFE1800|I2C stub}"]
+  m4 [label="{0xFFFE3000|SPI (ABB TWL3025)}"]
+  m5 [label="{0xFFFE3800|Timer 1}"]
+  m6 [label="{0xFFFE3C00|Timer 2}"]
+  m7 [label="{0xFFFE4800|Keypad (active-low)}"]
+  m8 [label="{0xFFFF5000|UART IrDA}"]
+  m9 [label="{0xFFFF5800|UART Modem (osmocon)}",
+      fillcolor="#FFECB3"]
+  m10 [label="{0xFFFFF000|DPLL stub}"]
+  m11 [label="{0xFFFFFA00|INTH (Interrupt Handler)}",
+       fillcolor="#F8BBD0"]
+  m12 [label="{0xFFFFFB00|CLKM stub}"]
+  m13 [label="{0xFFF00000|Catch-all (1MB, lowest prio)}",
+       fillcolor="#FFCDD2"]
+
+  title -> m0 -> m1 -> m2 -> m3 -> m4 -> m5 -> m6 -> m7 -> m8 -> m9 -> m10 -> m11 -> m12 -> m13
+}'
+render_graphviz(dot_code)
+```
+
+
+---
+
+## Périphériques implémentés
+
+#### INTH — Interrupt Controller (0xFFFFFA00)
+
+Le contrôleur d'interruptions Calypso gère 32 lignes d'IRQ avec masquage et priorités.
+
+```{r inth_diagram, results="asis"}
+dot_code <- 'digraph inth {
+  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  subgraph cluster_sources {
+    label="IRQ Sources"; style=dashed
+    t1 [label="Timer1\nIRQ 1", fillcolor="#C8E6C9"]
+    t2 [label="Timer2\nIRQ 2", fillcolor="#C8E6C9"]
+    uart [label="UART Modem\nIRQ 7", fillcolor="#B3E5FC"]
+    spi [label="SPI/ABB\nIRQ 13", fillcolor="#DCEDC8"]
+    irda [label="UART IrDA\nIRQ 18", fillcolor="#B3E5FC"]
+    tdma [label="TDMA Frame\nIRQ (TRX)", fillcolor="#D1C4E9"]
+  }
+
+  subgraph cluster_inth {
+    label="INTH Registers"; style=filled; fillcolor="#FCE4EC"
+    itr [label="ITR\n(Pending)", shape=record]
+    mir [label="MIR\n(Mask)", shape=record]
+    ilr [label="ILR0-31\n(Priority+FIQ)", shape=record]
+    irq_out [label="IRQ out", shape=diamond, fillcolor="#EF9A9A"]
+    fiq_out [label="FIQ out", shape=diamond, fillcolor="#EF9A9A"]
+  }
+
+  cpu [label="ARM946E-S\nCPU", fillcolor="#FFCDD2"]
+
+  t1 -> itr
+  t2 -> itr
+  uart -> itr
+  spi -> itr
+  irda -> itr
+  tdma -> itr
+  itr -> mir [label="& ~mask"]
+  mir -> ilr [label="priority\nselect"]
+  ilr -> irq_out [label="IRQ"]
+  ilr -> fiq_out [label="FIQ"]
+  irq_out -> cpu
+  fiq_out -> cpu
+}'
+render_graphviz(dot_code)
+```
+
+**Registres clés :**
+
+| Offset | Registre | Description |
+|--------|----------|-------------|
+| 0x00 | ITR | Interrupts pending (raw) |
+| 0x04 | MIR | Mask — bit=1 masque l'IRQ |
+| 0x08 | SIR_IRQ_CODE | Numéro de l'IRQ la plus prioritaire |
+| 0x0C | SIR_FIQ_CODE | Numéro de la FIQ la plus prioritaire |
+| 0x10 | CTRL | Contrôle global (new IRQ agreement) |
+| 0x20+ | ILR[0..31] | Priority + FIQ/IRQ select par ligne |
+
+#### UART — 16550-like (Modem + IrDA)
+
+```{r uart_flow, results="asis"}
+dot_code <- 'digraph uart_flow {
+  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  subgraph cluster_uart {
+    label="UART Modem — 0xFFFF5800"; style=filled; fillcolor="#E3F2FD"
+
+    regs [label="Registers\nTHR/RHR/IER/IIR\nLCR/MCR/LSR/MSR\nDLL/DLH", shape=record,
+          fillcolor="#BBDEFB"]
+    txfifo [label="TX FIFO\n(64 bytes)", fillcolor="#B3E5FC"]
+    rxfifo [label="RX FIFO\n(64 bytes)", fillcolor="#B3E5FC"]
+    irq [label="IRQ\nlogic", shape=diamond, fillcolor="#81D4FA"]
+  }
+
+  firmware [label="OsmocomBB\nfirmware", fillcolor="#CE93D8"]
+  chardev [label="QEMU chardev\n(pty)", fillcolor="#FFF9C4"]
+  osmocon [label="osmocon\n(host)", fillcolor="#FFE0B2"]
+  inth [label="INTH\nIRQ 7", fillcolor="#F8BBD0"]
+
+  firmware -> regs [label="MMIO\nwrite THR"]
+  regs -> txfifo [label="TX"]
+  txfifo -> chardev [label="chr_fe_write"]
+  chardev -> osmocon [label="pty bytes"]
+  osmocon -> chardev [label="pty bytes", style=dashed]
+  chardev -> rxfifo [label="chr_fe_handler"]
+  rxfifo -> regs [label="RX"]
+  regs -> firmware [label="MMIO\nread RHR", style=dashed]
+  irq -> inth [label="pulse"]
+  regs -> irq [label="IER\nconditions"]
+}'
+render_graphviz(dot_code)
+```
+
+**Points clés de l'implémentation :**
+
+- Le chardev est attaché via `qdev_prop_set_chr()` **avant** `realize()`
+- Les handlers RX sont configurés dans `calypso_uart_realize()`
+- Protocole sercomm encapsulé dans les trames UART
+- Le loader utilise le protocole HDLC pour le handshake osmocon
+- Le layer1 utilise sercomm pour L1CTL
+
+#### Timers (Timer1 @ 0xFFFE3800, Timer2 @ 0xFFFE3C00)
+
+```{r timer_diagram, results="asis"}
+dot_code <- 'digraph timer {
+  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]
+  node [shape=record, style=filled, fontname="Courier", fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  regs [label="{Timer Registers|CNTL (mode, start/stop)|LOAD (reload value)|READ (current count)}",
+        fillcolor="#C8E6C9"]
+  qemu_timer [label="{QEMUTimer|QEMU_CLOCK_VIRTUAL|callback on expiry}",
+               fillcolor="#FFF9C4"]
+  irq [label="IRQ → INTH", shape=diamond, fillcolor="#F8BBD0"]
+
+  regs -> qemu_timer [label="timer_mod()\non CNTL write"]
+  qemu_timer -> irq [label="fire on\nexpiry"]
+  qemu_timer -> regs [label="auto-reload\nif AR bit set", style=dashed]
+}'
+render_graphviz(dot_code)
+```
+
+#### SPI / ABB TWL3025
+
+Le SPI communique avec l'ABB (Analog Baseband) TWL3025 qui gère la radio, le VCXO, l'ADC batterie, etc.
+
+```{r spi_abb, results="asis"}
+dot_code <- 'digraph spi_abb {
+  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]
+
+  spi [label="SPI Controller\n0xFFFE3000\nIRQ 13", fillcolor="#DCEDC8"]
+  abb [label="ABB TWL3025\n(émulé en registres)\nVRPCDEV=0x01\nVRPCSTEN=0x13",
+       fillcolor="#FFF9C4"]
+  firmware [label="Firmware\nabb_reg_write()\nabb_reg_read()", fillcolor="#CE93D8"]
+
+  firmware -> spi [label="MMIO"]
+  spi -> abb [label="page/addr/data\n10-bit words"]
+  abb -> spi [label="read data", style=dashed]
+}'
+render_graphviz(dot_code)
+```
+
+#### Keypad (0xFFFE4800)
+
+```{r keypad_diagram, results="asis"}
+dot_code <- 'digraph keypad {
+  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  monitor [label="QEMU Monitor\nwrite 0xFFFE4800 0xDEAD\nwrite 0xFFFE4800 0xBEEF",
+           fillcolor="#FFF9C4"]
+  kp [label="CalypsoKeypad\nkeys: uint16 (active-low)\n0xFF = all released\nbit clear = pressed",
+      fillcolor="#FFE0B2"]
+  timer_r [label="QEMUTimer\nrelease (500ms)", fillcolor="#C8E6C9"]
+  timer_2p [label="QEMUTimer\n2nd press (+700ms)", fillcolor="#C8E6C9"]
+  timer_2r [label="QEMUTimer\n2nd release (+1200ms)", fillcolor="#C8E6C9"]
+  firmware [label="Firmware\nkeypad scan\nread 0xFFFE4800", fillcolor="#CE93D8"]
+
+  monitor -> kp [label="magic write"]
+  kp -> timer_r [label="0xDEAD\nsingle press"]
+  kp -> timer_2p [label="0xBEEF\ndouble press"]
+  timer_r -> kp [label="set bit\n(release)"]
+  timer_2p -> kp [label="clear bit\n(2nd press)"]
+  timer_2p -> timer_2r [label="schedule"]
+  timer_2r -> kp [label="set bit\n(2nd release)"]
+  kp -> firmware [label="MMIO read", style=dashed]
+}'
+render_graphviz(dot_code)
+```
+
+**Séquence double appui (0xBEEF) :**
+
+```
+t=0ms         t=500ms       t=700ms        t=1200ms
+│─ press 1 ──│── gap ──────│── press 2 ───│
+keys=0xFE     keys=0xFF     keys=0xFE      keys=0xFF
+```
+
+#### TRX Bridge — DSP API & TPU
+
+```{r trx_bridge, results="asis"}
+dot_code <- 'digraph trx_bridge {
+  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  subgraph cluster_qemu {
+    label="QEMU Calypso"; style=filled; fillcolor="#F3E5F5"
+
+    tpu [label="TPU Emulation\nRAM: 0xFFFE8000\nReg: 0xFFFF1000", fillcolor="#D1C4E9"]
+    dsp [label="DSP API\nShared RAM\n0xFFD00000", fillcolor="#D1C4E9"]
+    trx [label="calypso_trx\nUDP socket\nport 4729", fillcolor="#CE93D8"]
+    irq [label="TDMA Frame IRQ", shape=diamond, fillcolor="#F8BBD0"]
+  }
+
+  subgraph cluster_host {
+    label="Host"; style=dashed; color="#666"
+    transceiver [label="transceiver\n(layer23)", fillcolor="#FFE0B2"]
+    bts [label="osmo-bts-trx", fillcolor="#BBDEFB"]
+  }
+
+  tpu -> trx [label="burst data"]
+  dsp -> trx [label="DSP params"]
+  trx -> transceiver [label="TRXD\nUDP 5700+"]
+  transceiver -> bts [label="TRX\nprotocol"]
+  trx -> irq [label="TDMA tick"]
+  irq -> tpu [label="schedule\nnext frame", style=dashed]
+}'
+render_graphviz(dot_code)
+```
+
+---
+
+## Boot sequence
+
+#### Flux de démarrage
+
+```{r boot_sequence, results="asis"}
+dot_code <- 'digraph boot {
+  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica, nodesep=0.3]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  start [label="QEMU start\n-kernel layer1.highram.elf\n-serial pty", fillcolor="#FFCDD2"]
+
+  load [label="QEMU loads ELF\nat 0x00820000\n(entry point = _start)", fillcolor="#FFE0B2"]
+
+  bss [label="_start:\nClear BSS\n(loop_bss)", fillcolor="#FFF9C4"]
+
+  stacks [label="Init stacks\nFIQ sp, IRQ sp\nSVC sp, ABT sp", fillcolor="#FFF9C4"]
+
+  ctors [label="do_global_ctors()\nC++ init", fillcolor="#FFF9C4"]
+
+  main [label="_jump_main\n→ main()", fillcolor="#C8E6C9"]
+
+  hw_init [label="Hardware init:\nUART, SPI/ABB\nTimer, INTH\nKeypad, TPU", fillcolor="#B3E5FC"]
+
+  l1_loop [label="Layer1 main loop\nTDMA frame IRQ handler\nL1CTL via sercomm", fillcolor="#CE93D8"]
+
+  osmocon [label="osmocon connects\nvia pty → sercomm\n→ /tmp/osmocom_l2", fillcolor="#FFE0B2"]
+
+  start -> load -> bss -> stacks -> ctors -> main -> hw_init -> l1_loop
+  l1_loop -> osmocon [label="L1CTL\nready", style=dashed]
+}'
+render_graphviz(dot_code)
+```
+
+**Point critique :** Le layer1 est chargé **directement** par QEMU (`-kernel`), sans passer par
+le loader + osmocon upload. Le protocole `osmoload memwrite` n'est pas implémenté dans l'émulation
+UART, donc le chargement via loader échoue (le code reste celui du loader à 0x820044).
+
+**Diagnostic :** `xp /1xw 0x00820044` via le monitor QEMU permet de distinguer les deux :
+
+- `0xeb002876` → **layer1** (bl 0x82a224)
+- `0xeb000ea3` → **loader** (bl 0x823ad8)
+
+---
+
+## Orchestration — tmux & Docker
+
+#### Architecture de déploiement
+
+```{r deployment, results="asis"}
+dot_code <- 'digraph deployment {
+  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica, compound=true]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  subgraph cluster_docker {
+    label="Docker Container (openbsc-nitb)\n--privileged --network=host"
+    style=filled; fillcolor="#E8EAF6"; color="#3F51B5"
+
+    subgraph cluster_tmux {
+      label="tmux session: gsm"; style=dashed; color="#666"
+
+      w0 [label="Window 0: nitb\ncd /etc/osmocom\nosmo-nitb --yes-i-really-\nwant-to-run-prehistoric-software",
+          fillcolor="#BBDEFB"]
+      w1 [label="Window 1: calypso\ncd /src/qemu\nbash launch_calypso.sh",
+          fillcolor="#CE93D8"]
+      w2 [label="Window 2: trx\ncd .../transceiver\n./transceiver",
+          fillcolor="#FFE0B2"]
+      w3 [label="Window 3: bts\ncd /etc/osmocom\nosmo-bts-trx -i 0.0.0.0",
+          fillcolor="#C8E6C9"]
+    }
+
+    entrypoint [label="entrypoint.sh\nTUN setup (apn0)\nip_forward\n→ exec run.sh",
+                fillcolor="#FFF9C4"]
+
+    tun [label="apn0\n192.168.100.1/24\n(GPRS NAT)", shape=ellipse, fillcolor="#DCEDC8"]
+  }
+
+  subgraph cluster_host {
+    label="Host Linux"; style=dashed; color="#999"
+    wireshark [label="Wireshark\n-i lo -k\n-f udp port 4729\n-Y gsmtap", fillcolor="#E8F5E9"]
+    start_sh [label="start.sh\nwireshark &\ndocker run ...", fillcolor="#FFF9C4"]
+  }
+
+  start_sh -> wireshark [label="lance"]
+  start_sh -> entrypoint [label="docker run"]
+  entrypoint -> tun [label="TUN/NAT"]
+  entrypoint -> w0 [label="run.sh", lhead=cluster_tmux]
+
+  w0 -> w3 [style=invis]
+  w1 -> w2 [style=invis]
+}'
+render_graphviz(dot_code)
+```
+
+#### Séquence de démarrage temporel
+
+```{r startup_timeline, results="asis"}
+dot_code <- 'digraph timeline {
+  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]
+  node [shape=record, style=filled, fontname=Helvetica, fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  t0 [label="{t=0s|start.sh|Wireshark → background\ndocker run → entrypoint.sh}", fillcolor="#FFF9C4"]
+  t1 [label="{t=1s|entrypoint.sh|TUN apn0 + ip_forward\nexec run.sh}", fillcolor="#FFE0B2"]
+  t2 [label="{t=2s|run.sh — Window 0|osmo-nitb démarre\nÉcoute Abis, GSUP}", fillcolor="#BBDEFB"]
+  t3 [label="{t=5s|run.sh — Window 1|QEMU Calypso + osmocon\nlayer1 boot → L1CTL socket}", fillcolor="#CE93D8"]
+  t4 [label="{t=8s|run.sh — Window 2|transceiver\nAttend /tmp/osmocom_l2 (30s max)\nPuis bridge L1→TRX}", fillcolor="#FFE0B2"]
+  t5 [label="{t=11s|run.sh — Window 3|osmo-bts-trx\nConnecte au transceiver + nitb}", fillcolor="#C8E6C9"]
+  t6 [label="{t=~15s|Stack opérationnelle|BTS radiating\nGSMTAP → Wireshark}", fillcolor="#E8F5E9"]
+
+  t0 -> t1 -> t2 -> t3 -> t4 -> t5 -> t6
+}'
+render_graphviz(dot_code)
+```
+
+---
+
+## Scripts de lancement
+
+#### launch_calypso.sh — QEMU + osmocon
+
+```bash
+#!/bin/bash
+QEMU=./build/qemu-system-arm
+FIRMWARE=${1:-~/compal_e88/layer1.highram.elf}
+MONSOCK=/tmp/qemu-calypso-mon.sock
+LOGFILE=/tmp/qemu-calypso.log
+rm -f "$MONSOCK" "$LOGFILE"
+killall -q qemu-system-arm 2>/dev/null; sleep 0.3
+
+$QEMU -M calypso \
+  -kernel "$FIRMWARE" \
+  -serial pty \
+  -monitor unix:$MONSOCK,server,nowait \
+  >"$LOGFILE" 2>&1 &
+QEMU_PID=$!
+
+# Attendre le pty
+PTS=""
+for i in $(seq 1 50); do
+    [ -f "$LOGFILE" ] && PTS=$(grep -o '/dev/pts/[0-9]*' "$LOGFILE" | head -1)
+    [ -n "$PTS" ] && break
+    sleep 0.1
+done
+
+# osmocon comme bridge L1CTL (pas d'upload, direct boot)
+osmocon -p "$PTS" -m c123xor &
+OSMO_PID=$!
+
+trap "kill $QEMU_PID $OSMO_PID 2>/dev/null; rm -f $MONSOCK; exit" INT TERM
+wait $QEMU_PID
+```
+
+#### Commandes de diagnostic
+
+```bash
+# Vérifier quel firmware est en RAM (loader vs layer1)
+echo "xp /1xw 0x00820044" | socat - UNIX-CONNECT:/tmp/qemu-calypso-mon.sock
+# 0xeb002876 → layer1 | 0xeb000ea3 → loader
+
+# Dump des premières instructions
+echo "xp /16xw 0x00820000" | socat - UNIX-CONNECT:/tmp/qemu-calypso-mon.sock
+
+# Vérifier que le CPU progresse
+echo "info registers" | socat - UNIX-CONNECT:/tmp/qemu-calypso-mon.sock
+
+# Power button pulse
+echo "write 0xFFFE4800 0xDEAD" | socat - UNIX-CONNECT:/tmp/qemu-calypso-mon.sock
+
+# Double power press
+echo "write 0xFFFE4800 0xBEEF" | socat - UNIX-CONNECT:/tmp/qemu-calypso-mon.sock
+
+# Hexdump série (vérifier que layer1 envoie des trames sercomm)
+hexdump -C "$PTS" | head -20
+```
+
+---
+
+## Stubs et périphériques non implémentés
+
+```{r stubs, results="asis"}
+dot_code <- 'digraph stubs {
+  graph [rankdir=TB, bgcolor=transparent, fontname=Helvetica]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]
+
+  subgraph cluster_impl {
+    label="Implémentés"; style=filled; fillcolor="#E8F5E9"
+    n1 [label="INTH (IRQ ctrl)", fillcolor="#C8E6C9"]
+    n2 [label="Timer 1 & 2", fillcolor="#C8E6C9"]
+    n3 [label="UART Modem + IrDA", fillcolor="#C8E6C9"]
+    n4 [label="SPI / ABB TWL3025", fillcolor="#C8E6C9"]
+    n5 [label="I2C", fillcolor="#C8E6C9"]
+    n6 [label="Keypad (stateful)", fillcolor="#C8E6C9"]
+    n7 [label="TRX Bridge", fillcolor="#C8E6C9"]
+    n8 [label="IRAM + Alias", fillcolor="#C8E6C9"]
+  }
+
+  subgraph cluster_stub {
+    label="Stubs (retourne 0)"; style=filled; fillcolor="#FFF3E0"
+    s1 [label="0xFFFE6800 — tmr6800 (8-bit)", fillcolor="#FFE0B2"]
+    s2 [label="0xFFFE8000 — mmio_80xx (8-bit)", fillcolor="#FFE0B2"]
+    s3 [label="0xFFFEF000 — conf (16-bit)", fillcolor="#FFE0B2"]
+    s4 [label="0xFFFF9800 — mmio_98xx (16-bit)", fillcolor="#FFE0B2"]
+    s5 [label="0xFFFFF000 — DPLL (16-bit)", fillcolor="#FFE0B2"]
+    s6 [label="0xFFFFF900 — Rhea bridge (16-bit)", fillcolor="#FFE0B2"]
+    s7 [label="0xFFFFFB00 — CLKM (16-bit)", fillcolor="#FFE0B2"]
+    s8 [label="0xFFFFFC00 — mmio_fcxx (16-bit)", fillcolor="#FFE0B2"]
+    s9 [label="0xFFFFFD00 — cntl (16-bit)", fillcolor="#FFE0B2"]
+    s10 [label="0xFFFFFF00 — DIO (8-bit)", fillcolor="#FFE0B2"]
+    s11 [label="0xFFF00000 — catch-all (1MB)", fillcolor="#FFCCBC"]
+  }
+}'
+render_graphviz(dot_code)
+```
+
+---
+
+## Problèmes connus et solutions
+
+| Problème | Cause | Solution |
+|----------|-------|----------|
+| "Powering off due to keypress" | Keypad initialisé à 0x00 (toutes touches pressées) | Init `kp.keys = 0xFF` (active-low) |
+| Layer1 jamais uploadé via osmocon | Protocole `osmoload memwrite` non émulé dans UART | Charger layer1 directement via `-kernel` |
+| `xp /16xi` → "not supported on this arch" | Désassemblage ARM non supporté dans monitor | Utiliser `xp /16xw` (dump hex brut) |
+| Loader re-exécuté après `osmoload jump` | Code loader et layer1 à la même adresse 0x820000 | Comparer l'opcode à 0x820044 pour distinguer |
+| Flash init fail | Pas d'émulation flash NOR | Non bloquant, le firmware continue |
+
+---
+
+## Prochaines étapes
+
+```{r roadmap, results="asis"}
+dot_code <- 'digraph roadmap {
+  graph [rankdir=LR, bgcolor=transparent, fontname=Helvetica]
+  node [shape=box, style="filled,rounded", fontname=Helvetica, fontsize=10]
+  edge [fontname=Helvetica, fontsize=9]
+
+  done [label="Fait", shape=plaintext, fontsize=12, fontcolor="#4CAF50"]
+  next [label="Prochaines\nétapes", shape=plaintext, fontsize=12, fontcolor="#FF9800"]
+  future [label="Long terme", shape=plaintext, fontsize=12, fontcolor="#9C27B0"]
+
+  d1 [label="SoC complet\nINTH+UART+SPI\n+Timer+I2C", fillcolor="#C8E6C9"]
+  d2 [label="TRX bridge\nUDP 4729", fillcolor="#C8E6C9"]
+  d3 [label="Keypad\nstateful", fillcolor="#C8E6C9"]
+  d4 [label="Boot direct\nlayer1 -kernel", fillcolor="#C8E6C9"]
+
+  n1 [label="IRQ keypad\npress/release", fillcolor="#FFE0B2"]
+  n2 [label="Watchdog\ntimer", fillcolor="#FFE0B2"]
+  n3 [label="osmoload\nmemwrite\n(UART proto)", fillcolor="#FFE0B2"]
+  n4 [label="GPRS\nPCU+SGSN+GGSN", fillcolor="#FFE0B2"]
+
+  f1 [label="Multi-MS\n(N phones)", fillcolor="#E1BEE7"]
+  f2 [label="Flash NOR\nemulation", fillcolor="#E1BEE7"]
+  f3 [label="Audio\nosmo-gapk\nALSA", fillcolor="#E1BEE7"]
+  f4 [label="Upstream\nQEMU merge", fillcolor="#E1BEE7"]
+
+  done -> d1 -> d2 -> d3 -> d4 [style=invis]
+  next -> n1 -> n2 -> n3 -> n4 [style=invis]
+  future -> f1 -> f2 -> f3 -> f4 [style=invis]
+
+  d4 -> n1 [style=dashed, color="#999"]
+  n4 -> f1 [style=dashed, color="#999"]
+}'
+render_graphviz(dot_code)
+```
+
+---
+
+## Annexe — Fichiers source QEMU
+
+| Fichier | Rôle |
+|---------|------|
+| `hw/arm/calypso/calypso_soc.c` | SoC principal, init de tous les périphériques |
+| `hw/arm/calypso/calypso_uart.c` | UART 16550-like avec chardev |
+| `hw/arm/calypso/calypso_inth.c` | Contrôleur d'interruptions 32 lignes |
+| `hw/arm/calypso/calypso_timer.c` | Timer avec auto-reload |
+| `hw/arm/calypso/calypso_spi.c` | SPI + registres ABB TWL3025 |
+| `hw/arm/calypso/calypso_i2c.c` | I2C stub |
+| `hw/arm/calypso/calypso_trx.c` | TRX bridge UDP (DSP API + TPU) |
+| `hw/arm/calypso/calypso_machine.c` | Définition machine QEMU `-M calypso` |
+| `include/hw/arm/calypso/calypso_soc.h` | Header SoC (CalypsoSoCState) |
+| `include/hw/arm/calypso/calypso_trx.h` | Header TRX (IRQ numbers, API) |
+| `include/hw/arm/calypso/calypso_uart.h` | Header UART (TYPE_CALYPSO_UART) |
+
+---
+
+*Document généré le `r Sys.Date()` — QEMU 9.2.4 modifié, OsmocomBB rev osmocon_v0.0.0-1784-g9516a0e5*

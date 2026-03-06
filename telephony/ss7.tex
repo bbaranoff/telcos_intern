@@ -1,0 +1,916 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\section{Les réseaux mobiles : une infrastructure
+invisible}\label{les-ruxe9seaux-mobiles-une-infrastructure-invisible}
+
+Les réseaux de télécommunications mobiles constituent aujourd'hui l'une
+des infrastructures techniques les plus critiques de la société moderne.
+Ils permettent la transmission de voix, de données et de messages à
+l'échelle mondiale et supportent une part importante des communications
+personnelles, industrielles et institutionnelles.
+
+L'architecture actuelle des réseaux mobiles est le résultat d'une
+évolution progressive débutée avec les premiers systèmes cellulaires
+analogiques, puis avec l'introduction du \textbf{GSM (Global System for
+Mobile Communications)} dans les années 1990. Ce standard a profondément
+transformé les télécommunications en introduisant une architecture
+numérique standardisée, reposant sur une séparation claire entre
+plusieurs composants réseau.
+
+Dans un réseau GSM classique, plusieurs éléments principaux coopèrent :
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{BTS (Base Transceiver Station)} : station radio qui communique
+  avec les téléphones mobiles.
+\item
+  \textbf{BSC (Base Station Controller)} : contrôleur qui gère plusieurs
+  BTS et leurs ressources radio.
+\item
+  \textbf{MSC (Mobile Switching Center)} : commutateur central qui gère
+  les appels et la mobilité.
+\item
+  \textbf{HLR (Home Location Register)} : base de données contenant les
+  informations des abonnés.
+\item
+  \textbf{STP (Signal Transfer Point)} : nœud de routage de la
+  signalisation SS7 entre réseaux.
+\end{itemize}
+
+Ces composants communiquent entre eux via des protocoles spécialisés,
+notamment \textbf{SS7}, un système de signalisation conçu pour
+transporter les messages nécessaires au fonctionnement du réseau :
+authentification, localisation des abonnés, établissement des appels ou
+routage des SMS.
+
+Même si les technologies récentes comme \textbf{4G (LTE)} et \textbf{5G}
+ont profondément transformé l'architecture des réseaux mobiles, une
+grande partie de cette infrastructure historique reste encore utilisée
+aujourd'hui, en particulier dans les couches de compatibilité et dans
+certaines applications industrielles ou critiques.
+
+Comprendre ces réseaux nécessite donc d'explorer non seulement leur
+fonctionnement radio, mais également l'ensemble de leur infrastructure
+de signalisation.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Les réseaux mobiles comme systèmes
+distribués}\label{les-ruxe9seaux-mobiles-comme-systuxe8mes-distribuuxe9s}
+
+Un réseau mobile est en réalité un \textbf{système distribué complexe}
+composé de plusieurs sous-réseaux interconnectés.
+
+Chaque opérateur possède sa propre infrastructure comprenant ses bases
+d'abonnés, ses centres de commutation et ses stations radio. Cependant,
+les communications doivent également fonctionner entre opérateurs
+différents. Pour permettre ces échanges, les réseaux sont reliés via des
+mécanismes de signalisation inter-opérateurs.
+
+Dans le monde GSM, cette interconnexion repose principalement sur :
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{SS7 (Signaling System No.7)}
+\item
+  \textbf{MAP (Mobile Application Part)}
+\item
+  \textbf{SIGTRAN / M3UA}, qui permettent de transporter la
+  signalisation SS7 sur des réseaux IP modernes.
+\end{itemize}
+
+Un élément central dans cette architecture est le \textbf{STP (Signal
+Transfer Point)}. Il agit comme un routeur de signalisation capable
+d'acheminer les messages entre plusieurs réseaux.
+
+Dans une topologie simplifiée, plusieurs opérateurs peuvent être
+connectés à un STP central qui permet d'acheminer les requêtes entre
+leurs infrastructures respectives.
+
+Ce type d'architecture permet par exemple :
+
+\begin{itemize}
+\tightlist
+\item
+  le routage d'un \textbf{SMS vers un abonné d'un autre opérateur}
+\item
+  la localisation d'un téléphone lors d'un \textbf{appel entrant}
+\item
+  la gestion du \textbf{roaming international}
+\end{itemize}
+
+Cette interconnexion rend les réseaux mobiles extrêmement puissants mais
+également très complexes à étudier, car elle implique de nombreuses
+interactions entre systèmes distincts.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Reproduire un réseau télécom en
+laboratoire}\label{reproduire-un-ruxe9seau-tuxe9luxe9com-en-laboratoire}
+
+Dans les environnements opérateurs réels, l'infrastructure télécom est
+généralement inaccessible aux chercheurs, aux étudiants ou aux
+ingénieurs souhaitant comprendre en profondeur le fonctionnement des
+réseaux mobiles.
+
+Pour pallier cette difficulté, plusieurs projets open-source ont émergé
+afin de reproduire ces architectures en laboratoire. Parmi eux, la suite
+\textbf{Osmocom} permet de déployer l'ensemble des composants
+nécessaires à la création d'un réseau GSM complet.
+
+Le laboratoire présenté dans cet ouvrage repose sur cette approche. Il
+met en place un environnement capable de simuler plusieurs opérateurs
+GSM interconnectés via une infrastructure de signalisation complète.
+
+Ce laboratoire inclut notamment :
+
+\begin{itemize}
+\tightlist
+\item
+  plusieurs réseaux GSM indépendants
+\item
+  un \textbf{STP inter-opérateur}
+\item
+  la signalisation \textbf{SIGTRAN / M3UA}
+\item
+  un \textbf{HLR par opérateur}
+\item
+  un \textbf{MSC}
+\item
+  un \textbf{BSC}
+\item
+  une passerelle \textbf{SIP via Asterisk}
+\item
+  un système de routage \textbf{SMS inter-opérateur}
+\end{itemize}
+
+L'objectif de cet environnement est de rendre \textbf{observable et
+reproductible} une infrastructure télécom qui est normalement réservée
+aux opérateurs.
+
+Dans ce laboratoire, les réseaux peuvent être démarrés, modifiés et
+analysés en temps réel. Les échanges de signalisation peuvent être
+inspectés, les routes modifiées et les interactions entre opérateurs
+étudiées.
+
+Par exemple, il est possible d'observer comment une requête de
+localisation d'abonné traverse plusieurs réseaux avant d'atteindre le
+HLR correspondant, ou comment un SMS est routé d'un opérateur vers un
+autre via un STP central.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Architecture simplifiée du
+laboratoire}\label{architecture-simplifiuxe9e-du-laboratoire}
+
+Chaque opérateur possède ses propres identifiants réseau et son propre
+plan de signalisation. Le STP central agit comme un point d'échange
+permettant d'acheminer les messages entre ces différents réseaux.
+
+Ce type d'environnement permet de reproduire des scénarios réalistes
+tout en conservant un contrôle complet sur l'infrastructure.
+
+\begin{center}\includegraphics[width=9.47in]{../../../../tmp/RtmpZY6wjN/file26cc44d9761d9} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Implémentation du réseau SS7 et analyse des
+dumps}\label{impluxe9mentation-du-ruxe9seau-ss7-et-analyse-des-dumps}
+
+Dans un réseau télécom réel, la signalisation est le système nerveux de
+l'infrastructure. Les appels, les SMS et la gestion des abonnés ne
+reposent pas uniquement sur la radio : ils dépendent d'un réseau de
+signalisation distinct chargé de coordonner les équipements du cœur de
+réseau.
+
+Dans l'architecture GSM classique, ce rôle est assuré par \textbf{SS7
+(Signalling System No.~7)}. Historiquement conçu pour les réseaux
+téléphoniques commutés, SS7 a ensuite été adapté aux réseaux mobiles
+pour transporter des protocoles comme \textbf{MAP}, utilisés pour la
+gestion des abonnés et des services mobiles.
+
+Dans ce laboratoire, la signalisation SS7 n'est pas simulée de manière
+abstraite : elle est réellement implémentée sur IP à l'aide de
+\textbf{SIGTRAN et M3UA}, ce qui permet d'observer et d'analyser les
+échanges réels entre les composants du réseau. Le projet reproduit ainsi
+une infrastructure complète d'interconnexion entre plusieurs réseaux
+mobiles simulés.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Le rôle du réseau SS7 dans l'architecture
+GSM}\label{le-ruxf4le-du-ruxe9seau-ss7-dans-larchitecture-gsm}
+
+Dans un réseau GSM, la radio (BTS et BSC) ne constitue qu'une partie de
+l'infrastructure. Les décisions concernant l'acheminement des appels ou
+des SMS sont prises dans le cœur de réseau.
+
+Les principaux éléments impliqués sont :
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{MSC (Mobile Switching Center)} : Centre de commutation qui
+  gère les appels et la mobilité.
+\item
+  \textbf{HLR (Home Location Register)} : Base de données contenant les
+  informations des abonnés.
+\item
+  \textbf{STP (Signal Transfer Point)} : Routeur de signalisation SS7
+  chargé d'acheminer les messages.
+\end{itemize}
+
+Dans une architecture classique, tous ces éléments échangent des
+messages SS7 pour coordonner leurs actions.
+
+Un SMS, par exemple, implique généralement plusieurs échanges :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  le MSC reçoit le message du téléphone
+\item
+  il interroge le HLR pour trouver le destinataire
+\item
+  le message est transmis au SMSC
+\item
+  le SMSC demande au HLR où se trouve l'abonné
+\item
+  le message est finalement délivré au MSC du réseau cible
+\end{enumerate}
+
+Chaque étape correspond à une série de messages MAP transportés sur SS7.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{SS7 sur IP : SIGTRAN et
+M3UA}\label{ss7-sur-ip-sigtran-et-m3ua}
+
+Les réseaux modernes n'utilisent plus les liaisons SS7 traditionnelles
+sur TDM. La signalisation est aujourd'hui transportée sur IP grâce à une
+famille de protocoles appelée \textbf{SIGTRAN}.
+
+Dans cette architecture, le transport se fait généralement via :
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{SCTP} pour la couche transport
+\item
+  \textbf{M3UA (MTP3 User Adaptation)} pour transporter les messages SS7
+  sur IP
+\end{itemize}
+
+Dans le laboratoire, chaque composant Osmocom (MSC, BSC, STP) communique
+via \textbf{M3UA sur SCTP}, exactement comme dans les déploiements
+opérateurs modernes.
+
+Cela permet d'observer directement les flux de signalisation dans un
+analyseur réseau comme Wireshark.
+
+\begin{center}\includegraphics[width=2.31in]{../../../../tmp/RtmpZY6wjN/file26cc4743cb264} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{L'architecture
+multi-opérateurs}\label{larchitecture-multi-opuxe9rateurs}
+
+L'une des particularités du projet est de simuler plusieurs réseaux
+mobiles indépendants, chacun possédant son propre cœur de réseau.
+
+Chaque opérateur est isolé dans un conteneur Docker contenant :
+
+\begin{itemize}
+\tightlist
+\item
+  un \textbf{MSC}
+\item
+  un \textbf{HLR}
+\item
+  un \textbf{BSC}
+\item
+  un \textbf{STP local}
+\item
+  un \textbf{MGW}
+\item
+  un \textbf{SMSC}
+\end{itemize}
+
+Tous ces composants communiquent localement via l'interface
+\textbf{127.0.0.1}, ce qui évite les problèmes de synchronisation au
+démarrage des conteneurs.
+
+L'interconnexion entre les différents opérateurs est assurée par un
+composant central : l'\textbf{Inter-STP}.
+
+Ce nœud agit comme un \textbf{routeur SS7 inter-opérateurs}, chargé
+d'acheminer la signalisation entre les différents réseaux.
+
+\begin{center}\includegraphics[width=5.17in]{../../../../tmp/RtmpZY6wjN/file26cc471e4035a} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Topologie réseau Docker}\label{topologie-ruxe9seau-docker}
+
+La topologie réseau du laboratoire repose sur deux types de réseaux
+Docker distincts :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  un \textbf{réseau backbone inter-opérateurs}, utilisé pour transporter
+  la signalisation SS7
+\item
+  un \textbf{réseau privé par opérateur}, utilisé pour le trafic interne
+  GSM
+\end{enumerate}
+
+Cette séparation reflète l'organisation réelle des réseaux télécom où la
+signalisation circule sur un réseau distinct du trafic utilisateur.
+
+\subsubsection{Réseaux}\label{ruxe9seaux}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1940}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2239}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.5821}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Réseau Docker
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Plage
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rôle
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{gsm-inter} & \texttt{172.20.0.0/24} & Backbone interop (M3UA
+inter-STP) \\
+\texttt{gsm-net-opN} & \texttt{172.20.N.0/24} & Réseau privé opérateur N
+(GSMTAP, GPRS) \\
+\end{longtable}
+
+Le réseau \textbf{gsm-inter} joue le rôle de backbone de signalisation.
+C'est sur ce réseau que transitent les connexions \textbf{SCTP / M3UA}
+entre les STP opérateurs et l'Inter-STP.
+
+Chaque opérateur possède en parallèle un réseau privé dédié.
+
+\subsubsection{Attribution des adresses
+IP}\label{attribution-des-adresses-ip}
+
+Pour simplifier la génération automatique des configurations,
+l'adressage IP suit une formule simple.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2063}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3968}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3968}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Composant
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+IP backbone (\texttt{gsm-inter})
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+IP privée (\texttt{gsm-net-opN})
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Inter-STP & \texttt{172.20.0.10} & --- \\
+Conteneur OpN & \texttt{172.20.0.(10+N)} & \texttt{172.20.N.10} \\
+\end{longtable}
+
+La règle générale est la suivante :
+
+\begin{verbatim}
+opérateur N
+backbone : 172.20.0.(10+N)
+réseau privé : 172.20.N.10
+\end{verbatim}
+
+Cette convention permet de générer automatiquement toutes les
+configurations réseau lors du démarrage du laboratoire.
+
+\subsubsection{Communication
+intra-conteneur}\label{communication-intra-conteneur}
+
+À l'intérieur d'un conteneur opérateur, tous les composants Osmocom
+communiquent via \textbf{localhost}.
+
+Ce choix présente deux avantages :
+
+\begin{itemize}
+\tightlist
+\item
+  éliminer les \textbf{conditions de course Docker} lors du démarrage
+\item
+  garantir que le STP est disponible immédiatement pour les autres
+  composants
+\end{itemize}
+
+Le STP local agit ainsi comme \textbf{hub de signalisation
+intra-opérateur}.
+
+\subsubsection{Communication
+inter-conteneurs}\label{communication-inter-conteneurs}
+
+La communication entre opérateurs est volontairement limitée.
+
+Le seul lien qui traverse réellement le réseau Docker est la connexion
+entre :
+
+\begin{itemize}
+\tightlist
+\item
+  le \textbf{STP opérateur}
+\item
+  l'\textbf{Inter-STP}
+\end{itemize}
+
+\begin{center}\includegraphics[width=5.47in]{../../../../tmp/RtmpZY6wjN/file26cc44ce2effe} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Signalisation SS7
+détaillée}\label{signalisation-ss7-duxe9tailluxe9e}
+
+\subsection{Point codes}\label{point-codes}
+
+Dans SS7, chaque nœud possède un identifiant unique appelé \textbf{point
+code}.
+
+Ces identifiants permettent de déterminer vers quel équipement doit être
+routé un message.
+
+Le laboratoire utilise le format \textbf{ITU 14-bit} :
+
+\begin{verbatim}
+zone.network.node
+\end{verbatim}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Nœud & Point Code & Formule \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Inter-STP & \texttt{0.23.0} & fixe \\
+MSC OpN & \texttt{N.23.1} & zone=N \\
+STP OpN & \texttt{N.23.2} & zone=N \\
+BSC OpN & \texttt{N.23.3} & zone=N \\
+\end{longtable}
+
+Cette convention permet d'identifier immédiatement l'opérateur et le
+type d'équipement.
+
+\subsection{Routing Contexts (RCTX)}\label{routing-contexts-rctx}
+
+Dans M3UA, le \textbf{Routing Context} permet d'identifier un flux de
+signalisation.
+
+Le projet utilise une formule systématique pour générer ces identifiants
+:
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+RCTX & Formule & Usage \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{N×100+10} & \texttt{rctx\_msc} & MSC OpN → STP OpN \\
+\texttt{N×100+20} & \texttt{rctx\_stp} & STP OpN \\
+\texttt{N×100+30} & \texttt{rctx\_bsc} & BSC OpN \\
+\textbf{\texttt{N×100+50}} & \textbf{\texttt{rctx\_inter}} & \textbf{STP
+OpN → Inter-STP} \\
+\end{longtable}
+
+Le contexte le plus important est \textbf{rctx\_inter}, utilisé pour
+l'interconnexion entre opérateurs.
+
+Une incohérence dans ce contexte empêche la signalisation inter-réseau
+de fonctionner correctement.
+
+\subsection{Configuration de
+l'Inter-STP}\label{configuration-de-linter-stp}
+
+L'Inter-STP est le routeur central de signalisation.
+
+Il utilise une configuration simplifiée : chaque opérateur est
+représenté par un \textbf{Application Server (AS)}.
+
+Le routage repose uniquement sur le \textbf{Destination Point Code}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Parcours complet d'un message
+SS7}\label{parcours-complet-dun-message-ss7}
+
+Le chemin d'un message de signalisation peut être représenté de la
+manière suivante :
+
+\begin{center}\includegraphics[width=6.86in]{../../../../tmp/RtmpZY6wjN/file26cc41285f9e1} \end{center}
+
+Le message suit donc quatre étapes :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  le \textbf{MSC} envoie le message au \textbf{STP local}
+\item
+  le STP local transmet le message à l'\textbf{Inter-STP}
+\item
+  l'Inter-STP sélectionne l'opérateur cible
+\item
+  le STP distant délivre le message au \textbf{MSC destinataire}
+\end{enumerate}
+
+Ce mécanisme reproduit exactement la logique d'interconnexion des
+réseaux mobiles.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Observabilité et
+diagnostic}\label{observabilituxe9-et-diagnostic}
+
+Une fois l'infrastructure SS7 en place, l'un des aspects les plus
+intéressants du laboratoire est la possibilité d'observer la
+signalisation en temps réel.
+
+Dans les réseaux opérateurs, l'accès à la signalisation SS7 est
+généralement extrêmement restreint. Les équipements de cœur de réseau
+sont isolés et les ingénieurs disposent seulement d'outils internes pour
+analyser les flux.
+
+Dans ce laboratoire, la situation est radicalement différente : toute la
+signalisation peut être inspectée.
+
+Deux mécanismes principaux permettent cette observation :
+
+\begin{itemize}
+\tightlist
+\item
+  les \textbf{interfaces VTY des composants Osmocom}
+\item
+  les \textbf{captures réseau avec Wireshark}
+\end{itemize}
+
+Les interfaces VTY exposent l'état interne des nœuds SS7. Elles
+permettent par exemple de vérifier les associations M3UA actives, la
+table de routage ou l'état des routes de signalisation.
+
+Une commande simple permet par exemple de consulter les connexions ASP :
+
+\begin{verbatim}
+show cs7 instance 0 asp
+\end{verbatim}
+
+Cette commande indique si les associations de signalisation sont
+\textbf{actives}, \textbf{inactives} ou \textbf{en attente}.
+
+Une autre commande essentielle est :
+
+\begin{verbatim}
+show cs7 instance 0 route
+\end{verbatim}
+
+Elle affiche la table de routage SS7 et permet de vérifier si les routes
+sont disponibles.
+
+Dans un système sain, les routes dynamiques correspondant aux MSC et aux
+BSC apparaissent comme \textbf{available}. Si une route apparaît comme
+\textbf{PROHIB}, cela signifie que la signalisation ne peut pas
+atteindre ce point code.
+
+Ces informations constituent ce que l'on appelle des \textbf{dumps de
+signalisation}. Elles permettent de comprendre précisément comment le
+réseau prend ses décisions de routage.
+
+\subsection{Analyse des flux avec
+Wireshark}\label{analyse-des-flux-avec-wireshark}
+
+Le laboratoire permet également de capturer directement les flux de
+signalisation transportés sur le réseau Docker.
+
+Les protocoles visibles sont les suivants :
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{SCTP} --- transport utilisé par SIGTRAN
+\item
+  \textbf{M3UA} --- encapsulation des messages SS7
+\item
+  \textbf{SCCP} --- routage de signalisation
+\item
+  \textbf{MAP} --- gestion des services mobiles
+\end{itemize}
+
+Dans Wireshark, quelques filtres simples permettent d'isoler ces
+protocoles :
+
+\begin{verbatim}
+m3ua
+sccp
+gsm_map
+sctp.srcport == 2908
+\end{verbatim}
+
+Ces captures permettent d'observer des procédures fondamentales du
+réseau GSM :
+
+\begin{itemize}
+\tightlist
+\item
+  requêtes de localisation d'abonné
+\item
+  routage des SMS
+\item
+  messages de gestion de mobilité
+\item
+  interrogations du HLR
+\end{itemize}
+
+Le laboratoire devient ainsi un véritable \textbf{microscope de
+signalisation télécom}.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Diagrammes UML de
+l'architecture}\label{diagrammes-uml-de-larchitecture}
+
+\subsection{1. Diagramme de classes : Composants
+SS7}\label{diagramme-de-classes-composants-ss7}
+
+\begin{center}\includegraphics[width=5.72in]{../../../../tmp/RtmpZY6wjN/file26cc44c0c5b24} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{2. Flux d'appel
+inter-opérateurs}\label{flux-dappel-inter-opuxe9rateurs}
+
+\begin{center}\includegraphics[width=2.27in]{../../../../tmp/RtmpZY6wjN/file26cc4632540c6} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{3. Stack de protocoles SS7}\label{stack-de-protocoles-ss7}
+
+\begin{center}\includegraphics[width=3.4in]{../../../../tmp/RtmpZY6wjN/file26cc43e96132e} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{4. SMS inter-opérateurs}\label{sms-inter-opuxe9rateurs}
+
+\begin{center}\includegraphics[width=8.37in]{../../../../tmp/RtmpZY6wjN/file26cc42317974d} \end{center}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Conclusion}\label{conclusion}
+
+Les réseaux mobiles modernes reposent sur une architecture complexe dans
+laquelle la radio n'est qu'une partie visible de l'infrastructure.
+
+Derrière chaque appel ou chaque SMS se trouve un réseau de signalisation
+chargé de coordonner les équipements du cœur de réseau. SS7 a longtemps
+constitué l'épine dorsale de cette infrastructure, et bien que les
+réseaux évoluent vers des architectures IP plus récentes, les principes
+fondamentaux de la signalisation restent similaires.
+
+Le projet \textbf{osmo\_egprs} propose une approche différente de
+l'apprentissage des télécommunications : au lieu d'étudier les
+protocoles de manière abstraite, il permet de \textbf{reconstruire un
+réseau complet}, puis d'observer son fonctionnement interne.
+
+Grâce à la conteneurisation et à l'automatisation de la configuration,
+il devient possible de déployer en quelques minutes un environnement qui
+reproduit :
+
+\begin{itemize}
+\tightlist
+\item
+  plusieurs réseaux mobiles indépendants
+\item
+  un backbone de signalisation SS7
+\item
+  des échanges inter-opérateurs
+\item
+  des services voix et SMS
+\end{itemize}
+
+Ce laboratoire transforme ainsi un système habituellement inaccessible
+en un environnement expérimental ouvert.
+
+Il permet non seulement de comprendre l'architecture des réseaux
+mobiles, mais aussi d'explorer leur fonctionnement réel --- un pas
+essentiel pour quiconque souhaite étudier les télécommunications, leur
+histoire et leur sécurité.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Annexe : SDR \& Matériel (UHD,
+BladeRF)}\label{annexe-sdr-matuxe9riel-uhd-bladerf}
+
+\subsection{UHD (USRP/Ettus)}\label{uhd-usrpettus}
+
+\begin{itemize}
+\item
+  \textbf{libuhd-dev, uhd-host} : Drivers et outils pour USRP.
+\item
+  \textbf{Images firmware} :
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{python3}\NormalTok{ /usr/lib/uhd/utils/uhd\_images\_downloader.py}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Règle udev} pour détection auto :
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{wget}\NormalTok{ https://raw.githubusercontent.com/EttusResearch/uhd/refs/heads/master/host/utils/uhd{-}usrp.rules}
+\FunctionTok{cp}\NormalTok{ uhd{-}usrp.rules /etc/udev/rules.d/}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{BladeRF (Nuand)}\label{bladerf-nuand}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{libbladerf-dev} + build depuis les sources :
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/nuand/BladeRF /opt/GSM/BladeRF}
+\BuiltInTok{cd}\NormalTok{ /opt/GSM/BladeRF }\KeywordTok{\&\&} \FunctionTok{mkdir}\NormalTok{ build }\KeywordTok{\&\&} \BuiltInTok{cd}\NormalTok{ build}
+\FunctionTok{cmake}\NormalTok{ .. }\KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Librairies Osmocom de base}\label{librairies-osmocom-de-base}
+
+Ces librairies sont la fondation de toute la stack GSM Osmocom.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{libosmocore} : Primitives GSM, timers, gestion protocoles.
+\item
+  \textbf{libosmo-netif} : Interfaces réseau.
+\item
+  \textbf{libosmo-abis} : Support interface Abis (BTS ↔ BSC).
+\end{itemize}
+
+\textbf{Build de chaque librairie :}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/}\OperatorTok{\textless{}}\NormalTok{repo}\OperatorTok{\textgreater{}}
+\BuiltInTok{cd} \OperatorTok{\textless{}}\NormalTok{repo}\OperatorTok{\textgreater{}} \KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{(remplacer \texttt{\textless{}repo\textgreater{}} par le nom de la
+librairie)}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{Document généré le 2026-03-06 avec R Markdown et Graphviz}
+
+\end{document}

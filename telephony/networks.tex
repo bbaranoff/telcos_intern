@@ -1,0 +1,1637 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+\section{Réseaux mobiles}\label{ruxe9seaux-mobiles}
+
+\subsection{Objectif de cet ouvrage}\label{objectif-de-cet-ouvrage}
+
+L'objectif de ce livre est d'expliquer le fonctionnement interne des
+réseaux mobiles en partant des bases radio jusqu'aux mécanismes de
+signalisation qui orchestrent leur fonctionnement.
+
+À travers l'étude d'un laboratoire reproductible, nous analyserons :
+
+\begin{itemize}
+\tightlist
+\item
+  l'architecture des réseaux GSM
+\item
+  les protocoles de signalisation utilisés par les opérateurs
+\item
+  les interactions entre réseaux mobiles
+\item
+  les mécanismes historiques qui ont façonné l'infrastructure actuelle
+\end{itemize}
+
+Cette approche permet de comprendre non seulement comment ces réseaux
+fonctionnent, mais aussi pourquoi ils ont été conçus de cette manière.
+
+Les chapitres suivants exploreront progressivement les différentes
+couches du système, en commençant par les bases du GSM et de la
+signalisation SS7, avant d'aborder les architectures plus modernes et
+les implications en matière de sécurité.
+
+\subsubsection{Architecture GSM/EGPRS}\label{architecture-gsmegprs}
+
+\begin{center}\includegraphics[width=4.35in]{../../../../tmp/RtmpVUNkQ4/file28a5522632abc} \end{center}
+
+\subsection{Présentation}\label{pruxe9sentation}
+
+Ce guide décrit l'installation modulaire d'une infrastructure
+\textbf{EGPRS} (GPRS/EDGE) basée sur Osmocom et SDR (USRP, BladeRF).\\
+Chaque chapitre détaille un module, son rôle, ses dépendances et
+options.\\
+Tout peut être scripté pour une intégration Dockerfile ou un déploiement
+manuel sur Debian/Ubuntu 22.04+.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Dépendances système}\label{duxe9pendances-systuxe8me}
+
+Commencez par installer tous les outils de build essentiels,
+bibliothèques, Python et utilitaires de debug : - Compilation :
+\texttt{gcc}, \texttt{g++}, \texttt{make}, \texttt{cmake},
+\texttt{autoconf}, \texttt{automake}, \texttt{libtool}, etc. - Libs
+système : \texttt{libusb-1.0-0-dev}, \texttt{libedit-dev},
+\texttt{libfftw3-dev}, \texttt{liburing-dev}, \ldots{} - Dev Python :
+\texttt{python3-dev}, \texttt{python3-pip}, \texttt{python3-numpy},
+\texttt{python3-mako}, \texttt{python3-lxml}, \texttt{python3-six},
+\ldots{} - Outils additionnels : \texttt{nano}, \texttt{git},
+\texttt{wget}, \texttt{curl}, \texttt{tmux}, \texttt{doxygen},
+\texttt{ethtool}, etc.
+
+\textbf{Commande d'installation :}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{apt}\NormalTok{ update}
+\ExtensionTok{apt}\NormalTok{ install }\AttributeTok{{-}y} \OperatorTok{\textless{}}\NormalTok{tous{-}les{-}paquets{-}listés}\OperatorTok{\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{OsmocomBB}\label{osmocombb}
+
+\textbf{OsmocomBB} (Osmocom Baseband) est un projet open source qui
+implémente une pile GSM ``baseband'' pour certains téléphones Motorola
+et des configurations SDR.
+
+\subsubsection{Qu'est-ce qu'OsmocomBB\,?}\label{quest-ce-quosmocombb}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Pile protocolaire GSM côté mobile (MS, mobile station)}
+\item
+  Remplace le firmware d'origine pour donner accès aux couches GSM
+  1/2/3, journalisation des protocoles, sniffing et tests
+\item
+  Utilisations\,: analyse, tests de sécurité, recherche académique, IMSI
+  catchers, fuzzing radio
+\end{itemize}
+
+\subsubsection{Architecture}\label{architecture}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{host/osmocon}\,: Outil de chargement du firmware sur les
+  appareils compatibles
+\item
+  \textbf{src/host/layer23}\,: Pile GSM s'exécutant sur le PC (appels,
+  SMS, sniffing, capture de bursts, etc.)
+\item
+  \textbf{firmware/}\,: Code baseband à flasher sur les téléphones
+  compatibles
+\end{itemize}
+
+\begin{center}\includegraphics[width=1.16in]{../../../../tmp/RtmpVUNkQ4/file28a5562e94f83} \end{center}
+
+\subsubsection{Matériel supporté}\label{matuxe9riel-supportuxe9}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Série Motorola C1xx (C123, C118, C155, etc.)}
+\item
+  Certains autres modèles à chipset ``Calypso''
+\end{itemize}
+
+\subsubsection{Cas d'usage \& limitations}\label{cas-dusage-limitations}
+
+\begin{itemize}
+\tightlist
+\item
+  Peut se connecter à une vraie cellule 2G ou à une BTS Osmocom
+  (osmo-bts-trx)
+\item
+  Limité à la 2G pure (pas de support 3G/4G)
+\item
+  \textbf{Attention\,:} Émettre sans licence est illégal\,!\\
+  N'utilisez que pour la recherche ou en environnement contrôlé.
+\end{itemize}
+
+\subsubsection{Liens utiles}\label{liens-utiles}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://github.com/osmocom/osmocom-bb}{Dépôt GitHub OsmocomBB}
+\item
+  \href{https://osmocom.org/projects/baseband/wiki/OsmocomBB}{Wiki
+  officiel}
+\item
+  \href{https://www.lafabriquedunet.fr/blog/osmocombb-guide/}{Guide
+  d'installation (FR)}
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Pour SDR\,:} Un projet expérimental existe pour connecter
+OsmocomBB à un SDR (BladeRF, HackRF, etc.) via l'interface ``virtual
+layer1''.
+
+\subsection{OsmocomBB Mobile (MS) -- Installation rapide Ubuntu
+24.04}\label{osmocombb-mobile-ms-installation-rapide-ubuntu-24.04}
+
+\subsubsection{Prérequis}\label{pruxe9requis}
+
+\begin{itemize}
+\item
+  \textbf{Matériel\,:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Motorola C1xx (C115/C118/C123/C155, etc., baseband Calypso)
+  \item
+    Câble USB-série 2.5\,mm (PL2303 ou FTDI)
+  \end{itemize}
+\item
+  \textbf{Système\,:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ubuntu 24.04 x86\_64 (natif ou VM)
+  \item
+    Accès internet + droits sudo/root
+  \end{itemize}
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Installer les
+dépendances}\label{installer-les-duxe9pendances}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y} \DataTypeTok{\textbackslash{}}
+\NormalTok{  build{-}essential git cmake pkg{-}config autoconf automake libtool shtool }\DataTypeTok{\textbackslash{}}
+\NormalTok{  bison flex libtalloc{-}dev libpcsclite{-}dev zlib1g{-}dev libmpfr{-}dev libmpc{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libgmp{-}dev libncurses5{-}dev libncursesw5{-}dev libsofia{-}sip{-}ua{-}dev libxml2{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libfftw3{-}dev libgnutls28{-}dev libssl{-}dev python3 python3{-}pip }\DataTypeTok{\textbackslash{}}
+\NormalTok{  alsa{-}oss lemon libtinfo{-}dev}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Installer la toolchain ARM (cross-compile
+Calypso)}\label{installer-la-toolchain-arm-cross-compile-calypso}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ /opt}
+\FunctionTok{sudo}\NormalTok{ wget https://downloads.osmocom.org/binaries/toolchain/arm{-}2021.03.tar.bz2}
+\FunctionTok{sudo}\NormalTok{ tar }\AttributeTok{{-}xjf}\NormalTok{ arm{-}2021.03.tar.bz2}
+\BuiltInTok{export} \VariableTok{PATH}\OperatorTok{=}\VariableTok{$PATH}\NormalTok{:/opt/arm{-}2021.03/bin}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+\emph{(Ajoute ce dernier export à ton \texttt{\textasciitilde{}/.bashrc}
+pour qu'il soit permanent)}
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Cloner et compiler
+OsmocomBB}\label{cloner-et-compiler-osmocombb}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmocom{-}bb.git}
+\BuiltInTok{cd}\NormalTok{ osmocom{-}bb/src}
+\ExtensionTok{autoreconf} \AttributeTok{{-}i}
+\BuiltInTok{export} \VariableTok{PATH}\OperatorTok{=}\VariableTok{$PATH}\NormalTok{:/opt/arm{-}2021.03/bin}
+\ExtensionTok{./configure}
+\FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Flasher le firmware Mobile (Compal/C123
+etc.)}\label{flasher-le-firmware-mobile-compalc123-etc.}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Branche le téléphone via le câble USB-série (sans la
+  batterie).}
+\item
+  \textbf{Dans un terminal\,:}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ host/osmocon}
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB0 }\AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/hello\_world.highram.bin}
+\CommentTok{\# (optionnel : tester hello\_world)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  \textbf{Pour le firmware mobile complet\,:}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB0 }\AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/layer1.highram.bin}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  \textbf{Dans un autre terminal\,:}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ host/layer23/src/mobile}
+\ExtensionTok{./mobile}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{\texorpdfstring{Configurer \texttt{mobile.cfg} (SIM,
+PLMN, log,
+etc.)}{Configurer mobile.cfg (SIM, PLMN, log, etc.)}}\label{configurer-mobile.cfg-sim-plmn-log-etc.}
+
+Crée/édite le fichier \texttt{mobile.cfg} (exemple dans
+\texttt{osmocom-bb/src/host/layer23/src/mobile/})\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DataTypeTok{log gsmtap 127.0.0.1}
+\DataTypeTok{log stderr}
+\DataTypeTok{hlr}
+\DataTypeTok{  subscriber{-}list subscriber\_list.csv}
+\DataTypeTok{sim}
+\DataTypeTok{  driver sysmo}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{(Adapte la section SIM si tu utilises une vraie SIM ou une ``test
+SIM'')}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Lancer OsmocomBB Mobile}\label{lancer-osmocombb-mobile}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Dans host/layer23/src/mobile/}
+\ExtensionTok{./mobile} \AttributeTok{{-}c}\NormalTok{ mobile.cfg}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Le téléphone démarre, tente de s'enregistrer sur le réseau configuré.
+\item
+  Regarde les logs\,: tu dois voir ``PLMN search'', ``network found'',
+  ``registration accepted'' (si SIM \& PLMN ok).
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{(Optionnel) Suivi GSMTAP dans
+Wireshark}\label{optionnel-suivi-gsmtap-dans-wireshark}
+
+Wireshark peut décoder en temps réel les trames GSMTAP envoyées en
+UDP\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{wireshark} \AttributeTok{{-}k} \AttributeTok{{-}Y}\NormalTok{ gsmtap }\AttributeTok{{-}i}\NormalTok{ udp:4729}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{(Pense à bien avoir \texttt{log\ gsmtap\ 127.0.0.1} dans ta config
+!)}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Liens utiles}\label{liens-utiles-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://osmocom.org/projects/baseband/wiki}{OsmocomBB Wiki}
+\item
+  \href{https://lists.osmocom.org/mailman/listinfo/baseband-devel}{Forum
+  OsmocomBB}
+\item
+  \href{https://downloads.osmocom.org/binaries/toolchain/}{Firmware
+  Toolchain}
+\item
+  \href{https://osmocom.org/projects/baseband/wiki/CalypsoBTS}{BTS
+  HowTo}
+\end{itemize}
+
+\subsection{SDR \& Matériel (UHD,
+BladeRF)}\label{sdr-matuxe9riel-uhd-bladerf}
+
+\subsubsection{UHD (USRP/Ettus)}\label{uhd-usrpettus}
+
+\begin{itemize}
+\item
+  \textbf{libuhd-dev, uhd-host} : Drivers et outils pour USRP.
+\item
+  \textbf{Images firmware} :
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{python3}\NormalTok{ /usr/lib/uhd/utils/uhd\_images\_downloader.py}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Règle udev} pour détection auto :
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{wget}\NormalTok{ https://raw.githubusercontent.com/EttusResearch/uhd/refs/heads/master/host/utils/uhd{-}usrp.rules }\KeywordTok{\&\&} \FunctionTok{cp}\NormalTok{ uhd{-}usrp.rules /etc/udev/rules.d/}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{BladeRF (Nuand)}\label{bladerf-nuand}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{libbladerf-dev} + build depuis les sources :
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/nuand/BladeRF /opt/GSM/BladeRF}
+\BuiltInTok{cd}\NormalTok{ /opt/GSM/BladeRF }\KeywordTok{\&\&} \FunctionTok{mkdir}\NormalTok{ build }\KeywordTok{\&\&} \BuiltInTok{cd}\NormalTok{ build}
+\FunctionTok{cmake}\NormalTok{ .. }\KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Librairies Osmocom de
+base}\label{librairies-osmocom-de-base}
+
+Ces librairies sont la fondation de toute la stack GSM Osmocom.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{libosmocore} : Primitives GSM, timers, gestion protocoles.
+\item
+  \textbf{libosmo-netif} : Interfaces réseau.
+\item
+  \textbf{libosmo-abis} : Support interface Abis (BTS ↔ BSC).
+\end{itemize}
+
+\textbf{Build de chaque librairie :}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/}\OperatorTok{\textless{}}\NormalTok{repo}\OperatorTok{\textgreater{}}
+\BuiltInTok{cd} \OperatorTok{\textless{}}\NormalTok{repo}\OperatorTok{\textgreater{}} \KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{(remplacer \texttt{\textless{}repo\textgreater{}} par le nom de la
+librairie)}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Stack cœur GSM/EDGE}\label{stack-cux153ur-gsmedge}
+
+\pandocbounded{\includegraphics[keepaspectratio]{pictures/osmocom.png}}
+
+\textbf{Osmocom fournit un module séparé pour chaque composant cœur de
+réseau :}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{osmo-hlr} : Home Location Register (base d'abonnés)
+\item
+  \textbf{osmo-msc} : Mobile Switching Center (appels, SMS, mobilité)
+\item
+  \textbf{osmo-bsc} : Base Station Controller (gestion BTS, handover)
+\item
+  \textbf{osmo-sgsn} : Serving GPRS Support Node (sessions GPRS/EDGE)
+\item
+  \textbf{osmo-ggsn} : Gateway GPRS Support Node (passerelle IP/data)
+\item
+  \textbf{osmo-mgw} : Media Gateway (flux voix/data)
+\item
+  \textbf{osmo-pcu} : Packet Control Unit (gestion trames GPRS/EDGE)
+\item
+  \textbf{libosmo-sigtran} : SIGTRAN/SS7 over IP
+\item
+  \textbf{libsmpp34} : Librairie SMPP (SMS)
+\item
+  \textbf{libgtpnl} : GTP (GPRS Tunneling Protocol pour data mobile)
+\end{itemize}
+
+\begin{center}\includegraphics[width=1.71in]{../../../../tmp/RtmpVUNkQ4/file28a55171e778d} \end{center}
+
+\begin{center}\includegraphics[width=1.53in]{../../../../tmp/RtmpVUNkQ4/file28a555511195} \end{center}
+
+\textbf{Exemple de build générique :} \textbf{Exemple de build générique
+:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/}\OperatorTok{\textless{}}\NormalTok{module}\OperatorTok{\textgreater{}}
+\BuiltInTok{cd} \OperatorTok{\textless{}}\NormalTok{module}\OperatorTok{\textgreater{}} \KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \PreprocessorTok{[}\SpecialStringTok{OPTIONS}\PreprocessorTok{]} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Les options comme \texttt{-\/-enable-gtp-linux},
+  \texttt{-\/-enable-iu}, \texttt{-\/-enable-smpp}, etc, dépendent du
+  module.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Couches radio (TRX/BTS)}\label{couches-radio-trxbts}
+
+\begin{itemize}
+\item
+  \textbf{osmo-trx} : Transceiver SDR (modulation, A5/x, couche radio
+  PHY)
+\item
+  \textbf{osmo-bts} : Interface logicielle pour le TRX (logiciel BTS)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Option : \texttt{-\/-enable-trx} pour activer le mode SDR.
+  \end{itemize}
+\end{itemize}
+
+\textbf{Build typique :}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}trx}
+\BuiltInTok{cd}\NormalTok{ osmo{-}trx }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \AttributeTok{{-}{-}with{-}uhd} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+\FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}bts}
+\BuiltInTok{cd}\NormalTok{ osmo{-}bts }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \AttributeTok{{-}{-}enable{-}trx} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Services \& Outils
+additionnels}\label{services-outils-additionnels}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{osmo-sip-connector} : passerelle GSM ↔ VoIP SIP (pour appels
+  IP)
+\item
+  \textbf{Outils SIM} : \texttt{pcsc-tools}, \texttt{pcscd},
+  \texttt{libpcsclite-dev}
+\item
+  \textbf{iptables}, \textbf{tmux}, \textbf{nano}, \textbf{python3-pip}
+  : utilitaires système
+\item
+  \textbf{python3-requests} : scripts API/réseau
+\end{itemize}
+
+\textbf{Exemple d'installation :}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{apt}\NormalTok{ install }\AttributeTok{{-}y}\NormalTok{ iptables tmux nano python3{-}pip python3{-}requests}
+\ExtensionTok{pip3}\NormalTok{ install requests}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Script modulaire (bash)}\label{script-modulaire-bash}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#!/bin/bash}
+\CommentTok{\# Installeur modulaire EGPRS/Osmocom}
+\CommentTok{\# Construit une stack GSM/EDGE complète avec SDR : USRP, BladeRF, Osmocom core et toutes dépendances.}
+\CommentTok{\# Auteur : Bastien / bbaranoff (software{-}defined{-}radio.com)}
+\CommentTok{\# Testé sur Ubuntu 22.04+}
+
+\BuiltInTok{set} \AttributeTok{{-}e}
+\VariableTok{N}\OperatorTok{=}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)} \KeywordTok{||} \VariableTok{N}\OperatorTok{=}\NormalTok{2}
+\VariableTok{ROOT}\OperatorTok{=}\NormalTok{/opt/GSM}
+
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\#  Dépendances système}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\FunctionTok{install\_deps()} \KeywordTok{\{}
+    \BuiltInTok{echo} \StringTok{"==\textgreater{} Installation des paquets système et dépendances de build..."}
+    \ExtensionTok{apt}\NormalTok{ update}
+    \ExtensionTok{apt}\NormalTok{ install }\AttributeTok{{-}y} \DataTypeTok{\textbackslash{}}
+\NormalTok{        gcc g++ make cmake autoconf automake libtool pkg{-}config }\DataTypeTok{\textbackslash{}}
+\NormalTok{        libedit{-}dev libfftw3{-}dev libusb{-}1.0{-}0{-}dev liburing{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{        nano git wget curl tmux doxygen ethtool }\DataTypeTok{\textbackslash{}}
+\NormalTok{        python3 python3{-}dev python3{-}pip python3{-}six python3{-}mako python3{-}lxml python3{-}numpy python3{-}pybind11 python3{-}requests python3{-}scipy python3{-}setuptools python3{-}ruamel.yaml }\DataTypeTok{\textbackslash{}}
+\NormalTok{        libpcsclite{-}dev pcsc{-}tools pcscd cpufrequtils libsctp{-}dev libconfig++{-}dev libconfig{-}dev libmbedtls{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{        libtalloc{-}dev libgnutls28{-}dev libmnl{-}dev libortp{-}dev libdbd{-}sqlite3 iproute2 iputils{-}ping }\DataTypeTok{\textbackslash{}}
+\NormalTok{        libsqlite3{-}dev libdbi{-}dev libc{-}ares{-}dev libsofia{-}sip{-}ua{-}glib{-}dev telnet }\DataTypeTok{\textbackslash{}}
+\NormalTok{        systemd systemd{-}sysv dbus dbus{-}user{-}session ccache libboost{-}all{-}dev libncurses5 libncurses5{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{        libusb{-}1.0{-}0 libusb{-}dev iptables udev}
+\KeywordTok{\}}
+
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\#  Drivers SDR \& Firmware}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+
+\FunctionTok{install\_uhd()} \KeywordTok{\{}
+    \BuiltInTok{echo} \StringTok{"==\textgreater{} Installation UHD/USRP et téléchargement images firmware..."}
+    \ExtensionTok{apt}\NormalTok{ install }\AttributeTok{{-}y}\NormalTok{ libuhd{-}dev uhd{-}host}
+    \ExtensionTok{python3}\NormalTok{ /usr/lib/uhd/utils/uhd\_images\_downloader.py}
+    \CommentTok{\# Règles udev Ettus USRP}
+    \FunctionTok{wget} \AttributeTok{{-}O}\NormalTok{ /etc/udev/rules.d/uhd{-}usrp.rules https://raw.githubusercontent.com/EttusResearch/uhd/refs/heads/master/host/utils/uhd{-}usrp.rules}
+    \BuiltInTok{echo} \StringTok{"export UHD\_MODULE\_PATH=/usr/lib/uhd/modules"} \OperatorTok{\textgreater{}\textgreater{}}\NormalTok{ /root/.bashrc}
+\KeywordTok{\}}
+
+\FunctionTok{install\_bladerf()} \KeywordTok{\{}
+    \BuiltInTok{echo} \StringTok{"==\textgreater{} Installation BladeRF et build depuis sources..."}
+    \ExtensionTok{apt}\NormalTok{ install }\AttributeTok{{-}y}\NormalTok{ libbladerf{-}dev}
+    \FunctionTok{git}\NormalTok{ clone https://github.com/nuand/BladeRF }\VariableTok{$ROOT}\NormalTok{/BladeRF }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/BladeRF}
+    \FunctionTok{mkdir} \AttributeTok{{-}p}\NormalTok{ build }\KeywordTok{\&\&} \BuiltInTok{cd}\NormalTok{ build}
+    \FunctionTok{cmake}\NormalTok{ .. }\KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+\KeywordTok{\}}
+
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# Librairies Osmocom de base}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\FunctionTok{build\_osmo\_lib()} \KeywordTok{\{}
+    \BuiltInTok{echo} \StringTok{"==\textgreater{} Build des librairies Osmocom : libosmocore, libosmo{-}netif, libosmo{-}abis"}
+    \ControlFlowTok{for}\NormalTok{ repo }\KeywordTok{in}\NormalTok{ libosmocore libosmo{-}netif libosmo{-}abis}\KeywordTok{;} \ControlFlowTok{do}
+        \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/}\VariableTok{$repo} \VariableTok{$ROOT}\NormalTok{/}\VariableTok{$repo} \KeywordTok{||} \FunctionTok{true}
+        \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/}\VariableTok{$repo}
+        \ExtensionTok{autoreconf} \AttributeTok{{-}fi}
+        \ExtensionTok{./configure}
+        \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N}
+        \FunctionTok{make}\NormalTok{ install}
+        \ExtensionTok{ldconfig}
+    \ControlFlowTok{done}
+\KeywordTok{\}}
+
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# Réseau cœur, radio, EDGE}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\FunctionTok{build\_osmo\_core()} \KeywordTok{\{}
+    \BuiltInTok{echo} \StringTok{"==\textgreater{} Build Osmocom réseau, radio et modules GPRS..."}
+    
+    \CommentTok{\# HLR (DB abonnés)}
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}hlr }\VariableTok{$ROOT}\NormalTok{/osmo{-}hlr }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}hlr }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \CommentTok{\# Media Gateway}
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}mgw }\VariableTok{$ROOT}\NormalTok{/osmo{-}mgw }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}mgw }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \CommentTok{\# SIGTRAN (SS7 sur IP)}
+    \FunctionTok{git}\NormalTok{ clone https://gitea.osmocom.org/osmocom/libosmo{-}sigtran }\VariableTok{$ROOT}\NormalTok{/libosmo{-}sigtran }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/libosmo{-}sigtran }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \CommentTok{\# libsmpp34 (SMS)}
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/libsmpp34 }\VariableTok{$ROOT}\NormalTok{/libsmpp34 }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/libsmpp34 }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \CommentTok{\# libgtpnl (tunnels GTP)}
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/libgtpnl }\VariableTok{$ROOT}\NormalTok{/libgtpnl }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/libgtpnl }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \AttributeTok{{-}{-}enable{-}gtp{-}linux} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \CommentTok{\# Éléments cœur (ordre : GGSN, SGSN, MSC, BSC, PCU)}
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}ggsn }\VariableTok{$ROOT}\NormalTok{/osmo{-}ggsn }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}ggsn }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \AttributeTok{{-}{-}enable{-}gtp{-}linux} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}sgsn }\VariableTok{$ROOT}\NormalTok{/osmo{-}sgsn }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}sgsn }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \AttributeTok{{-}{-}enable{-}iu} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}msc }\VariableTok{$ROOT}\NormalTok{/osmo{-}msc }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}msc }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \AttributeTok{{-}{-}enable{-}smpp} \AttributeTok{{-}{-}enable{-}iu} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}bsc }\VariableTok{$ROOT}\NormalTok{/osmo{-}bsc }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}bsc }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \AttributeTok{{-}{-}enable{-}iu} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}pcu }\VariableTok{$ROOT}\NormalTok{/osmo{-}pcu }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}pcu }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \CommentTok{\# Couches radio : TRX, BTS}
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}trx }\VariableTok{$ROOT}\NormalTok{/osmo{-}trx }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}trx }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \AttributeTok{{-}{-}with{-}uhd} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}bts }\VariableTok{$ROOT}\NormalTok{/osmo{-}bts }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}bts }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \AttributeTok{{-}{-}enable{-}trx} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+
+    \CommentTok{\# SIP connector (SIP/VoIP)}
+    \FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmo{-}sip{-}connector }\VariableTok{$ROOT}\NormalTok{/osmo{-}sip{-}connector }\KeywordTok{||} \FunctionTok{true}
+    \BuiltInTok{cd} \VariableTok{$ROOT}\NormalTok{/osmo{-}sip{-}connector }\KeywordTok{\&\&} \ExtensionTok{autoreconf} \AttributeTok{{-}fi} \KeywordTok{\&\&} \ExtensionTok{./configure} \KeywordTok{\&\&} \FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$N} \KeywordTok{\&\&} \FunctionTok{make}\NormalTok{ install }\KeywordTok{\&\&} \ExtensionTok{ldconfig}
+\KeywordTok{\}}
+
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# Python \& utilitaires système}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\FunctionTok{install\_python\_utils()} \KeywordTok{\{}
+    \BuiltInTok{echo} \StringTok{"==\textgreater{} Installation dépendances pip et update images UHD..."}
+    \ExtensionTok{pip3}\NormalTok{ install requests}
+    \CommentTok{\# (Re)télécharge images firmware UHD si besoin}
+    \ExtensionTok{python3}\NormalTok{ /usr/lib/uhd/utils/uhd\_images\_downloader.py }\KeywordTok{||} \FunctionTok{true}
+\KeywordTok{\}}
+
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# Séquence principale}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\FunctionTok{main()} \KeywordTok{\{}
+    \ExtensionTok{install\_deps}
+    \ExtensionTok{install\_uhd}
+    \ExtensionTok{install\_bladerf}
+    \ExtensionTok{build\_osmo\_lib}
+    \ExtensionTok{build\_osmo\_core}
+    \ExtensionTok{install\_python\_utils}
+    \BuiltInTok{echo} \StringTok{"==\textgreater{} Tous les modules sont installés. Vous pouvez passer à la configuration et aux scripts de run."}
+\KeywordTok{\}}
+
+\ExtensionTok{main} \StringTok{"}\VariableTok{$@}\StringTok{"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Résumé \& Bonnes
+pratiques}\label{ruxe9sumuxe9-bonnes-pratiques}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Chaque module} est un bloc indépendant, à construire dans
+  l'ordre (libs → cœur → radio → services)
+\item
+  Pour EGPRS, l'ordre \textbf{BTS/TRX/PCU/SGSN/GGSN} est crucial (le
+  flux data traverse chaque élément)
+\item
+  \textbf{Séparation des modules} = maintenance et debug facilités
+\item
+  Toujours vérifier les dépendances système/matériel (drivers USRP,
+  firmware BladeRF, règles udev\ldots)
+\end{itemize}
+
+\subsection{Installation d'une BTS OsmocomBB
+Calypso}\label{installation-dune-bts-osmocombb-calypso}
+
+\subsection{Matériel requis}\label{matuxe9riel-requis}
+
+\begin{itemize}
+\tightlist
+\item
+  1-2x Motorola C1xx (C115, C118, C123\ldots{} chipset Calypso)
+\item
+  2x Câbles USB-série jack 2.5\,mm (PL2303/FTDI)
+\item
+  Ubuntu 24.04 x86\_64 (VM ou natif)
+\item
+  Accès root
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Dépendances système}\label{duxe9pendances-systuxe8me-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y} \DataTypeTok{\textbackslash{}}
+\NormalTok{  build{-}essential git cmake pkg{-}config autoconf automake libtool shtool }\DataTypeTok{\textbackslash{}}
+\NormalTok{  bison flex libtalloc{-}dev libpcsclite{-}dev zlib1g{-}dev libmpfr{-}dev libmpc{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libgmp{-}dev libncurses5{-}dev libncursesw5{-}dev libsofia{-}sip{-}ua{-}dev libxml2{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libfftw3{-}dev libgnutls28{-}dev libssl{-}dev python3 python3{-}pip }\DataTypeTok{\textbackslash{}}
+\NormalTok{  alsa{-}oss lemon libtinfo{-}dev}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+\textbf{Note}\,: Ubuntu 24.04 a GCC\,13+ par défaut, mais il faut
+parfois cross-compiler avec GCC 4.9 pour le firmware Calypso. S'il
+existe des binaires arm-elf précompilés pour Ubuntu 22.04, ils
+fonctionnent aussi sous 24.04. Pour l'ARM toolchain, voir plus bas
+(utilise de préférence un container/VM si souci d'incompatibilité).
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Installer la toolchain ARM-elf (cross-compiler
+Calypso)}\label{installer-la-toolchain-arm-elf-cross-compiler-calypso}
+
+\subsubsection{Option A\,: Téléchargement direct (prêt à
+l'emploi)}\label{option-a-tuxe9luxe9chargement-direct-pruxeat-uxe0-lemploi}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Depuis Osmocom (préconisé : ne pas compiler vous{-}même sous Ubuntu récent)}
+\BuiltInTok{cd}\NormalTok{ /opt}
+\FunctionTok{sudo}\NormalTok{ wget https://downloads.osmocom.org/binaries/toolchain/arm{-}2021.03.tar.bz2}
+\FunctionTok{sudo}\NormalTok{ tar }\AttributeTok{{-}xjf}\NormalTok{ arm{-}2021.03.tar.bz2}
+\BuiltInTok{export} \VariableTok{PATH}\OperatorTok{=}\VariableTok{$PATH}\NormalTok{:/opt/arm{-}2021.03/bin}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{quote}
+\textbf{Ajoute l'export PATH à ton .bashrc pour persistance}
+\end{quote}
+
+\subsubsection{Option B\,: Compilation
+manuelle}\label{option-b-compilation-manuelle}
+
+\begin{quote}
+(non recommandé sur Ubuntu 24.04, c'est lent et casse souvent, préfère
+la méthode ci-dessus)
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Compiler et installer
+OsmocomBB}\label{compiler-et-installer-osmocombb}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Cloner les sources}
+\FunctionTok{git}\NormalTok{ clone https://github.com/osmocom/osmocom{-}bb.git}
+\BuiltInTok{cd}\NormalTok{ osmocom{-}bb}
+
+\CommentTok{\# Préparer le build}
+\BuiltInTok{cd}\NormalTok{ src}
+\ExtensionTok{autoreconf} \AttributeTok{{-}i}
+
+\CommentTok{\# Compiler le firmware (spécifie la toolchain si besoin)}
+\BuiltInTok{export} \VariableTok{PATH}\OperatorTok{=}\VariableTok{$PATH}\NormalTok{:/opt/arm{-}2021.03/bin}
+\ExtensionTok{./configure}
+\FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)}
+\FunctionTok{sudo}\NormalTok{ make install}
+\FunctionTok{sudo}\NormalTok{ ldconfig}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Flasher le firmware sur les
+téléphones}\label{flasher-le-firmware-sur-les-tuxe9luxe9phones}
+
+\textbf{Connecte les deux téléphones via USB-PL2303, batterie retirée.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ src/host/osmocon}
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB0 }\AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/rssi.highram.bin}
+\CommentTok{\# (Shell \#1 : RSSI scan, contrôle{-}C pour arrêter)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Trouve un ARFCN actif (fort signal GSM, ex.~: 900/1800 MHz).}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Pour charger le firmware TRX (BTS)}
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB0 }\AttributeTok{{-}s}\NormalTok{ /tmp/osmocom\_l2 }\DataTypeTok{\textbackslash{}}
+  \AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/trx.highram.bin }\AttributeTok{{-}r}\NormalTok{ 99}
+\FunctionTok{sudo}\NormalTok{ ./osmocon }\AttributeTok{{-}m}\NormalTok{ c123xor }\AttributeTok{{-}p}\NormalTok{ /dev/ttyUSB1 }\AttributeTok{{-}s}\NormalTok{ /tmp/osmocom\_l2.2 }\DataTypeTok{\textbackslash{}}
+  \AttributeTok{{-}c}\NormalTok{ ../../target/firmware/board/compal\_e88/trx.highram.bin }\AttributeTok{{-}r}\NormalTok{ 99}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Lancer le transceiver et la stack
+BTS}\label{lancer-le-transceiver-et-la-stack-bts}
+
+Dans d'autres shells\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Shell \#3 : transceiver Calypso (remplace ARFCN trouvé)}
+\BuiltInTok{cd}\NormalTok{ src/host/layer23/src/transceiver/}
+\FunctionTok{sudo}\NormalTok{ ./transceiver }\AttributeTok{{-}a} \PreprocessorTok{[}\SpecialStringTok{ARFCN}\PreprocessorTok{]} \AttributeTok{{-}2} \AttributeTok{{-}r}\NormalTok{ 99}
+
+\CommentTok{\# Shell \#4 : osmo{-}nitb (NITB = core minimal)}
+\ExtensionTok{osmo{-}nitb} \AttributeTok{{-}c}\NormalTok{ \textasciitilde{}/.osmocom/open{-}bsc.cfg }\AttributeTok{{-}l}\NormalTok{ \textasciitilde{}/.osmocom/hlr.sqlite3 }\AttributeTok{{-}P} \AttributeTok{{-}m} \AttributeTok{{-}C} \AttributeTok{{-}{-}debug}\OperatorTok{=}\NormalTok{DRLL:DCC:DMM:DRR:DRSL:DNM}
+
+\CommentTok{\# Shell \#5 : osmobts{-}trx}
+\ExtensionTok{osmobts{-}trx} \AttributeTok{{-}c}\NormalTok{ \textasciitilde{}/.osmocom/osmo{-}bts.cfg }\AttributeTok{{-}r}\NormalTok{ 99}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{(Optionnel) Installer Asterisk + LCR pour appels
+SIP}\label{optionnel-installer-asterisk-lcr-pour-appels-sip}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y}\NormalTok{ asterisk asterisk{-}dev}
+\FunctionTok{git}\NormalTok{ clone https://github.com/fairwaves/lcr}
+\BuiltInTok{cd}\NormalTok{ lcr}
+\ExtensionTok{autoreconf} \AttributeTok{{-}i}
+\ExtensionTok{./configure} \AttributeTok{{-}{-}with{-}sip} \AttributeTok{{-}{-}with{-}gsm{-}bs} \AttributeTok{{-}{-}with{-}gsm{-}ms} \AttributeTok{{-}{-}with{-}asterisk}
+\FunctionTok{make}
+\FunctionTok{sudo}\NormalTok{ make install}
+\FunctionTok{sudo}\NormalTok{ cp chan\_lcr.so /usr/lib/asterisk/modules/}
+\end{Highlighting}
+\end{Shaded}
+
+Configurer \texttt{/etc/asterisk/sip.conf} avec tes identifiants SIP.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Vérifier le setup et
+logs}\label{vuxe9rifier-le-setup-et-logs}
+
+\begin{itemize}
+\tightlist
+\item
+  Vérifie les logs dans chaque shell\,: recherche ``registered'',
+  ``attach'', etc.
+\item
+  Lancer l'attachement avec un mobile (SIM Osmocom ou Free avec accès
+  PLMN custom).
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Installation de srsRAN 4G (via PPA ou
+sources)}\label{installation-de-srsran-4g-via-ppa-ou-sources}
+
+\pandocbounded{\includegraphics[keepaspectratio]{pictures/srsran.png}}
+
+\subsection{Installation rapide via PPA
+(Ubuntu)}\label{installation-rapide-via-ppa-ubuntu}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y}\NormalTok{ software{-}properties{-}common}
+\FunctionTok{sudo}\NormalTok{ add{-}apt{-}repository ppa:srsran/ppa}
+\FunctionTok{sudo}\NormalTok{ apt update}
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y}\NormalTok{ srsran}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Vérifie l'install :}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{srsenb} \AttributeTok{{-}{-}version}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Compilation depuis les
+sources}\label{compilation-depuis-les-sources}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y}\NormalTok{ git cmake build{-}essential libfftw3{-}dev libmbedtls{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libboost{-}program{-}options{-}dev libconfig++{-}dev libsctp{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libuhd{-}dev libpcsclite{-}dev pkg{-}config python3 python3{-}pip}
+
+\FunctionTok{git}\NormalTok{ clone https://github.com/srsran/srsRAN\_Project.git}
+\BuiltInTok{cd}\NormalTok{ srsRAN\_Project}
+\FunctionTok{mkdir}\NormalTok{ build }\KeywordTok{\&\&} \BuiltInTok{cd}\NormalTok{ build}
+\FunctionTok{cmake}\NormalTok{ ../}
+\FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)}
+\FunctionTok{sudo}\NormalTok{ make install}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Générer/Configurer une SIM (IMSI, Ki,
+OPC)}\label{guxe9nuxe9rerconfigurer-une-sim-imsi-ki-opc}
+
+Pour connecter un téléphone réel ou un UE logiciel, il faut une SIM dont
+les paramètres sont connus du core \textbf{srsEPC}.
+
+\subsection{a. Générer un profil SIM
+standard}\label{a.-guxe9nuxe9rer-un-profil-sim-standard}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{IMSI} : identifiant unique (ex: \texttt{001010123456789})
+\item
+  \textbf{Ki} : clé de 16 octets (ex:
+  \texttt{00112233445566778899aabbccddeeff})
+\item
+  \textbf{OPC} : clé d'opérateur de 16 octets (ex:
+  \texttt{0102030405060708090a0b0c0d0e0f10})
+\item
+  \textbf{MSISDN} (optionnel) : numéro de tel virtuel
+\end{itemize}
+
+Tu peux utiliser un générateur en ligne
+(\href{https://free5gc.org/webconsole/sim.html}{Free5GC SIM Generator}),
+ou générer aléatoirement\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Générer un IMSI au hasard}
+\VariableTok{IMSI}\OperatorTok{=}\StringTok{"001010}\VariableTok{$(}\FunctionTok{shuf} \AttributeTok{{-}i}\NormalTok{ 100000000{-}999999999 }\AttributeTok{{-}n}\NormalTok{ 1}\VariableTok{)}\StringTok{"}
+\CommentTok{\# Générer une clé Ki et OPC}
+\VariableTok{KI}\OperatorTok{=}\VariableTok{$(}\ExtensionTok{openssl}\NormalTok{ rand }\AttributeTok{{-}hex}\NormalTok{ 16}\VariableTok{)}
+\VariableTok{OPC}\OperatorTok{=}\VariableTok{$(}\ExtensionTok{openssl}\NormalTok{ rand }\AttributeTok{{-}hex}\NormalTok{ 16}\VariableTok{)}
+\BuiltInTok{echo} \StringTok{"IMSI: }\VariableTok{$IMSI}\StringTok{"}
+\BuiltInTok{echo} \StringTok{"KI:   }\VariableTok{$KI}\StringTok{"}
+\BuiltInTok{echo} \StringTok{"OPC:  }\VariableTok{$OPC}\StringTok{"}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{b. Ajouter l'abonné dans
+srsEPC}\label{b.-ajouter-labonnuxe9-dans-srsepc}
+
+Ouvre le fichier de conf des abonnés, typiquement :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{nano}\NormalTok{ /etc/srsran/epc\_user\_db.csv}
+\end{Highlighting}
+\end{Shaded}
+
+Ou dans ton dossier local \texttt{srsRAN\_Project/config/user\_db.csv}
+
+\textbf{Exemple d'entrée :}
+
+\begin{verbatim}
+IMSI,  Ki,                       OPC,                      MSISDN,     AMF,   SQN
+001010123456789,00112233445566778899aabbccddeeff,0102030405060708090a0b0c0d0e0f10,1234567890,8000,000000
+\end{verbatim}
+
+\textbf{Champ obligatoire}\,: IMSI, Ki, OPC (les autres = valeur par
+défaut si besoin).
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Programmer une carte SIM réelle
+(optionnel)}\label{programmer-une-carte-sim-ruxe9elle-optionnel}
+
+Si tu utilises une carte programmable (Sysmocom, MagicSIM, etc.)\,:
+
+\begin{itemize}
+\tightlist
+\item
+  Utilise \href{https://github.com/osmocom/pysim}{pySIM} (Python)
+\item
+  Lance\,:
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{pysim{-}prog.py} \AttributeTok{{-}{-}ki} \VariableTok{$KI} \AttributeTok{{-}{-}opc} \VariableTok{$OPC} \AttributeTok{{-}{-}imsi} \VariableTok{$IMSI}
+\end{Highlighting}
+\end{Shaded}
+
+(Adapté selon ton lecteur et modèle de carte)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Lancer srsENB (eNodeB) et srsEPC
+(core)}\label{lancer-srsenb-enodeb-et-srsepc-core}
+
+Dans deux terminaux\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Terminal 1 (eNodeB)}
+\ExtensionTok{srsenb}\NormalTok{ enb.conf}
+
+\CommentTok{\# Terminal 2 (EPC)}
+\ExtensionTok{srsepc}\NormalTok{ epc.conf}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Tester l'attachement UE}\label{tester-lattachement-ue}
+
+\begin{itemize}
+\tightlist
+\item
+  Allume ton téléphone (SIM insérée, mode réseau ``4G/auto'')
+\item
+  Vérifie la détection dans les logs
+\item
+  Si besoin, ajuste le PLMN dans \texttt{enb.conf} et \texttt{epc.conf}
+  pour matcher l'IMSI de la SIM (ex: MCC/MNC = 001/01)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsubsection{Docs utiles}\label{docs-utiles}
+
+\begin{itemize}
+\tightlist
+\item
+  \url{https://docs.srsran.com/projects/4g/en/latest/index.html}
+\item
+  \url{https://osmocom.org/projects/pysim/wiki}
+\end{itemize}
+
+\section{L'évolution 5G : rupture technologique, nouveaux
+usages}\label{luxe9volution-5g-rupture-technologique-nouveaux-usages}
+
+\subsection{Objectifs et rupture de la
+5G}\label{objectifs-et-rupture-de-la-5g}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Débit x10 à x100 par rapport à la 4G} (jusqu'à 10 Gbps en
+  pointe, 1 Gbps courant)
+\item
+  \textbf{Ultra faible latence} (\textless\,1 ms possible)
+\item
+  \textbf{Connectivité massive} : jusqu'à 1 million d'objets/km² (IoT,
+  capteurs, véhicules)
+\item
+  \textbf{Fiabilité et disponibilité quasi temps réel} (industrie,
+  santé, véhicules autonomes)
+\item
+  \textbf{Flexibilité réseau} : découpage ``network slicing'', chaque
+  usage a son ``mini-réseau'' dédié
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Ruptures techniques
+majeures}\label{ruptures-techniques-majeures}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Nouvelles bandes de fréquences} : ajout du spectre
+  millimétrique (\textgreater24 GHz), plus de capacité mais portée plus
+  courte
+\item
+  \textbf{Massive MIMO} : dizaines/centaines d'antennes pour booster
+  débit et couverture
+\item
+  \textbf{Beamforming} : orientation dynamique du signal vers chaque
+  utilisateur
+\item
+  \textbf{Core 5G tout IP/cloud natif} : virtualisation (NFV), fonctions
+  réseau en software (SDN)
+\item
+  \textbf{Architecture Standalone (SA)} : cœur 5G indépendant, vs
+  Non-Standalone (NSA) où la 5G s'appuie sur la 4G
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Nouveaux usages rendus
+possibles}\label{nouveaux-usages-rendus-possibles}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Internet mobile ultra haut débit} (streaming 4K/8K, réalité
+  augmentée/virtuelle, cloud gaming)
+\item
+  \textbf{Industrie 4.0} : automatisation, robotique, maintenance
+  prédictive, réseaux privés d'usine
+\item
+  \textbf{Véhicules connectés et autonomes} : communication V2X temps
+  réel
+\item
+  \textbf{Santé} : télémédecine en temps réel, chirurgie à distance
+\item
+  \textbf{Smart Cities et IoT massif} : gestion d'énergie, surveillance,
+  transports, capteurs urbains
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Limites, critiques et
+défis}\label{limites-critiques-et-duxe9fis}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Couverture inégale} (surtout en mmWave, portée faible, besoin
+  de micro-cellules)
+\item
+  \textbf{Consommation énergétique} (optimisée par le slicing mais
+  déploiement massif d'antennes)
+\item
+  \textbf{Nouveaux risques de sécurité} (surface d'attaque plus large,
+  virtualisation du cœur réseau)
+\item
+  \textbf{Investissements lourds} (infrastructures, renouvellement
+  terminaux)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Tableau récapitulatif}\label{tableau-ruxe9capitulatif}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1020}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0918}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.3265}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Génération
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Débit max
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Latence
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Connexions/km²
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Architecture
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Usages clés
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+4G & \textasciitilde100 Mbps -- 1 Gbps & \textasciitilde50 ms &
+\textasciitilde100\,000 & Tout-IP & Vidéo, web, app mobile \\
+\textbf{5G} & 1--10 Gbps & \textless\,1--10 ms & 1\,000\,000+ & Cloud,
+slicing & IoT massif, VR/AR, Industrie 4.0 \\
+\end{longtable}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{À retenir}\label{uxe0-retenir}
+
+\begin{quote}
+\textbf{La 5G n'est pas juste ``plus rapide''}\,: elle transforme
+l'infrastructure, permet l'émergence de nouveaux usages critiques
+(industrie, santé, véhicules), et prépare le terrain pour un monde
+ultra-connecté, piloté en temps réel.
+\end{quote}
+
+\section{5G SA labo\,: srsRAN Project + Open5GS (Ubuntu
+2024)}\label{g-sa-labo-srsran-project-open5gs-ubuntu-2024}
+
+\subsubsection{Architecture 5G SA (Open5GS +
+srsRAN)}\label{architecture-5g-sa-open5gs-srsran}
+
+\subsection{Prérequis}\label{pruxe9requis-1}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{OS\,:} Ubuntu 22.04 ou 24.04 (x86\_64)
+\item
+  \textbf{Matériel\,:} SDR (USRP B200/B210/X300/PlutoSDR/LimeSDR\ldots)
+  \emph{OU} mode simulation (aucun matériel SDR requis)
+\item
+  \textbf{Packages de base\,:} git, cmake, build-essential, etc.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Installer Open5GS (Core
+5G)}\label{installer-open5gs-core-5g}
+
+\pandocbounded{\includegraphics[keepaspectratio]{pictures/open5gs.png}}
+
+\subsubsection{a) Dépendances}\label{a-duxe9pendances}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt update}
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y}\NormalTok{ git build{-}essential meson ninja{-}build python3 python3{-}pip python3{-}setuptools }\DataTypeTok{\textbackslash{}}
+\NormalTok{  flex bison libsctp{-}dev libssl{-}dev libnghttp2{-}dev libmicrohttpd{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libyaml{-}dev libmariadb{-}dev libmongoc{-}dev libbson{-}dev mongodb}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{b) Cloner et compiler
+Open5GS}\label{b-cloner-et-compiler-open5gs}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/open5gs/open5gs}
+\BuiltInTok{cd}\NormalTok{ open5gs}
+\ExtensionTok{meson}\NormalTok{ build }\AttributeTok{{-}{-}prefix}\OperatorTok{=}\KeywordTok{\textasciigrave{}}\BuiltInTok{pwd}\KeywordTok{\textasciigrave{}}\NormalTok{/install}
+\ExtensionTok{ninja} \AttributeTok{{-}C}\NormalTok{ build}
+\ExtensionTok{ninja} \AttributeTok{{-}C}\NormalTok{ build install}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{(Binaires dans \texttt{open5gs/install/bin/})}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Installer srsRAN Project
+(gNB/UE)}\label{installer-srsran-project-gnbue}
+
+\subsubsection{a) Dépendances}\label{a-duxe9pendances-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ apt install }\AttributeTok{{-}y}\NormalTok{ cmake g++ libsctp{-}dev libfftw3{-}dev libmbedtls{-}dev }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libboost{-}program{-}options{-}dev libconfig++{-}dev pkg{-}config python3 python3{-}pip }\DataTypeTok{\textbackslash{}}
+\NormalTok{  libzmq3{-}dev libpcsclite{-}dev}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{b) Cloner et compiler
+srsRAN}\label{b-cloner-et-compiler-srsran}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{git}\NormalTok{ clone https://github.com/srsran/srsRAN\_Project.git}
+\BuiltInTok{cd}\NormalTok{ srsRAN\_Project}
+\FunctionTok{mkdir}\NormalTok{ build }\KeywordTok{\&\&} \BuiltInTok{cd}\NormalTok{ build}
+\FunctionTok{cmake}\NormalTok{ ../}
+\FunctionTok{make} \AttributeTok{{-}j}\VariableTok{$(}\FunctionTok{nproc}\VariableTok{)}
+\FunctionTok{sudo}\NormalTok{ make install}
+\end{Highlighting}
+\end{Shaded}
+
+\emph{(Binaires dans \texttt{/usr/local/bin/})}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Configurer Open5GS (Core)}\label{configurer-open5gs-core}
+
+\begin{itemize}
+\item
+  Tous les fichiers\,: \texttt{open5gs/install/etc/open5gs/}
+\item
+  Fichiers clés\,:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{amf.yaml} (AMF/core)
+  \item
+    \texttt{smf.yaml} (SMF/session)
+  \item
+    \texttt{upf.yaml} (UPF/user-plane)
+  \item
+    \texttt{udm.yaml}, \texttt{ausf.yaml}, etc.
+  \end{itemize}
+\end{itemize}
+
+\textbf{Edits minimaux\,:}
+
+\begin{itemize}
+\tightlist
+\item
+  PLMN\,: \texttt{mcc:\ 001}, \texttt{mnc:\ 01} (ou tes propres valeurs)
+\item
+  Dans \texttt{amf.yaml}\,: l'adresse \texttt{ngap} doit matcher celle
+  de ton gNB (ex\,: \texttt{127.0.0.1})
+\end{itemize}
+
+\subsubsection{Ajouter un abonné test
+(SIM)}\label{ajouter-un-abonnuxe9-test-sim}
+
+\begin{itemize}
+\item
+  Ouvre \texttt{subscribers.yaml} ou passe par le
+  \href{https://github.com/open5gs/open5gs/wiki/WebUI}{WebUI Open5GS}
+\item
+  Exemple d'entrée :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{{-}}\AttributeTok{ }\FunctionTok{imsi}\KeywordTok{:}\AttributeTok{ }\StringTok{\textquotesingle{}001010123456789\textquotesingle{}}
+\AttributeTok{  }\FunctionTok{key}\KeywordTok{:}\AttributeTok{ }\StringTok{\textquotesingle{}465B5CE8B199B49FAA5F0A2EE238A6BC\textquotesingle{}}
+\AttributeTok{  }\FunctionTok{opc}\KeywordTok{:}\AttributeTok{ }\StringTok{\textquotesingle{}E8ED289DEBA952E4283B54E88E6183CA\textquotesingle{}}
+\AttributeTok{  }\FunctionTok{amf}\KeywordTok{:}\AttributeTok{ }\StringTok{\textquotesingle{}8000\textquotesingle{}}
+\AttributeTok{  }\FunctionTok{sqn}\KeywordTok{:}\AttributeTok{ }\StringTok{\textquotesingle{}000000000000\textquotesingle{}}
+\end{Highlighting}
+\end{Shaded}
+\item
+  À reporter dans la SIM (physique ou config UE logicielle)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Configurer srsRAN gNB}\label{configurer-srsran-gnb}
+
+\begin{itemize}
+\tightlist
+\item
+  Fichier\,: \texttt{srsran\_project/config/gnb.yaml} \emph{(ou
+  \texttt{gnb.conf} selon la version)}
+\end{itemize}
+
+Exemple minimal\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plmn}\KeywordTok{:}
+\AttributeTok{  }\FunctionTok{mcc}\KeywordTok{:}\AttributeTok{ }\DecValTok{001}
+\AttributeTok{  }\FunctionTok{mnc}\KeywordTok{:}\AttributeTok{ }\DecValTok{01}
+\FunctionTok{amf}\KeywordTok{:}
+\AttributeTok{  }\FunctionTok{addr}\KeywordTok{:}\AttributeTok{ }\FloatTok{127.0.0.1}\CommentTok{   \# IP du core Open5GS}
+\AttributeTok{  }\FunctionTok{port}\KeywordTok{:}\AttributeTok{ }\DecValTok{38412}
+\FunctionTok{slices}\KeywordTok{:}
+\AttributeTok{  }\KeywordTok{{-}}\AttributeTok{ }\FunctionTok{sst}\KeywordTok{:}\AttributeTok{ }\DecValTok{1}
+\AttributeTok{    }\FunctionTok{sd}\KeywordTok{:}\AttributeTok{ }\DecValTok{0x000001}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  Spécifie \texttt{rf.device\_name} pour ton SDR (si RF)
+\item
+  Réseau/interface\,: ex\,: \texttt{ngap.interface\_name:\ lo} pour
+  tests locaux
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Configurer srsRAN UE (si test en pur
+logiciel)}\label{configurer-srsran-ue-si-test-en-pur-logiciel}
+
+\begin{itemize}
+\tightlist
+\item
+  Fichier\,: \texttt{srsran\_project/config/ue.yaml} \emph{(ou
+  \texttt{ue.conf})}
+\item
+  Paramètres\,: PLMN, key, opc, amf, imei identiques à l'abonné Open5GS.
+\item
+  Mode RF ou simulation selon besoin.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Lancer le Core Open5GS}\label{lancer-le-core-open5gs}
+
+Ouvre \textbf{plusieurs terminaux} (ou \texttt{tmux})\,:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ open5gs/install/bin/}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}mmed}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}sgwcd}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}smfd}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}amfd}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}upfd}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}ausfd}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}udmd}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}pcfd}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}nrfd}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}bsfd}
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}hssd}
+\end{Highlighting}
+\end{Shaded}
+
+Ou tout-en-un :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sudo}\NormalTok{ ./open5gs{-}daemon}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Lancer le gNB srsRAN}\label{lancer-le-gnb-srsran}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{srsran\_gnb} \AttributeTok{{-}{-}cfg}\NormalTok{ srsran\_project/config/gnb.yaml}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{(Optionnel) Lancer le srsUE (UE 5G SA
+logiciel)}\label{optionnel-lancer-le-srsue-ue-5g-sa-logiciel}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{srsran\_ue} \AttributeTok{{-}{-}cfg}\NormalTok{ srsran\_project/config/ue.yaml}
+\end{Highlighting}
+\end{Shaded}
+
+Ou utiliser un vrai smartphone 5G + SDR côté réseau.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Supervision}\label{supervision}
+
+\begin{itemize}
+\tightlist
+\item
+  Utilise le \textbf{WebUI Open5GS} (si installé) pour la gestion des
+  SIM et le monitoring.
+\item
+  Surveille les logs (attach, registration, PDU session, etc.).
+\item
+  Une fois le UE attaché, fais un \texttt{ping} (depuis l'UE ou via
+  l'interface UPF).
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Conseils de dépannage}\label{conseils-de-duxe9pannage}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{PLMN, clés et IP doivent correspondre} partout.
+\item
+  Utilise \texttt{127.0.0.1} ou une IP locale réelle selon ton cas.
+\item
+  Avec du RF\,: vérifie fréquence/bande/SDR.
+\item
+  En simulation pure (``null device'') tu peux tout tester sans SDR.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{Liens utiles}\label{liens-utiles-2}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{https://docs.srsran.com/projects/5g/en/latest/}{Docs srsRAN
+  Project 5G}
+\item
+  \href{https://open5gs.org/open5gs/docs/}{Docs Open5GS}
+\item
+  \href{https://github.com/open5gs/open5gs/wiki/WebUI}{WebUI Open5GS}
+\item
+  \href{https://open5gs.org/open5gs/docs/guide-subscription/}{Guide
+  abonnés Open5GS}
+\end{itemize}
+
+\end{document}
