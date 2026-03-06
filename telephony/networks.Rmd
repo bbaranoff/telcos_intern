@@ -75,7 +75,7 @@ cd <repo> && autoreconf -fi && ./configure && make -j$(nproc) && make install &&
 
 ## Stack cœur GSM/EDGE
 
-[](pictures/osmocom.png)
+![](pictures/osmocom.png)
 
 **Osmocom fournit un module séparé pour chaque composant cœur de réseau :**
 
@@ -296,6 +296,8 @@ main "$@"
 
 # Installation de srsRAN 4G (via PPA ou sources)
 
+![](pictures/srsran.png)
+
 ## 1. Installation rapide via PPA (Ubuntu)
 
 ```bash
@@ -485,6 +487,8 @@ srsepc epc.conf
 ---
 
 ## 2. Installer Open5GS (Core 5G)
+
+![](pictures/open5gs.png)
 
 ### a) Dépendances
 
