@@ -29,7 +29,7 @@ Dans ce chapitre, nous allons décrire :
 
 ---
 
-# 1 — Architecture d’un réseau LoRa
+## Architecture d’un réseau LoRa
 
 Contrairement aux réseaux cellulaires traditionnels, les réseaux LoRaWAN utilisent une architecture relativement simple.
 
@@ -62,7 +62,7 @@ Dans de nombreux déploiements expérimentaux ou communautaires, le serveur rés
 
 ---
 
-## Exemple de gateway LoRa
+### Exemple de gateway LoRa
 
 Dans ce projet, une gateway **Dragino LoRa** a été utilisée.
 
@@ -78,7 +78,7 @@ Les données radio reçues sont encapsulées dans des paquets IP et envoyées ve
 
 ---
 
-# 2 — Configuration de la gateway LoRa
+### Configuration de la gateway LoRa
 
 La première étape consiste à configurer la gateway pour qu’elle se connecte au serveur **The Things Network**.
 
@@ -110,7 +110,7 @@ Ces informations permettent au réseau TTN d’intégrer la gateway dans son inf
 
 ---
 
-## Installation du système sur Raspberry Pi
+### Installation du système sur Raspberry Pi
 
 Certaines gateways LoRa utilisent un **Raspberry Pi** comme système embarqué.
 
@@ -157,7 +157,7 @@ sudo apt install \
 
 ---
 
-# 3 — Enregistrement des capteurs LoRa
+### Enregistrement des capteurs LoRa
 
 Une fois la gateway opérationnelle, il est possible d’ajouter des **end devices** dans le réseau.
 
@@ -179,7 +179,7 @@ Une fois ces paramètres renseignés, l’appareil peut être enregistré.
 
 ---
 
-## Encodage des données
+### Encodage des données
 
 Les données transmises par les capteurs LoRa sont généralement encodées dans un format compact.
 
@@ -201,7 +201,7 @@ Ce format facilite l’intégration avec les plateformes IoT.
 
 ---
 
-## Configuration de l’application TTN
+### Configuration de l’application TTN
 
 Pour recevoir les données du capteur, il est nécessaire de récupérer les informations de connexion :
 
@@ -215,7 +215,7 @@ Ces informations incluent :
 
 ---
 
-## Visualisation des données
+### Visualisation des données
 
 Les données LoRa peuvent être visualisées sur différentes plateformes IoT.
 
@@ -237,7 +237,7 @@ Ces données peuvent être visualisées en temps réel sur une carte.
 
 ---
 
-# Conclusion
+## Conclusion
 
 Les réseaux LoRaWAN offrent une solution efficace pour connecter des objets sur de longues distances avec une consommation énergétique très faible.
 

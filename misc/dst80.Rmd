@@ -22,7 +22,7 @@ véhicule ↔ transpondeur RFID
 
 ---
 
-# Principe du protocole d’authentification
+## Principe du protocole d’authentification
 
 Le fonctionnement de DST80 repose sur un mécanisme classique de **défi-réponse cryptographique**.
 
@@ -74,7 +74,7 @@ Dans le cas de DST80, la clé secrète est supposée avoir une taille de :
 
 ---
 
-# Faiblesses du système DST80
+## Faiblesses du système DST80
 
 En 2020, plusieurs chercheurs ont analysé le système DST80 et ont découvert que sa sécurité réelle était **inférieure à la sécurité théorique annoncée**.
 
@@ -153,7 +153,7 @@ Un tel espace de recherche peut être exploré avec du matériel moderne, notamm
 
 ---
 
-# Méthodologie de l’attaque
+## Méthodologie de l’attaque
 
 L’attaque repose sur un principe relativement simple :
 
@@ -176,7 +176,7 @@ Mais une fois les constantes constructeur identifiées, la récupération de la 
 
 ---
 
-# Démonstration du COSIC sur un véhicule Tesla
+## Démonstration du COSIC sur un véhicule Tesla
 
 Une démonstration particulièrement médiatisée a été réalisée par les chercheurs du laboratoire **COSIC (Computer Security and Industrial Cryptography)** de l'Université KU Leuven.
 
@@ -214,7 +214,7 @@ Cette démonstration a conduit Tesla à publier une **mise à jour logicielle** 
 
 ---
 
-# Enseignements pour la sécurité des systèmes embarqués
+## Enseignements pour la sécurité des systèmes embarqués
 
 L’analyse de DST80 illustre plusieurs principes importants de la sécurité cryptographique.
 
@@ -236,7 +236,7 @@ Un espace de recherche considéré comme impraticable dans les années 1990 peut
 
 ---
 
-# Conclusion
+## Conclusion
 
 Le cas de DST80 montre comment des systèmes cryptographiques largement déployés peuvent présenter des faiblesses structurelles.
 
@@ -248,9 +248,10 @@ Les travaux publiés par la communauté académique et les laboratoires de reche
 
 Dans le domaine des systèmes embarqués et des dispositifs RFID, ces recherches jouent un rôle essentiel pour améliorer la robustesse des infrastructures technologiques modernes.
 
-# Suite de rétro-ingénierie et de brute-force DST80
+## Suite de rétro-ingénierie et de brute-force DST80
 
-Basé sur **DST80 (non rétro-ingéniéré)** disponible ici
+Basé sur **DST80 (non rétro-ingéniéré)** disponible ici [DST80 Revrsing](https://github.com/bbaranoff/dst80_reversing)
+
 
 Ce projet fournit une implémentation **haute performance** pour récupérer les clés **TI DST80** (Digital Signature Transponder) en utilisant **OpenCL**.
 
@@ -258,7 +259,7 @@ Il est conçu pour démontrer comment des **faiblesses architecturales** et des 
 
 ---
 
-# La théorie : pourquoi c’est cassable
+## La théorie : pourquoi c’est cassable
 
 L’algorithme **DST80** utilise une clé de **80 bits**, traditionnellement divisée en deux moitiés de **40 bits** :
 
@@ -295,7 +296,7 @@ En combinant ces facteurs, la complexité passe de :
 
 ---
 
-# Performance et stratégie (méthode IACR)
+## Performance et stratégie (méthode IACR)
 
 Comme décrit dans les travaux de recherche :
 
@@ -303,19 +304,19 @@ L’attaque suit une approche **par étapes** :
 
 ![IACR Algorithm](pictures/iacr.png)
 
-### 1. Constantes inconnues
+### Constantes inconnues
 
 Sur un GPU grand public (par exemple **NVIDIA RTX 3050 Ti**), récupérer une clé complète avec **un octet inconnu** prend environ :
 
 **300 minutes (~5 heures)**.
 
-### 2. Constantes connues
+### Constantes connues
 
 Une fois les constantes constructeur identifiées, l’espace de recherche se réduit drastiquement :
 
 **environ 1 minute** pour retrouver une clé.
 
-### 3. Changement de constructeur
+### Changement de constructeur
 
 Si le constructeur change, il suffit de :
 
@@ -324,7 +325,7 @@ Si le constructeur change, il suffit de :
 
 ---
 
-# Configuration matérielle
+## Configuration matérielle
 
 * **GPU** : tout GPU compatible **OpenCL**
 
@@ -344,7 +345,7 @@ Si le constructeur change, il suffit de :
 
 ---
 
-# Structure du projet
+## Structure du projet
 
 | Fichier                | Description                                                                                  |
 | ---------------------- | -------------------------------------------------------------------------------------------- |
@@ -355,9 +356,9 @@ Si le constructeur change, il suffit de :
 
 ---
 
-# Utilisation
+## Utilisation
 
-## 1. Installation
+### Installation
 
 ```bash
 pip install -r requirements.txt
@@ -365,7 +366,7 @@ pip install -r requirements.txt
 
 ---
 
-## 2. Recherche rapide (constante 1 octet connue)
+### Recherche rapide (constante 1 octet connue)
 
 Si vous connaissez le suffixe (par exemple `0x2f`) :
 
@@ -375,7 +376,7 @@ python dst80_fast.py <c1> <t1> <c2> <t2>
 
 ---
 
-## 3. Recherche constructeur (constantes 2 octets)
+### Recherche constructeur (constantes 2 octets)
 
 Pour tester des constantes constructeur spécifiques (exemple `d1 2f`) :
 
@@ -385,7 +386,7 @@ python dst80_constructor.py <c1> <t1> <c2> <t2> d1 2f
 
 ---
 
-## 4. Reverse complet (mode découverte)
+### Reverse complet (mode découverte)
 
 Pour explorer l’espace complet (5 octets variables) afin de trouver les constantes :
 
@@ -395,7 +396,7 @@ python dst80_reverse.py <c1> <t1> <c2> <t2> 4228250625
 
 ---
 
-# Démonstration
+## Démonstration
 
 Ci-dessous un exemple de récupération réussie d’une clé avec la méthode **double challenge**.
 
@@ -403,7 +404,7 @@ Ci-dessous un exemple de récupération réussie d’une clé avec la méthode *
 
 ---
 
-# Tutoriel : générateur de signature DST80
+## Tutoriel : générateur de signature DST80
 
 Ce script calcule la **réponse de 24 bits (signature)** pour un challenge DST80 donné.
 
@@ -411,7 +412,7 @@ Il gère automatiquement la **symétrie interne du chiffrement** en dérivant **
 
 ---
 
-# Construction de la clé
+## Construction de la clé
 
 Le script suppose l’implémentation automobile classique où la clé de **80 bits est symétrique** :
 
@@ -423,7 +424,7 @@ Le script suppose l’implémentation automobile classique où la clé de **80 b
 
 ---
 
-# Utilisation basique
+## Utilisation basique
 
 Lancer simplement le script pour utiliser les valeurs par défaut :
 
@@ -435,7 +436,7 @@ Cela permet de **vérifier que l’environnement fonctionne correctement**.
 
 ---
 
-# Challenges et clés personnalisés
+## Challenges et clés personnalisés
 
 Vous pouvez fournir vos propres valeurs hexadécimales.
 
@@ -463,7 +464,7 @@ python generate.py --kl 0x1122334455 --challenge 0x6162636465
 
 ---
 
-# Détail de la sortie
+## Détail de la sortie
 
 Le script affiche un résumé clair :
 

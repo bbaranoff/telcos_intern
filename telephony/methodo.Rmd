@@ -23,7 +23,7 @@
 
 ---
 
-# La clé RTL-SDR
+### La clé RTL-SDR
 
 ![](pictures/rtl-sdr.jpg){width=50%}
 
@@ -47,7 +47,7 @@ C’est l’outil idéal pour apprendre :
 
 ---
 
-# ADALM-PLUTO
+### ADALM-PLUTO
 
 ![](pictures/pluto.png){width=50%}
 
@@ -68,7 +68,7 @@ Très utilisé pour :
 
 ---
 
-# LimeSDR Mini
+### LimeSDR Mini
 
 ![](pictures/lime.jpg){width=50%}
 
@@ -87,7 +87,7 @@ Très apprécié pour :
 
 ---
 
-# HackRF One
+### HackRF One
 
 ![](pictures/hackrf.jpeg){width=50%}
 
@@ -107,7 +107,7 @@ Utilisations typiques :
 
 ---
 
-# BladeRF
+### BladeRF
 
 ![](pictures/blade.png){width=50%}
 
@@ -126,7 +126,7 @@ Utilisé pour :
 
 ---
 
-# AntSDR
+### AntSDR
 
 ![](pictures/ant.jpg){width=50%}
 
@@ -145,7 +145,7 @@ Très intéressant pour :
 
 ---
 
-# LibreSDR
+### LibreSDR
 
 ![](pictures/libre.png){width=50%}
 
@@ -161,7 +161,7 @@ Très bon rapport performance/prix.
 
 ---
 
-# USRP B210
+### USRP B210
 
 ![](pictures/B210.jpg){width=50%}
 
@@ -181,7 +181,7 @@ Très utilisé dans :
 
 ---
 
-# USRP X310
+### USRP X310
 
 ![](pictures/X310.jpeg){width=50%}
 
@@ -199,7 +199,7 @@ Utilisé pour :
 * radar
 * communications expérimentales
 
-## La clé RTL-SDR
+# La clé RTL-SDR
 
 ![](pictures/rtl.jpg)
 
@@ -248,7 +248,7 @@ Ces clés coûtent généralement **moins de 40 €**, ce qui a largement contri
 
 ---
 
-# Installation des outils RTL-SDR sous Ubuntu
+## Installation des outils RTL-SDR sous Ubuntu
 
 La première étape consiste à installer les pilotes permettant d'accéder au matériel.
 

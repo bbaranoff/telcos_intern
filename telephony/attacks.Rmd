@@ -114,7 +114,7 @@ Toute attaque ou rétro-ingénierie d’A5/1 est réservée à la recherche, au 
 
 ## Tuto Kraken + behemoth.py (Ubuntu 22.04/24.04)
 
-## 1. Préparer le système
+## Préparer le système
 
 ```bash
 sudo apt update
@@ -124,7 +124,7 @@ sudo apt install -y git build-essential cmake python3 python3-pip \
 
 ---
 
-## 2. Installer Kraken
+## Installer Kraken
 
 **a) Récupérer le repo**
 
@@ -143,14 +143,14 @@ make
 
 ---
 
-## 3. Installer ou télécharger les Rainbow Tables
+## Installer ou télécharger les Rainbow Tables
 
 * **Attention :** Les tables font **plusieurs To** (ex : [tables sur le forum SRLabs](https://opensource.srlabs.de/projects/a51-decrypt/wiki/Rainbow_Tables)).
 * **Décompresse** tout dans un dossier, exemple : `/mnt/kraken_tables/`
 
 ---
 
-## 4. Installer behemoth.py
+## Installer behemoth.py
 
 **a) Télécharger le script**
 
@@ -172,7 +172,7 @@ pip3 install -r requirements.txt  # (si besoin)
 
 ---
 
-## 5. Utiliser Kraken (manuel et avec behemoth.py)
+## Utiliser Kraken (manuel et avec behemoth.py)
 
 ## A. Utilisation simple de Kraken
 
@@ -210,7 +210,7 @@ python3 behemoth.py -k /chemin/kraken -t /mnt/kraken_tables/ -i dossier_kc/ -j 8
 
 ---
 
-## 6. Schéma résumé
+## Schéma résumé
 
 ```
 (signal GSM) → extraction keystream (.kc) → Kraken (ou behemoth.py)
@@ -240,7 +240,7 @@ python3 behemoth.py -k /chemin/kraken -t /mnt/kraken_tables/ -i dossier_kc/ -j 8
 
 ## Installation Deka (cracker Kraken OpenCL)
 
-### 1. Prérequis
+### Prérequis
 
 * **OS :** Debian Jessie à Bookworm, ou Ubuntu
 * **GPU :** AMD recommandé (Nvidia possible mais demande plus de patchs)
@@ -257,7 +257,7 @@ pip3 install pyopencl
 
 ---
 
-### 2. Cloner le code
+### Cloner le code
 
 Fork recommandé (patché pour systèmes récents) :
 
@@ -277,7 +277,7 @@ git clone git://git.srlabs.de/kraken
 
 ---
 
-### 3. Télécharger les tables Rainbow
+### Télécharger les tables Rainbow
 
 * **Taille :** \~1,7 To (40 fichiers `.dlt`)
 * **Torrent / Téléchargement direct :**
@@ -292,7 +292,7 @@ git clone git://git.srlabs.de/kraken
 
 ---
 
-### 4. Installer les tables
+### Installer les tables
 
 **Option 1 – Mode fichier (le plus simple, moins performant) :**
 
@@ -310,7 +310,7 @@ git clone git://git.srlabs.de/kraken
 
 ---
 
-### 5. Configurer Deka
+### Configurer Deka
 
 Édite `delta_config.h` :
 
@@ -325,7 +325,7 @@ git clone git://git.srlabs.de/kraken
 
 ---
 
-### 6. Générer le kernel OpenCL
+### Générer le kernel OpenCL
 
 * **AMD :** utiliser `genkernel32.sh` (recommandé)
 * **Nvidia :** il faudra peut-être patcher “unsigned long long” → “ulong”
@@ -348,14 +348,14 @@ if(diff != all) { ... }
 
 ---
 
-### 7. Tuning kernel (vankusconf.py/.h)
+### Tuning kernel (vankusconf.py/.h)
 
 * **Kernels concurrents :** (nombre de cores GPU - 1) × petit entier. Exemple : 4095 pour 2048 cores GPU.
 * **QSIZE :** Environ 2× le nombre de fragments traités en parallèle.
 
 ---
 
-### 8. Lancer Deka / Kraken
+### Lancer Deka / Kraken
 
 **Démarrage manuel (conseillé pour debug/début) :**
 
@@ -380,7 +380,7 @@ export PYOPENCL_CTX="0:0"
 
 ---
 
-### 9. Connexion & test de crack
+### Connexion & test de crack
 
 Connexion au serveur Deka (paplon) :
 
@@ -398,7 +398,7 @@ crack 00111000...   # (colle un burst connu)
 
 ---
 
-### 10. Monitoring & tuning perfs
+### Monitoring & tuning perfs
 
 Dans telnet, tape `stats` pour vérifier la taille des files d’attente.
 
@@ -410,27 +410,27 @@ Dans telnet, tape `stats` pour vérifier la taille des files d’attente.
 ### Récapitulatif express
 
 ```sh
-# 1. Dépendances
+# Dépendances
 sudo apt install git build-essential python3-pip ocl-icd-libopencl1 opencl-headers clinfo
 pip3 install pyopencl
 
-# 2. Cloner le code
+# Cloner le code
 git clone https://github.com/0x7678/typhon-vx.git
 cd typhon-vx/kraken
 
-# 3. Télécharger les tables (~1,7To)
+# Télécharger les tables (~1,7To)
 
-# 4. Installer les tables (TableConvert ou install.py)
+# Installer les tables (TableConvert ou install.py)
 
-# 5. Éditer delta_config.h (chemins absolus/UUID)
+# Éditer delta_config.h (chemins absolus/UUID)
 
-# 6. Générer kernel : ./genkernel32.sh > slice.c
+# Générer kernel : ./genkernel32.sh > slice.c
 
-# 7. Lancer : paplon.py, oclvankus.py, delta_client.py
+# Lancer : paplon.py, oclvankus.py, delta_client.py
 
-# 8. Connexion : telnet localhost 1578, commande "crack"
+# Connexion : telnet localhost 1578, commande "crack"
 
-# 9. Tune (stats, kernel, stockage)
+# Tune (stats, kernel, stockage)
 ```
 
 ---
@@ -467,7 +467,7 @@ L’environnement décrit dans ce projet permet de **reproduire expérimentaleme
 
 ---
 
-# Principe général de la redirection LTE
+## Principe général de la redirection LTE
 
 Lorsqu’un téléphone est connecté à un réseau LTE, la communication avec la station de base (eNodeB) est gérée par le protocole :
 
@@ -516,7 +516,7 @@ Une fois ce processus terminé, le téléphone se retrouve connecté à la cellu
 
 ---
 
-# Infrastructure expérimentale
+## Infrastructure expérimentale
 
 La démonstration repose sur une architecture composée de deux piles réseau distinctes :
 
@@ -528,7 +528,7 @@ EDGE Redirection Network
 
 ```
 
-## Pile LTE (point d’ancrage)
+### Pile LTE (point d’ancrage)
 
 La couche LTE est fournie par **srsRAN_4G**, qui implémente :
 
@@ -547,7 +547,7 @@ Ces composants permettent de créer une cellule LTE expérimentale capable de :
 
 ---
 
-## Pile 2G (réseau cible)
+### Pile 2G (réseau cible)
 
 La couche GSM/EDGE est fournie par la suite **Osmocom** :
 
@@ -576,7 +576,7 @@ UE → data / voice
 
 ---
 
-# Rôle des identités réseau (MNO / MVNO)
+## Rôle des identités réseau (MNO / MVNO)
 
 L’efficacité de l’attaque repose sur l’utilisation de deux identités réseau différentes :
 
@@ -612,7 +612,7 @@ Une fois connecté à la cellule EDGE, le terminal considère qu’il est déjà
 
 ---
 
-# Mécanisme de fallback
+## Mécanisme de fallback
 
 Après la redirection, le terminal exécute une recherche radio :
 
@@ -638,7 +638,7 @@ Deux cas apparaissent généralement.
 
 ---
 
-## Cas MVNO
+### Cas MVNO
 
 Les réseaux **MVNO (Mobile Virtual Network Operator)** ont souvent des politiques de mobilité moins agressives.
 
@@ -656,7 +656,7 @@ Cela permet des expériences prolongées.
 
 ---
 
-## Cas MNO
+### Cas MNO
 
 Les grands opérateurs utilisent souvent des mécanismes appelés :
 
@@ -673,7 +673,7 @@ Dans ce cas, la redirection ne dure parfois que quelques secondes.
 
 ---
 
-# Implémentation dans srsRAN
+## Implémentation dans srsRAN
 
 La démonstration utilise une version modifiée de **srsRAN_4G**.
 
@@ -693,7 +693,7 @@ Ces informations forcent le terminal à scanner les fréquences GSM définies da
 
 ---
 
-# Automatisation de l’environnement
+## Automatisation de l’environnement
 
 Le projet utilise **Docker** afin de simplifier le déploiement.
 
@@ -741,7 +741,7 @@ docker exec -it egprs \
 
 ---
 
-# Conclusion
+## Conclusion
 
 L’attaque de redirection LTE illustre une faiblesse structurelle des réseaux cellulaires modernes :
 

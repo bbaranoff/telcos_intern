@@ -39,35 +39,35 @@ apt install -y <tous-les-paquets-listés>
 
 ---
 
-# OsmocomBB
+## OsmocomBB
 
 **OsmocomBB** (Osmocom Baseband) est un projet open source qui implémente une pile GSM “baseband” pour certains téléphones Motorola et des configurations SDR.
 
-## Qu’est-ce qu’OsmocomBB ?
+### Qu’est-ce qu’OsmocomBB ?
 
 - **Pile protocolaire GSM côté mobile (MS, mobile station)**
 - Remplace le firmware d’origine pour donner accès aux couches GSM 1/2/3, journalisation des protocoles, sniffing et tests
 - Utilisations : analyse, tests de sécurité, recherche académique, IMSI catchers, fuzzing radio
 
-## Architecture
+### Architecture
 
 - **host/osmocon** : Outil de chargement du firmware sur les appareils compatibles
 - **src/host/layer23** : Pile GSM s’exécutant sur le PC (appels, SMS, sniffing, capture de bursts, etc.)
 - **firmware/** : Code baseband à flasher sur les téléphones compatibles
 
-## Matériel supporté
+### Matériel supporté
 
 - **Série Motorola C1xx (C123, C118, C155, etc.)**
 - Certains autres modèles à chipset “Calypso”
 
-## Cas d’usage & limitations
+### Cas d’usage & limitations
 
 - Peut se connecter à une vraie cellule 2G ou à une BTS Osmocom (osmo-bts-trx)
 - Limité à la 2G pure (pas de support 3G/4G)
 - **Attention :** Émettre sans licence est illégal !  
   N’utilisez que pour la recherche ou en environnement contrôlé.
 
-## Liens utiles
+### Liens utiles
 
 - [Dépôt GitHub OsmocomBB](https://github.com/osmocom/osmocom-bb)
 - [Wiki officiel](https://osmocom.org/projects/baseband/wiki/OsmocomBB)
@@ -79,7 +79,7 @@ apt install -y <tous-les-paquets-listés>
 
 ## OsmocomBB Mobile (MS) – Installation rapide Ubuntu 24.04
 
-## 1. Prérequis
+### Prérequis
 
 * **Matériel :**
 
@@ -92,7 +92,7 @@ apt install -y <tous-les-paquets-listés>
 
 ---
 
-## 2. Installer les dépendances
+### Installer les dépendances
 
 ```bash
 sudo apt update
@@ -106,7 +106,7 @@ sudo apt install -y \
 
 ---
 
-## 3. Installer la toolchain ARM (cross-compile Calypso)
+### Installer la toolchain ARM (cross-compile Calypso)
 
 ```bash
 cd /opt
@@ -119,7 +119,7 @@ export PATH=$PATH:/opt/arm-2021.03/bin
 
 ---
 
-## 4. Cloner et compiler OsmocomBB
+### Cloner et compiler OsmocomBB
 
 ```bash
 git clone https://github.com/osmocom/osmocom-bb.git
@@ -132,7 +132,7 @@ make -j$(nproc)
 
 ---
 
-## 5. Flasher le firmware Mobile (Compal/C123 etc.)
+### Flasher le firmware Mobile (Compal/C123 etc.)
 
 1. **Branche le téléphone via le câble USB-série (sans la batterie).**
 
@@ -159,7 +159,7 @@ cd host/layer23/src/mobile
 
 ---
 
-## 6. Configurer `mobile.cfg` (SIM, PLMN, log, etc.)
+### Configurer `mobile.cfg` (SIM, PLMN, log, etc.)
 
 Crée/édite le fichier `mobile.cfg` (exemple dans `osmocom-bb/src/host/layer23/src/mobile/`) :
 
@@ -176,7 +176,7 @@ sim
 
 ---
 
-##7. Lancer OsmocomBB Mobile
+### Lancer OsmocomBB Mobile
 
 ```bash
 # Dans host/layer23/src/mobile/
@@ -188,7 +188,7 @@ sim
 
 ---
 
-## 8. (Optionnel) Suivi GSMTAP dans Wireshark
+### (Optionnel) Suivi GSMTAP dans Wireshark
 
 Wireshark peut décoder en temps réel les trames GSMTAP envoyées en UDP :
 
@@ -200,7 +200,7 @@ wireshark -k -Y gsmtap -i udp:4729
 
 ---
 
-## Liens utiles
+### Liens utiles
 
 * [OsmocomBB Wiki](https://osmocom.org/projects/baseband/wiki)
 * [Forum OsmocomBB](https://lists.osmocom.org/mailman/listinfo/baseband-devel)
@@ -301,7 +301,7 @@ Chaque opérateur possède ses propres identifiants réseau et son propre plan d
 
 Ce type d’environnement permet de reproduire des scénarios réalistes tout en conservant un contrôle complet sur l’infrastructure.
 
-## Partie 2 — Implémentation du réseau SS7 et analyse des dumps
+## Implémentation du réseau SS7 et analyse des dumps
 
 Dans un réseau télécom réel, la signalisation est le système nerveux de l’infrastructure. Les appels, les SMS et la gestion des abonnés ne reposent pas uniquement sur la radio : ils dépendent d’un réseau de signalisation distinct chargé de coordonner les équipements du cœur de réseau.
 
@@ -311,7 +311,7 @@ Dans ce laboratoire, la signalisation SS7 n’est pas simulée de manière abstr
 
 ---
 
-### 2.1 Le rôle du réseau SS7 dans l’architecture GSM
+### Le rôle du réseau SS7 dans l’architecture GSM
 
 Dans un réseau GSM, la radio (BTS et BSC) ne constitue qu’une partie de l’infrastructure. Les décisions concernant l’acheminement des appels ou des SMS sont prises dans le cœur de réseau.
 
@@ -340,7 +340,7 @@ Chaque étape correspond à une série de messages MAP transportés sur SS7.
 
 ---
 
-### 2.2 SS7 sur IP : SIGTRAN et M3UA
+### SS7 sur IP : SIGTRAN et M3UA
 
 Les réseaux modernes n’utilisent plus les liaisons SS7 traditionnelles sur TDM. La signalisation est aujourd’hui transportée sur IP grâce à une famille de protocoles appelée **SIGTRAN**.
 
@@ -355,7 +355,7 @@ Cela permet d’observer directement les flux de signalisation dans un analyseur
 
 ---
 
-### 2.3 L’architecture multi-opérateurs
+### L’architecture multi-opérateurs
 
 L’une des particularités du projet est de simuler plusieurs réseaux mobiles indépendants, chacun possédant son propre cœur de réseau.
 
@@ -390,7 +390,7 @@ Lorsqu’un message SS7 doit être envoyé vers un autre réseau, il est transmi
 
 ---
 
-### 2.4 Le rôle des point codes
+### Le rôle des point codes
 
 Dans SS7, chaque équipement possède un identifiant unique appelé **point code**.
 
@@ -409,7 +409,7 @@ Cette organisation permet d’identifier immédiatement l’origine d’un messa
 
 ---
 
-### 2.5 Observer la signalisation avec les dumps
+### Observer la signalisation avec les dumps
 
 L’un des objectifs principaux de ce laboratoire est de rendre la signalisation **observable et analysable**.
 
@@ -442,7 +442,7 @@ L’analyse de ces dumps est essentielle pour diagnostiquer les problèmes de si
 
 ---
 
-### 2.6 Analyse des traces réseau
+### Analyse des traces réseau
 
 En plus des dumps VTY, le laboratoire permet également d’observer directement les flux de signalisation sur le réseau IP.
 
@@ -467,7 +467,7 @@ Le laboratoire reproduit donc un environnement d’étude particulièrement util
 
 ---
 
-### 2.7 Un laboratoire pour l’étude de la signalisation mobile
+### Un laboratoire pour l’étude de la signalisation mobile
 
 L’implémentation du réseau SS7 dans ce projet ne se limite pas à une simple démonstration technique.
 
@@ -482,7 +482,7 @@ Cette approche transforme le projet en un véritable **laboratoire de signalisat
 
 ---
 
-# Partie 3 — Topologie réseau et implémentation SS7
+## Topologie réseau et implémentation SS7
 
 Une fois l’architecture multi-opérateurs définie, l’étape suivante consiste à comprendre comment les différents composants du réseau communiquent réellement entre eux.
 Dans ce laboratoire, toute l’infrastructure repose sur **Docker**, qui fournit l’isolation des opérateurs et la connectivité réseau nécessaire pour simuler un backbone télécom.
@@ -491,7 +491,7 @@ Cette approche permet de reproduire une architecture réaliste : chaque opérate
 
 ---
 
-# 3. Topologie réseau Docker
+# Topologie réseau Docker
 
 La topologie réseau du laboratoire repose sur deux types de réseaux Docker distincts :
 
@@ -576,7 +576,7 @@ Cette architecture reflète le fonctionnement réel des réseaux télécom, où 
 
 ---
 
-# 4. Signalisation SS7
+# Signalisation SS7
 
 Le cœur du laboratoire repose sur la signalisation **SS7**, qui permet aux différents équipements du réseau GSM de communiquer.
 
@@ -673,7 +673,7 @@ Ce mécanisme reproduit exactement la logique d’interconnexion des réseaux mo
 
 ---
 
-# Fin de la partie SS7 — Observabilité et diagnostic
+## Fin de la partie SS7 — Observabilité et diagnostic
 
 Une fois l’infrastructure SS7 en place, l’un des aspects les plus intéressants du laboratoire est la possibilité d’observer la signalisation en temps réel.
 
@@ -742,7 +742,7 @@ Le laboratoire devient ainsi un véritable **microscope de signalisation téléc
 
 ---
 
-# Conclusion
+## Conclusion
 
 Les réseaux mobiles modernes reposent sur une architecture complexe dans laquelle la radio n’est qu’une partie visible de l’infrastructure.
 
@@ -1045,7 +1045,7 @@ main "$@"
 
 ---
 
-## 1. Dépendances système
+## Dépendances système
 
 ```bash
 sudo apt update
@@ -1062,7 +1062,7 @@ sudo apt install -y \
 
 ---
 
-## 2. Installer la toolchain ARM-elf (cross-compiler Calypso)
+## Installer la toolchain ARM-elf (cross-compiler Calypso)
 
 ### Option A : Téléchargement direct (prêt à l’emploi)
 
@@ -1082,18 +1082,18 @@ export PATH=$PATH:/opt/arm-2021.03/bin
 
 ---
 
-## 3. Compiler et installer OsmocomBB
+## Compiler et installer OsmocomBB
 
 ```bash
-# 1. Cloner les sources
+# Cloner les sources
 git clone https://github.com/osmocom/osmocom-bb.git
 cd osmocom-bb
 
-# 2. Préparer le build
+# Préparer le build
 cd src
 autoreconf -i
 
-# 3. Compiler le firmware (spécifie la toolchain si besoin)
+# Compiler le firmware (spécifie la toolchain si besoin)
 export PATH=$PATH:/opt/arm-2021.03/bin
 ./configure
 make -j$(nproc)
@@ -1103,7 +1103,7 @@ sudo ldconfig
 
 ---
 
-## 4. Flasher le firmware sur les téléphones
+## Flasher le firmware sur les téléphones
 
 **Connecte les deux téléphones via USB-PL2303, batterie retirée.**
 
@@ -1125,7 +1125,7 @@ sudo ./osmocon -m c123xor -p /dev/ttyUSB1 -s /tmp/osmocom_l2.2 \
 
 ---
 
-## 5. Lancer le transceiver et la stack BTS
+## Lancer le transceiver et la stack BTS
 
 Dans d’autres shells :
 
@@ -1143,7 +1143,7 @@ osmobts-trx -c ~/.osmocom/osmo-bts.cfg -r 99
 
 ---
 
-## 6. (Optionnel) Installer Asterisk + LCR pour appels SIP
+## (Optionnel) Installer Asterisk + LCR pour appels SIP
 
 ```bash
 sudo apt install -y asterisk asterisk-dev
@@ -1160,7 +1160,7 @@ Configurer `/etc/asterisk/sip.conf` avec tes identifiants SIP.
 
 ---
 
-## 7. Vérifier le setup et logs
+## Vérifier le setup et logs
 
 * Vérifie les logs dans chaque shell : recherche “registered”, “attach”, etc.
 * Lancer l’attachement avec un mobile (SIM Osmocom ou Free avec accès PLMN custom).
@@ -1172,7 +1172,7 @@ Configurer `/etc/asterisk/sip.conf` avec tes identifiants SIP.
 
 ![](pictures/srsran.png)
 
-## 1. Installation rapide via PPA (Ubuntu)
+## Installation rapide via PPA (Ubuntu)
 
 ```bash
 sudo apt update
@@ -1190,7 +1190,7 @@ srsenb --version
 
 ---
 
-## 2. Compilation depuis les sources
+## Compilation depuis les sources
 
 ```bash
 sudo apt update
@@ -1208,7 +1208,7 @@ sudo make install
 
 ---
 
-## 3. Générer/Configurer une SIM (IMSI, Ki, OPC)
+## Générer/Configurer une SIM (IMSI, Ki, OPC)
 
 Pour connecter un téléphone réel ou un UE logiciel, il faut une SIM dont les paramètres sont connus du core **srsEPC**.
 
@@ -1253,7 +1253,7 @@ IMSI,  Ki,                       OPC,                      MSISDN,     AMF,   SQ
 
 ---
 
-## 4. Programmer une carte SIM réelle (optionnel)
+## Programmer une carte SIM réelle (optionnel)
 
 Si tu utilises une carte programmable (Sysmocom, MagicSIM, etc.) :
 
@@ -1268,7 +1268,7 @@ pysim-prog.py --ki $KI --opc $OPC --imsi $IMSI
 
 ---
 
-## 5. Lancer srsENB (eNodeB) et srsEPC (core)
+## Lancer srsENB (eNodeB) et srsEPC (core)
 
 Dans deux terminaux :
 
@@ -1282,7 +1282,7 @@ srsepc epc.conf
 
 ---
 
-## 6. Tester l’attachement UE
+## Tester l’attachement UE
 
 * Allume ton téléphone (SIM insérée, mode réseau “4G/auto”)
 * Vérifie la détection dans les logs
@@ -1297,7 +1297,7 @@ srsepc epc.conf
 
 # L’évolution 5G : rupture technologique, nouveaux usages
 
-## 1. Objectifs et rupture de la 5G
+## Objectifs et rupture de la 5G
 
 * **Débit x10 à x100 par rapport à la 4G** (jusqu’à 10 Gbps en pointe, 1 Gbps courant)
 * **Ultra faible latence** (< 1 ms possible)
@@ -1307,7 +1307,7 @@ srsepc epc.conf
 
 ---
 
-## 2. Ruptures techniques majeures
+## Ruptures techniques majeures
 
 * **Nouvelles bandes de fréquences** : ajout du spectre millimétrique (>24 GHz), plus de capacité mais portée plus courte
 * **Massive MIMO** : dizaines/centaines d’antennes pour booster débit et couverture
@@ -1317,7 +1317,7 @@ srsepc epc.conf
 
 ---
 
-## 3. Nouveaux usages rendus possibles
+## Nouveaux usages rendus possibles
 
 * **Internet mobile ultra haut débit** (streaming 4K/8K, réalité augmentée/virtuelle, cloud gaming)
 * **Industrie 4.0** : automatisation, robotique, maintenance prédictive, réseaux privés d’usine
@@ -1327,7 +1327,7 @@ srsepc epc.conf
 
 ---
 
-## 4. Limites, critiques et défis
+## Limites, critiques et défis
 
 * **Couverture inégale** (surtout en mmWave, portée faible, besoin de micro-cellules)
 * **Consommation énergétique** (optimisée par le slicing mais déploiement massif d’antennes)
@@ -1336,7 +1336,7 @@ srsepc epc.conf
 
 ---
 
-## 5. Tableau récapitulatif
+## Tableau récapitulatif
 
 | Génération | Débit max           | Latence   | Connexions/km² | Architecture   | Usages clés                      |
 | ---------- | ------------------- | --------- | -------------- | -------------- | -------------------------------- |
@@ -1345,13 +1345,13 @@ srsepc epc.conf
 
 ---
 
-## 6. À retenir
+## À retenir
 
 > **La 5G n’est pas juste “plus rapide”** : elle transforme l’infrastructure, permet l’émergence de nouveaux usages critiques (industrie, santé, véhicules), et prépare le terrain pour un monde ultra-connecté, piloté en temps réel.
 
 # 5G SA labo : srsRAN Project + Open5GS (Ubuntu 2024)
 
-## 1. Prérequis
+## Prérequis
 
 * **OS :** Ubuntu 22.04 ou 24.04 (x86\_64)
 * **Matériel :** SDR (USRP B200/B210/X300/PlutoSDR/LimeSDR…)
@@ -1360,7 +1360,7 @@ srsepc epc.conf
 
 ---
 
-## 2. Installer Open5GS (Core 5G)
+## Installer Open5GS (Core 5G)
 
 ![](pictures/open5gs.png)
 
@@ -1387,7 +1387,7 @@ ninja -C build install
 
 ---
 
-## 3. Installer srsRAN Project (gNB/UE)
+## Installer srsRAN Project (gNB/UE)
 
 ### a) Dépendances
 
@@ -1412,7 +1412,7 @@ sudo make install
 
 ---
 
-## 4. Configurer Open5GS (Core)
+## Configurer Open5GS (Core)
 
 * Tous les fichiers : `open5gs/install/etc/open5gs/`
 * Fichiers clés :
@@ -1443,7 +1443,7 @@ sudo make install
 
 ---
 
-## 5. Configurer srsRAN gNB
+## Configurer srsRAN gNB
 
 * Fichier : `srsran_project/config/gnb.yaml` *(ou `gnb.conf` selon la version)*
 
@@ -1466,7 +1466,7 @@ slices:
 
 ---
 
-## 6. Configurer srsRAN UE (si test en pur logiciel)
+## Configurer srsRAN UE (si test en pur logiciel)
 
 * Fichier : `srsran_project/config/ue.yaml` *(ou `ue.conf`)*
 * Paramètres : PLMN, key, opc, amf, imei identiques à l’abonné Open5GS.
@@ -1474,7 +1474,7 @@ slices:
 
 ---
 
-## 7. Lancer le Core Open5GS
+## Lancer le Core Open5GS
 
 Ouvre **plusieurs terminaux** (ou `tmux`) :
 
@@ -1501,7 +1501,7 @@ sudo ./open5gs-daemon
 
 ---
 
-## 8. Lancer le gNB srsRAN
+## Lancer le gNB srsRAN
 
 ```bash
 srsran_gnb --cfg srsran_project/config/gnb.yaml
@@ -1509,7 +1509,7 @@ srsran_gnb --cfg srsran_project/config/gnb.yaml
 
 ---
 
-## 9. (Optionnel) Lancer le srsUE (UE 5G SA logiciel)
+## (Optionnel) Lancer le srsUE (UE 5G SA logiciel)
 
 ```bash
 srsran_ue --cfg srsran_project/config/ue.yaml
@@ -1519,7 +1519,7 @@ Ou utiliser un vrai smartphone 5G + SDR côté réseau.
 
 ---
 
-## 10. Supervision
+## Supervision
 
 * Utilise le **WebUI Open5GS** (si installé) pour la gestion des SIM et le monitoring.
 * Surveille les logs (attach, registration, PDU session, etc.).

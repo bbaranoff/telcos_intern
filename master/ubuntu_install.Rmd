@@ -31,7 +31,7 @@ Cette approche permet d'éviter l'utilisation d'équipements propriétaires coû
 De nombreux lecteurs utilisent initialement **Windows**.  
 La première étape consiste donc à installer **Ubuntu Linux**, qui offre un environnement particulièrement adapté à l'expérimentation réseau et radio.
 
-### 1. Télécharger Ubuntu
+### Télécharger Ubuntu
 
 Télécharger l'image officielle :
 
@@ -43,7 +43,7 @@ Choisir :
 
 Le fichier téléchargé est une image **ISO** du système.
 
-### 2. Créer une clé USB bootable
+### Créer une clé USB bootable
 
 Sous Windows, utiliser un outil comme :
 
@@ -56,7 +56,7 @@ Procédure :
 - sélectionner l'image **ISO Ubuntu**
 - créer la **clé bootable**
 
-### 3. Démarrer sur la clé USB
+### Démarrer sur la clé USB
 
 Redémarrer l'ordinateur et accéder au **menu de démarrage** (souvent avec une touche comme `F12`, `F10` ou `ESC`).
 
@@ -64,7 +64,7 @@ Sélectionner :
 
 **Boot sur la clé USB**
 
-### 4. Installer Ubuntu
+### Installer Ubuntu
 
 L'installateur Ubuntu guide ensuite l'utilisateur.
 
@@ -81,7 +81,7 @@ Deux options sont possibles :
 
 Pour les expérimentations décrites dans ce livre, un système **Ubuntu seul** simplifie généralement la configuration.
 
-### 5. Mise à jour du système
+### Mise à jour du système
 
 Une fois Ubuntu installé, ouvrir un terminal et exécuter :
 
