@@ -25,7 +25,7 @@ Par exemple :
 - **sémaphores optiques**
 - **télégraphes optiques**
 
-Le système de **Claude Chappe**, développé en France à la fin du XVIIIᵉ siècle, est l’un des premiers véritables réseaux de communication à distance.  
+Le système de **Claude Chappe**, développé en France à la fin du XVIII siècle, est l’un des premiers véritables réseaux de communication à distance.  
 Il utilisait des **tours équipées de bras mobiles** visibles à plusieurs kilomètres.
 
 Chaque position des bras représentait un symbole.
@@ -60,7 +60,7 @@ Car une question devient alors possible :
 
 ## L’électricité devient un langage
 
-Au début du XIXᵉ siècle, les progrès en **électricité et en électromagnétisme** transforment progressivement la manière dont les scientifiques comprennent les phénomènes physiques.
+Au début du XIX siècle, les progrès en **électricité et en électromagnétisme** transforment progressivement la manière dont les scientifiques comprennent les phénomènes physiques.
 
 Les expériences menées par **Ørsted**, **Ampère** et **Faraday** montrent qu’il existe un lien profond entre **électricité et magnétisme**.  
 Un courant électrique peut produire un champ magnétique, et inversement un champ magnétique variable peut produire un courant.
@@ -206,7 +206,7 @@ Pendant que le téléphone et le télégraphe se développent, la physique pours
 
 **quelle est la nature de l’électricité et du magnétisme ?**
 
-Au milieu du XIXᵉ siècle, les expériences de **Faraday** avaient déjà montré qu’un champ magnétique variable pouvait produire un courant électrique.  
+Au milieu du XIX siècle, les expériences de **Faraday** avaient déjà montré qu’un champ magnétique variable pouvait produire un courant électrique.  
 Mais il manquait encore une **théorie unifiée** capable de décrire ces phénomènes.
 
 C’est le physicien écossais **James Clerk Maxwell** qui va apporter cette réponse.
@@ -331,7 +331,7 @@ Mais ces systèmes restaient principalement **point à point** :
 
 Ils ne formaient pas encore un **réseau structuré** capable de gérer des millions d'utilisateurs.
 
-Pendant la première moitié du XXᵉ siècle, la radio évolue rapidement.  
+Pendant la première moitié du XX siècle, la radio évolue rapidement.  
 Les ingénieurs développent de nouvelles techniques pour transporter plus d'information et améliorer la qualité du signal.
 
 Par exemple :

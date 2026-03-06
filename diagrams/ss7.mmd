@@ -1,0 +1,18 @@
+graph LR
+
+MSC_A["MSC Op1<br/>1.23.1"]
+STP_A["STP Op1<br/>1.23.2"]
+INTER["Inter-STP<br/>0.23.0"]
+STP_B["STP Op2<br/>2.23.2"]
+MSC_B["MSC Op2<br/>2.23.1"]
+
+MSC_A -->|SCTP 127.0.0.1:2905| STP_A
+STP_A -->|M3UA| INTER
+INTER -->|DPC 2.23.x| STP_B
+STP_B -->|SCCP routing| MSC_B
+
+style MSC_A fill:#e6e6e6,stroke:#333
+style STP_A fill:#e6e6e6,stroke:#333
+style STP_B fill:#e6e6e6,stroke:#333
+style MSC_B fill:#e6e6e6,stroke:#333
+style INTER fill:#9ec9ff,stroke:#333
