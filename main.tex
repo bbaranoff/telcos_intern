@@ -1147,9 +1147,373 @@ Linux offre plusieurs avantages :
 C'est pour cette raison que Linux est aujourd'hui le système le plus
 utilisé dans la recherche en télécommunications et en sécurité radio.
 
-\subsection{La clé RTL-SDR}\label{la-cluxe9-rtl-sdr}
+\section{Différents types de SDR}\label{diffuxe9rents-types-de-sdr}
 
-\pandocbounded{\includegraphics[keepaspectratio]{pictures/rtl-sdr.jpg}}
+\subsection{Tableau comparatif des SDR (Specs + Prix,
+2025)}\label{tableau-comparatif-des-sdr-specs-prix-2025}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1364}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1818}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0808}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0909}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1313}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0657}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.2172}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0960}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{SDR (modèle)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Plage RF}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Tx/Rx}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Bande instant.}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{FPGA/Chipset}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Interface}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Points forts}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Prix indicatif}*
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{RTL-SDR V3} & 500 kHz--1,7 GHz & RX seulement &
+\textasciitilde2,4 MHz & RTL2832U + R820T2 & USB 2.0 & Ultra abordable,
+RX seul, énorme écosystème & 30--40 € \\
+\textbf{ADALM-PLUTO (PlutoSDR)} & 325 MHz--3,8 GHz (mod :
+\textasciitilde70--6000 MHz) & 1Tx / 1Rx (full) & 20 MHz & Zynq Z-7010 +
+AD9363 & USB 2.0 & Ultra compact, bidouillable, éducatif & 230--350 € \\
+\textbf{LimeSDR Mini 2.0} & \textasciitilde10 MHz--3,5 GHz & 1Tx / 1Rx &
+40 MHz & Lattice ECP5 + LMS7002M & USB 3.0 & Basse latence, DSP avancé,
+open source & \textasciitilde410 € \\
+\textbf{HackRF One} & 1 MHz--6 GHz & 1Tx / 1Rx (half) & 20 MHz &
+MAX2837/2839 & USB 2.0 & Open source, hacking, très populaire & 320--350
+€ \\
+\textbf{BladeRF 2.0 Micro xA4} & \textasciitilde47 MHz--6 GHz & 1Tx /
+1Rx (full) & 56 MHz & Intel Cyclone V + LMS7002M & USB 3.0 & Puissant,
+large bande, forte communauté & \textasciitilde650 € \\
+\textbf{AntSDR E200/E310} & 70 MHz--6 GHz & 2Tx / 2Rx (full) & 56--61,44
+MHz & Zynq-7020 + AD9361/63 & Ethernet/USB & MIMO 2×2, flexible &
+317--472 € \\
+\textbf{LibreSDR B210/B220 Mini} & 70 MHz--6 GHz & 2Tx / 2Rx (full) &
+\textasciitilde56 MHz & FPGA + AD9361/63 & USB 3.0 & Compatible USRP
+B210 & \textasciitilde369 € \\
+\textbf{USRP B210} & 70 MHz--6 GHz & 2Tx / 2Rx (full) & 56 MHz &
+Spartan-6 + AD9361 & USB 3.0 & Référence labo, UHD & \textasciitilde2000
+€ \\
+\textbf{USRP X310} & 10 MHz--6 GHz* & 2Tx / 2Rx (full) & 160 MHz &
+Kintex-7 & 1/10 GbE & Recherche pro, modulaire & 10 000 €+ \\
+\end{longtable}
+
+*Prix indicatifs 2025.
+
+\textbf{Légende}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Full} : duplex intégral (Tx et Rx simultanés)
+\item
+  \textbf{Half} : semi-duplex (Tx ou Rx)
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{La clé RTL-SDR}\label{la-cluxe9-rtl-sdr}
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{pictures/rtl-sdr.jpg}
+
+La \textbf{RTL-SDR} est une clé USB basée sur le chipset
+\textbf{RTL2832U} initialement conçue pour la télévision DVB-T. Le
+détournement du mode \textbf{I/Q brut} a permis d'en faire le SDR le
+plus populaire du monde.
+
+Caractéristiques principales :
+
+\begin{itemize}
+\tightlist
+\item
+  RX uniquement
+\item
+  bande instantanée \textasciitilde2,4 MHz
+\item
+  très bon support logiciel (GNU Radio, rtl-sdr, GQRX, SDR++)
+\item
+  prix extrêmement bas
+\end{itemize}
+
+C'est l'outil idéal pour apprendre :
+
+\begin{itemize}
+\tightlist
+\item
+  ADS-B
+\item
+  AIS
+\item
+  météo satellite
+\item
+  analyse spectrale
+\item
+  écoute radio numérique
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{ADALM-PLUTO}\label{adalm-pluto}
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{pictures/pluto.png}
+
+Le \textbf{PlutoSDR} est un SDR éducatif développé par \textbf{Analog
+Devices}.
+
+Points clés :
+
+\begin{itemize}
+\tightlist
+\item
+  basé sur \textbf{Zynq + AD9363}
+\item
+  Tx/Rx full duplex
+\item
+  hackable (firmware modifiable)
+\item
+  bande instantanée 20 MHz
+\end{itemize}
+
+Très utilisé pour :
+
+\begin{itemize}
+\tightlist
+\item
+  4G / 5G expérimental
+\item
+  radar
+\item
+  GNURadio avancé
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{LimeSDR Mini}\label{limesdr-mini}
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{pictures/lime.jpg}
+
+Le \textbf{LimeSDR Mini} utilise le transceiver \textbf{LMS7002M}.
+
+Points forts :
+
+\begin{itemize}
+\tightlist
+\item
+  bande instantanée 40 MHz
+\item
+  FPGA ECP5 programmable
+\item
+  open hardware
+\end{itemize}
+
+Très apprécié pour :
+
+\begin{itemize}
+\tightlist
+\item
+  expérimentation LTE
+\item
+  SDR haute bande passante
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{HackRF One}\label{hackrf-one}
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{pictures/hackrf.jpeg}
+
+Le \textbf{HackRF One} est probablement le SDR le plus utilisé dans la
+communauté sécurité radio.
+
+Caractéristiques :
+
+\begin{itemize}
+\tightlist
+\item
+  1 MHz à 6 GHz
+\item
+  semi-duplex
+\item
+  20 MHz de bande instantanée
+\end{itemize}
+
+Utilisations typiques :
+
+\begin{itemize}
+\tightlist
+\item
+  recherche sécurité RF
+\item
+  replay radio
+\item
+  analyse protocole
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{BladeRF}\label{bladerf}
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{pictures/blade.png}
+
+Le \textbf{BladeRF 2.0} est une plateforme SDR très puissante.
+
+Points forts :
+
+\begin{itemize}
+\tightlist
+\item
+  FPGA Cyclone V
+\item
+  56 MHz de bande instantanée
+\item
+  support logiciel très mature
+\end{itemize}
+
+Utilisé pour :
+
+\begin{itemize}
+\tightlist
+\item
+  implémentations LTE
+\item
+  systèmes radio expérimentaux
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{AntSDR}\label{antsdr}
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{pictures/ant.jpg}
+
+Les \textbf{AntSDR} sont des clones modernes des plateformes
+\textbf{AD9361}.
+
+Avantages :
+
+\begin{itemize}
+\tightlist
+\item
+  MIMO 2×2
+\item
+  Ethernet
+\item
+  prix très compétitif
+\end{itemize}
+
+Très intéressant pour :
+
+\begin{itemize}
+\tightlist
+\item
+  recherche radio avancée
+\item
+  systèmes multi-antennes
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{LibreSDR}\label{libresdr}
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{pictures/libre.png}
+
+Le \textbf{LibreSDR} vise à reproduire les capacités du \textbf{USRP
+B210} dans un format compact.
+
+Caractéristiques :
+
+\begin{itemize}
+\tightlist
+\item
+  2×2 MIMO
+\item
+  USB 3
+\item
+  bande \textasciitilde56 MHz
+\end{itemize}
+
+Très bon rapport performance/prix.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{USRP B210}\label{usrp-b210}
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{pictures/B210.jpg}
+
+Le \textbf{USRP B210} est une plateforme de référence pour la recherche
+SDR.
+
+Points clés :
+
+\begin{itemize}
+\tightlist
+\item
+  AD9361
+\item
+  MIMO 2×2
+\item
+  UHD officiel
+\end{itemize}
+
+Très utilisé dans :
+
+\begin{itemize}
+\tightlist
+\item
+  laboratoires universitaires
+\item
+  projets GNU Radio avancés
+\item
+  implémentations LTE / 5G
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{USRP X310}\label{usrp-x310}
+
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{pictures/X310.jpeg}
+
+Le \textbf{USRP X310} est une plateforme SDR haut de gamme.
+
+Caractéristiques :
+
+\begin{itemize}
+\tightlist
+\item
+  FPGA Kintex-7
+\item
+  modules RF interchangeables
+\item
+  bande instantanée très élevée
+\end{itemize}
+
+Utilisé pour :
+
+\begin{itemize}
+\tightlist
+\item
+  recherche radio avancée
+\item
+  radar
+\item
+  communications expérimentales
+\end{itemize}
+
+\subsection{La clé RTL-SDR}\label{la-cluxe9-rtl-sdr-1}
+
+\pandocbounded{\includegraphics[keepaspectratio]{pictures/rtl.jpg}}
 
 L'un des outils les plus accessibles pour explorer le spectre radio est
 la \textbf{clé RTL-SDR}.
