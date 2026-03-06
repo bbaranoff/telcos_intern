@@ -114,7 +114,7 @@ Toute attaque ou rétro-ingénierie d’A5/1 est réservée à la recherche, au 
 
 ## Tuto Kraken + behemoth.py (Ubuntu 22.04/24.04)
 
-## Préparer le système
+## 1. Préparer le système
 
 ```bash
 sudo apt update
@@ -124,7 +124,7 @@ sudo apt install -y git build-essential cmake python3 python3-pip \
 
 ---
 
-## Installer Kraken
+## 2. Installer Kraken
 
 **a) Récupérer le repo**
 
@@ -143,14 +143,14 @@ make
 
 ---
 
-## Installer ou télécharger les Rainbow Tables
+## 3. Installer ou télécharger les Rainbow Tables
 
 * **Attention :** Les tables font **plusieurs To** (ex : [tables sur le forum SRLabs](https://opensource.srlabs.de/projects/a51-decrypt/wiki/Rainbow_Tables)).
 * **Décompresse** tout dans un dossier, exemple : `/mnt/kraken_tables/`
 
 ---
 
-## Installer behemoth.py
+## 4. Installer behemoth.py
 
 **a) Télécharger le script**
 
@@ -172,7 +172,7 @@ pip3 install -r requirements.txt  # (si besoin)
 
 ---
 
-## Utiliser Kraken (manuel et avec behemoth.py)
+## 5. Utiliser Kraken (manuel et avec behemoth.py)
 
 ## A. Utilisation simple de Kraken
 
@@ -210,7 +210,7 @@ python3 behemoth.py -k /chemin/kraken -t /mnt/kraken_tables/ -i dossier_kc/ -j 8
 
 ---
 
-## Schéma résumé
+## 6. Schéma résumé
 
 ```
 (signal GSM) → extraction keystream (.kc) → Kraken (ou behemoth.py)
@@ -229,7 +229,7 @@ python3 behemoth.py -k /chemin/kraken -t /mnt/kraken_tables/ -i dossier_kc/ -j 8
 
 ---
 
-## Liens utiles
+##Liens utiles
 
 * [Kraken](https://github.com/JPaulMora/kraken)
 * [behemoth.py](https://github.com/JPaulMora/behemoth)
@@ -240,7 +240,7 @@ python3 behemoth.py -k /chemin/kraken -t /mnt/kraken_tables/ -i dossier_kc/ -j 8
 
 ## Installation Deka (cracker Kraken OpenCL)
 
-### Prérequis
+### 1. Prérequis
 
 * **OS :** Debian Jessie à Bookworm, ou Ubuntu
 * **GPU :** AMD recommandé (Nvidia possible mais demande plus de patchs)
@@ -257,7 +257,7 @@ pip3 install pyopencl
 
 ---
 
-### Cloner le code
+### 2. Cloner le code
 
 Fork recommandé (patché pour systèmes récents) :
 
@@ -277,7 +277,7 @@ git clone git://git.srlabs.de/kraken
 
 ---
 
-### Télécharger les tables Rainbow
+### 3. Télécharger les tables Rainbow
 
 * **Taille :** \~1,7 To (40 fichiers `.dlt`)
 * **Torrent / Téléchargement direct :**
@@ -292,7 +292,7 @@ git clone git://git.srlabs.de/kraken
 
 ---
 
-### Installer les tables
+### 4. Installer les tables
 
 **Option 1 – Mode fichier (le plus simple, moins performant) :**
 
@@ -310,7 +310,7 @@ git clone git://git.srlabs.de/kraken
 
 ---
 
-### Configurer Deka
+### 5. Configurer Deka
 
 Édite `delta_config.h` :
 
@@ -325,7 +325,7 @@ git clone git://git.srlabs.de/kraken
 
 ---
 
-### Générer le kernel OpenCL
+### 6. Générer le kernel OpenCL
 
 * **AMD :** utiliser `genkernel32.sh` (recommandé)
 * **Nvidia :** il faudra peut-être patcher “unsigned long long” → “ulong”
@@ -348,14 +348,14 @@ if(diff != all) { ... }
 
 ---
 
-### Tuning kernel (vankusconf.py/.h)
+### 7. Tuning kernel (vankusconf.py/.h)
 
 * **Kernels concurrents :** (nombre de cores GPU - 1) × petit entier. Exemple : 4095 pour 2048 cores GPU.
 * **QSIZE :** Environ 2× le nombre de fragments traités en parallèle.
 
 ---
 
-### Lancer Deka / Kraken
+### 8. Lancer Deka / Kraken
 
 **Démarrage manuel (conseillé pour debug/début) :**
 
@@ -380,7 +380,7 @@ export PYOPENCL_CTX="0:0"
 
 ---
 
-### Connexion & test de crack
+### 9. Connexion & test de crack
 
 Connexion au serveur Deka (paplon) :
 
@@ -398,7 +398,7 @@ crack 00111000...   # (colle un burst connu)
 
 ---
 
-### Monitoring & tuning perfs
+### 10. Monitoring & tuning perfs
 
 Dans telnet, tape `stats` pour vérifier la taille des files d’attente.
 
@@ -410,27 +410,27 @@ Dans telnet, tape `stats` pour vérifier la taille des files d’attente.
 ### Récapitulatif express
 
 ```sh
-# Dépendances
+# 1. Dépendances
 sudo apt install git build-essential python3-pip ocl-icd-libopencl1 opencl-headers clinfo
 pip3 install pyopencl
 
-# Cloner le code
+# 2. Cloner le code
 git clone https://github.com/0x7678/typhon-vx.git
 cd typhon-vx/kraken
 
-# Télécharger les tables (~1,7To)
+# 3. Télécharger les tables (~1,7To)
 
-# Installer les tables (TableConvert ou install.py)
+# 4. Installer les tables (TableConvert ou install.py)
 
-# Éditer delta_config.h (chemins absolus/UUID)
+# 5. Éditer delta_config.h (chemins absolus/UUID)
 
-# Générer kernel : ./genkernel32.sh > slice.c
+# 6. Générer kernel : ./genkernel32.sh > slice.c
 
-# Lancer : paplon.py, oclvankus.py, delta_client.py
+# 7. Lancer : paplon.py, oclvankus.py, delta_client.py
 
-# Connexion : telnet localhost 1578, commande "crack"
+# 8. Connexion : telnet localhost 1578, commande "crack"
 
-# Tune (stats, kernel, stockage)
+# 9. Tune (stats, kernel, stockage)
 ```
 
 ---
@@ -441,18 +441,9 @@ cd typhon-vx/kraken
 * Scripts et kernels adaptables à volonté (fragments, tuning, debug)
 * Pour le support ou l’optimisation, voir Issues Github, forums SRLabs, brmlab, Discords GSM
 
-# LTE Redirection Attack — Principe et démonstration expérimentale
 
-Les réseaux cellulaires modernes (LTE/4G et 5G) ont été conçus pour améliorer la sécurité des communications mobiles.  
-Cependant, afin de maintenir la compatibilité avec les générations précédentes, les téléphones restent capables de basculer vers des technologies plus anciennes comme **UMTS (3G)** ou **GSM/EDGE (2G)**.
 
-Cette compatibilité introduit une surface d’attaque connue sous le nom de :
-
-```
-
-LTE Redirection Attack
-
-```
+# LTE Redirection Attack
 
 Cette attaque consiste à **forcer un terminal LTE à quitter la couche 4G pour rejoindre une cellule 2G contrôlée par l’attaquant**.
 
