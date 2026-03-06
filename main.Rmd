@@ -1,12 +1,17 @@
+![](pictures/couverture.png)
+
 ---
 title: "Telco's intern"
 author: "Bastien Baranoff"
 date: "`r Sys.Date()`"
 output:
   pdf_document:
+    toc: true
     latex_engine: xelatex
 lang: fr
 ---
+
+
 
 # Un livre sur mon expérience en radio-télécommunications
 
