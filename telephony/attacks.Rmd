@@ -441,3 +441,324 @@ cd typhon-vx/kraken
 * Scripts et kernels adaptables à volonté (fragments, tuning, debug)
 * Pour le support ou l’optimisation, voir Issues Github, forums SRLabs, brmlab, Discords GSM
 
+# LTE Redirection Attack — Principe et démonstration expérimentale
+
+Les réseaux cellulaires modernes (LTE/4G et 5G) ont été conçus pour améliorer la sécurité des communications mobiles.  
+Cependant, afin de maintenir la compatibilité avec les générations précédentes, les téléphones restent capables de basculer vers des technologies plus anciennes comme **UMTS (3G)** ou **GSM/EDGE (2G)**.
+
+Cette compatibilité introduit une surface d’attaque connue sous le nom de :
+
+```
+
+LTE Redirection Attack
+
+```
+
+Cette attaque consiste à **forcer un terminal LTE à quitter la couche 4G pour rejoindre une cellule 2G contrôlée par l’attaquant**.
+
+Une fois le terminal connecté au réseau 2G, plusieurs attaques deviennent possibles :
+
+- interception des communications
+- downgrade cryptographique
+- collecte d’identifiants réseau
+- manipulation de la signalisation
+
+L’environnement décrit dans ce projet permet de **reproduire expérimentalement ce mécanisme à l’aide d’une infrastructure SDR open source**.
+
+---
+
+# Principe général de la redirection LTE
+
+Lorsqu’un téléphone est connecté à un réseau LTE, la communication avec la station de base (eNodeB) est gérée par le protocole :
+
+```
+
+RRC — Radio Resource Control
+
+```
+
+Le protocole RRC permet notamment de :
+
+- établir la connexion radio
+- configurer les ressources
+- libérer la connexion
+
+Lorsqu’une cellule LTE souhaite transférer un terminal vers une autre technologie radio, elle peut envoyer un message :
+
+```
+
+RRC Connection Release with Redirection
+
+```
+
+Ce message contient des informations indiquant au terminal **vers quelles fréquences il doit rechercher un autre réseau**.
+
+Dans le cas de cette démonstration, la redirection cible :
+
+```
+
+GSM / EDGE
+
+```
+
+Le flux de signalisation peut être résumé ainsi :
+
+```
+
+UE → LTE eNodeB (attachement)
+eNodeB → UE (RRC release + redirection info)
+UE → scan GSM frequencies
+UE → attach to EDGE cell
+
+```
+
+Une fois ce processus terminé, le téléphone se retrouve connecté à la cellule GSM contrôlée par l’infrastructure Osmocom.
+
+---
+
+# Infrastructure expérimentale
+
+La démonstration repose sur une architecture composée de deux piles réseau distinctes :
+
+```
+
+LTE Anchor Network
++
+EDGE Redirection Network
+
+```
+
+## Pile LTE (point d’ancrage)
+
+La couche LTE est fournie par **srsRAN_4G**, qui implémente :
+
+```
+
+srsENB
+srsEPC
+
+```
+
+Ces composants permettent de créer une cellule LTE expérimentale capable de :
+
+- accepter l’attachement d’un terminal
+- envoyer des messages RRC modifiés
+- déclencher la redirection
+
+---
+
+## Pile 2G (réseau cible)
+
+La couche GSM/EDGE est fournie par la suite **Osmocom** :
+
+```
+
+osmo-bts
+osmo-bsc
+osmo-msc
+osmo-hlr
+osmo-sgsn
+osmo-ggsn
+
+```
+
+Cette pile reproduit l’architecture complète d’un réseau 2G.
+
+Le terminal qui a été redirigé depuis LTE peut alors :
+
+```
+
+UE → attach EDGE
+UE → authentication
+UE → data / voice
+
+```
+
+---
+
+# Rôle des identités réseau (MNO / MVNO)
+
+L’efficacité de l’attaque repose sur l’utilisation de deux identités réseau différentes :
+
+```
+
+MNO identity
+MVNO identity
+
+```
+
+Le principe est le suivant :
+
+### LTE
+
+La cellule LTE annonce l’identité d’un **opérateur réel (MNO)**.
+
+Le téléphone accepte donc naturellement de s’y connecter.
+
+### EDGE
+
+La cellule GSM annonce une identité différente, généralement celle d’un **MVNO**.
+
+```
+
+LTE → MCC/MNC = MNO
+EDGE → MCC/MNC = MVNO
+
+```
+
+Cette séparation empêche le téléphone de revenir rapidement vers la couche LTE.
+
+Une fois connecté à la cellule EDGE, le terminal considère qu’il est déjà attaché à un réseau valide.
+
+---
+
+# Mécanisme de fallback
+
+Après la redirection, le terminal exécute une recherche radio :
+
+```
+
+scan GSM frequencies
+
+```
+
+Les fréquences ciblées sont définies dans la configuration Osmocom :
+
+```
+
+osmo-bsc.cfg
+
+```
+
+Le téléphone se connecte ensuite à la cellule GSM disponible.
+
+Le comportement dépend fortement de l’opérateur réel et des politiques SIM.
+
+Deux cas apparaissent généralement.
+
+---
+
+## Cas MVNO
+
+Les réseaux **MVNO (Mobile Virtual Network Operator)** ont souvent des politiques de mobilité moins agressives.
+
+Dans ce cas :
+
+```
+
+UE remains on EDGE
+
+```
+
+Le téléphone reste connecté à la cellule GSM expérimentale.
+
+Cela permet des expériences prolongées.
+
+---
+
+## Cas MNO
+
+Les grands opérateurs utilisent souvent des mécanismes appelés :
+
+```
+
+Fast Return to LTE
+LTE Steering
+
+```
+
+Le téléphone tente alors de revenir rapidement vers la couche LTE.
+
+Dans ce cas, la redirection ne dure parfois que quelques secondes.
+
+---
+
+# Implémentation dans srsRAN
+
+La démonstration utilise une version modifiée de **srsRAN_4G**.
+
+Le patch modifie le comportement du eNodeB pour envoyer un message RRC contenant des informations de redirection.
+
+Schéma simplifié :
+
+```
+
+RRCConnectionRelease
+redirectInfo
+GERAN frequencies
+
+````
+
+Ces informations forcent le terminal à scanner les fréquences GSM définies dans l’infrastructure Osmocom.
+
+---
+
+# Automatisation de l’environnement
+
+Le projet utilise **Docker** afin de simplifier le déploiement.
+
+La compilation est réalisée avec le script :
+
+```bash
+chmod +x build.sh
+./build.sh
+````
+
+Ou via une image Docker préconstruite :
+
+```bash
+sudo docker pull \
+    ghcr.io/bbaranoff/nsa_lte_redirect_to_edge:main
+
+sudo docker tag \
+    ghcr.io/bbaranoff/nsa_lte_redirect_to_edge:main \
+    redirection_build
+```
+
+Le déploiement est ensuite réalisé avec :
+
+```bash
+sudo ./start.sh
+```
+
+Ce script configure automatiquement :
+
+```
+host networking
+MCC / MNC identities
+Tracking Area Code
+```
+
+Les services sont orchestrés via **Tmux** dans le conteneur.
+
+Pour observer l’interaction entre les composants réseau :
+
+```bash
+docker exec -it egprs \
+    tmux attach-session \
+    -t osmocom
+```
+
+---
+
+# Conclusion
+
+L’attaque de redirection LTE illustre une faiblesse structurelle des réseaux cellulaires modernes :
+
+```
+backward compatibility
+```
+
+Pour assurer l’interopérabilité avec les générations précédentes, les terminaux restent capables de basculer vers des technologies plus anciennes comme GSM.
+
+Ces technologies présentent souvent des mécanismes de sécurité plus faibles.
+
+Les infrastructures **SDR open source** comme :
+
+```
+srsRAN
+Osmocom
+GNU Radio
+```
+
+permettent aujourd’hui d’étudier expérimentalement ces mécanismes et de mieux comprendre les interactions entre les différentes couches radio des réseaux mobiles.
