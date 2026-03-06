@@ -15,6 +15,35 @@ Cette approche permet de comprendre non seulement comment ces réseaux fonctionn
 
 Les chapitres suivants exploreront progressivement les différentes couches du système, en commençant par les bases du GSM et de la signalisation SS7, avant d’aborder les architectures plus modernes et les implications en matière de sécurité.
 
+
+### Architecture GSM/EGPRS
+
+```{r gsm_architecture}
+dot_code <- 'digraph gsm_arch {
+  graph [rankdir=LR, bgcolor=transparent]
+  node [shape=box, style=filled, fontname=Helvetica, fontsize=10, fillcolor="#B0E0E6"]
+  edge [color=black, fontname=Helvetica, fontsize=9]
+  
+  MS [label="Mobile\n(OsmocomBB)"]
+  BTS [label="BTS\n(osmo-bts-trx)"]
+  BSC [label="BSC\n(osmo-bsc)"]
+  MSC [label="MSC\n(osmo-msc)"]
+  HLR [label="HLR\n(osmo-hlr)"]
+  PCU [label="PCU\n(osmo-pcu)"]
+  SGSN [label="SGSN\n(osmo-sgsn)"]
+  GGSN [label="GGSN\n(osmo-ggsn)"]
+  STP [label="STP/SIGTRAN\n(osmo-stp)", fillcolor="#FFD700"]
+  
+  MS -> BTS [label="Um"]
+  BTS -> BSC [label="Abis"]
+  BSC -> MSC [label="A"]
+  MSC -> HLR [label="GSUP"]
+  PCU -> SGSN [label="Gb"]
+  SGSN -> GGSN [label="Gn"]
+  MSC -> STP [label="SS7"]
+}'
+render_graphviz(dot_code)
+```
 ## Présentation
 
 Ce guide décrit l'installation modulaire d'une infrastructure **EGPRS** (GPRS/EDGE) basée sur Osmocom et SDR (USRP, BladeRF).  
@@ -54,6 +83,23 @@ apt install -y <tous-les-paquets-listés>
 - **host/osmocon** : Outil de chargement du firmware sur les appareils compatibles
 - **src/host/layer23** : Pile GSM s’exécutant sur le PC (appels, SMS, sniffing, capture de bursts, etc.)
 - **firmware/** : Code baseband à flasher sur les téléphones compatibles
+
+```{r osmocombb_architecture}
+dot_code <- 'digraph osmocombb {
+  graph [rankdir=TB, bgcolor=transparent]
+  node [shape=box, style=filled, fontname=Helvetica, fontsize=10, fillcolor="#FFFFE0"]
+  edge [color=black, fontname=Helvetica, fontsize=9]
+  
+  host [label="PC Host\n(Layer23)"]
+  fw [label="Firmware\n(Calypso/ARM)"]
+  device [label="Motorola C1xx\n(C123/C118)"]
+  
+  host -> fw [label="osmocon"]
+  fw -> device [label="USB-serial"]
+  device -> host [label="L1CTL\nGSMTAP"]
+}'
+render_graphviz(dot_code)
+```
 
 ### Matériel supporté
 
@@ -274,6 +320,52 @@ cd <repo> && autoreconf -fi && ./configure && make -j$(nproc) && make install &&
 * **libsmpp34** : Librairie SMPP (SMS)
 * **libgtpnl** : GTP (GPRS Tunneling Protocol pour data mobile)
 
+
+```{r osmocom_stack}
+dot_code <- 'digraph osmocom_stack {
+  graph [rankdir=TB, bgcolor=transparent]
+  node [shape=box, style=filled, fontname=Helvetica, fontsize=10, fillcolor="#90EE90"]
+  edge [color=black, fontname=Helvetica, fontsize=9]
+  
+  BTS [label="osmo-bts-trx\n(BTS)"]
+  BSC [label="osmo-bsc\n(BSC)"]
+  MSC [label="osmo-msc\n(MSC)"]
+  HLR [label="osmo-hlr\n(HLR)"]
+  MGW [label="osmo-mgw\n(Media)"]
+  PCU [label="osmo-pcu\n(GPRS)"]
+  SGSN [label="osmo-sgsn\n(SGSN)"]
+  GGSN [label="osmo-ggsn\n(GGSN)"]
+  
+  BTS -> BSC
+  BSC -> MSC
+  BSC -> PCU
+  MSC -> HLR
+  MSC -> MGW
+  PCU -> SGSN
+  SGSN -> GGSN
+}'
+render_graphviz(dot_code)
+```
+
+```{r ss7_routing}
+dot_code <- 'digraph ss7_arch {
+  graph [rankdir=TB, bgcolor=transparent]
+  node [shape=box, style=filled, fontname=Helvetica, fontsize=10, fillcolor="#FFB6C1"]
+  edge [color=black, fontname=Helvetica, fontsize=9]
+  
+  MSC1 [label="MSC 1\nPC: 1.1.1"]
+  MSC2 [label="MSC 2\nPC: 1.2.1"]
+  MSC3 [label="MSC 3\nPC: 1.3.1"]
+  STP [label="STP\n(Router SS7)\nPC: 1.0.1", fillcolor="#FFD700"]
+  
+  MSC1 -> STP [label="M3UA"]
+  MSC2 -> STP [label="M3UA"]
+  MSC3 -> STP [label="M3UA"]
+}'
+render_graphviz(dot_code)
+```
+
+**Exemple de build générique :**
 **Exemple de build générique :**
 
 ```sh
@@ -795,6 +887,32 @@ srsepc epc.conf
 > **La 5G n’est pas juste “plus rapide”** : elle transforme l’infrastructure, permet l’émergence de nouveaux usages critiques (industrie, santé, véhicules), et prépare le terrain pour un monde ultra-connecté, piloté en temps réel.
 
 # 5G SA labo : srsRAN Project + Open5GS (Ubuntu 2024)
+
+
+### Architecture 5G SA (Open5GS + srsRAN)
+
+```{r 5g_architecture}
+dot_code <- 'digraph 5g_arch {
+  graph [rankdir=LR, bgcolor=transparent]
+  node [shape=box, style=filled, fontname=Helvetica, fontsize=10, fillcolor="#E0FFFF"]
+  edge [color=black, fontname=Helvetica, fontsize=9]
+  
+  UE [label="UE\n(srsRAN UE)"]
+  gNB [label="gNB\n(srsRAN gNB)"]
+  AMF [label="AMF\n(Open5GS)"]
+  SMF [label="SMF\n(Open5GS)"]
+  UPF [label="UPF\n(Open5GS)"]
+  UDM [label="UDM\n(Open5GS)"]
+  
+  UE -> gNB [label="NR (Radio)"]
+  gNB -> AMF [label="NGAP"]
+  AMF -> SMF [label="N11"]
+  AMF -> UDM [label="N12"]
+  SMF -> UPF [label="N4"]
+  UE -> UPF [label="N3"]
+}'
+render_graphviz(dot_code)
+```
 
 ## Prérequis
 
