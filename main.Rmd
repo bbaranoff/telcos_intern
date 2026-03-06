@@ -1,5 +1,3 @@
-![](pictures/couverture.png)
-
 ---
 title: "Telco's intern"
 author: "Bastien Baranoff"
@@ -10,7 +8,7 @@ output:
     latex_engine: xelatex
 lang: fr
 ---
-
+![](pictures/couverture.png)
 
 
 # Un livre sur mon expérience en radio-télécommunications
