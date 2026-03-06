@@ -1,3 +1,362 @@
+## Le réseau TETRA
+
+Le **TETRA (Terrestrial Trunked Radio)** est une norme de communication radio numérique conçue pour les **services critiques**. Elle a été développée dans les années 1990 par l’**European Telecommunications Standards Institute** pour remplacer les anciens réseaux radio analogiques utilisés par les services publics.
+
+Contrairement aux réseaux cellulaires grand public, TETRA est destiné à des organisations qui ont besoin de communications **fiables, sécurisées et instantanées**, même dans des situations de crise.
+
+On le retrouve notamment dans :
+
+* les **polices**
+* les **services de secours**
+* les **pompiers**
+* les **services de transport**
+* les **infrastructures critiques**
+
+Dans plusieurs pays européens, les réseaux TETRA sont utilisés par les services d’urgence nationaux.
+
+---
+
+# Principe général
+
+Un réseau TETRA est un **réseau radio professionnel trunké**.
+Le terme *trunked radio* signifie que les utilisateurs partagent dynamiquement un ensemble de canaux radio.
+
+Au lieu d’avoir une fréquence fixe pour chaque groupe, le système attribue automatiquement les canaux disponibles.
+
+Architecture simplifiée :
+
+```
+terminaux radio
+      ↓
+stations de base (TBS)
+      ↓
+commutation réseau
+      ↓
+groupes utilisateurs
+```
+
+Les terminaux sont généralement des **talkies-walkies numériques** capables de fonctionner :
+
+* en **mode réseau**
+* en **mode direct (DMO)** sans infrastructure
+
+---
+
+# Architecture du réseau
+
+Un réseau TETRA comporte plusieurs éléments principaux.
+
+### Terminaux radio
+
+Les terminaux sont des radios portables ou embarquées dans des véhicules.
+Ils permettent plusieurs types de communication :
+
+* appels individuels
+* appels de groupe
+* messages de données
+* signalisation d’urgence
+
+La communication de groupe est l’une des fonctions centrales du système.
+
+---
+
+### Stations de base
+
+Les stations de base assurent la couverture radio d’une zone.
+
+Chaque station gère plusieurs canaux radio et communique avec le réseau central.
+
+Ces stations sont appelées :
+
+**TBS — TETRA Base Station**
+
+---
+
+### Commutation réseau
+
+Le cœur du réseau TETRA est un système de commutation qui gère :
+
+* l’attribution des canaux
+* les groupes d’utilisateurs
+* la mobilité
+* l’authentification
+
+Ce composant est appelé :
+
+**SwMI — Switching and Management Infrastructure**
+
+Il joue un rôle comparable au **MSC** dans les réseaux GSM.
+
+---
+
+# Caractéristiques radio
+
+TETRA utilise une bande radio dédiée, généralement autour de :
+
+```
+380 – 400 MHz
+```
+
+(services de sécurité publique en Europe)
+
+La technologie utilise :
+
+```
+TDMA
+Time Division Multiple Access
+```
+
+Chaque canal radio de **25 kHz** est divisé en **4 slots temporels**.
+
+```
+| slot1 | slot2 | slot3 | slot4 |
+```
+
+Cela permet à plusieurs utilisateurs de partager la même fréquence.
+
+Le débit typique est d’environ :
+
+```
+7.2 kb/s par slot
+```
+
+---
+
+# Fonctionnalités principales
+
+Le système TETRA est conçu pour répondre aux besoins des communications critiques.
+
+### Appel de groupe
+
+Un utilisateur peut parler simultanément à tout un groupe d’utilisateurs.
+
+Exemple :
+
+```
+pompiers secteur A
+```
+
+Un seul bouton permet de transmettre à l’ensemble du groupe.
+
+---
+
+### Communication instantanée
+
+Contrairement à un appel téléphonique, la communication est quasi instantanée.
+
+Le temps d’établissement est typiquement :
+
+```
+< 300 ms
+```
+
+---
+
+### Mode direct (DMO)
+
+Les terminaux peuvent communiquer directement entre eux sans station de base.
+
+```
+radio ↔ radio
+```
+
+Ce mode est utile lorsque l’infrastructure est indisponible.
+
+---
+
+### Priorité et appels d’urgence
+
+Certains utilisateurs peuvent avoir un niveau de priorité supérieur.
+
+Par exemple :
+
+* chef d’intervention
+* centre de commandement
+
+Un appel prioritaire peut interrompre les communications en cours.
+
+---
+
+# Sécurité
+
+Les réseaux TETRA intègrent plusieurs mécanismes de sécurité :
+
+* **authentification des terminaux**
+* **chiffrement des communications**
+* **gestion des clés**
+
+Le chiffrement est généralement basé sur des algorithmes propriétaires appelés :
+
+```
+TEA — TETRA Encryption Algorithm
+```
+
+Il existe plusieurs variantes :
+
+* TEA1
+* TEA2
+* TEA3
+* TEA4
+
+Certaines implémentations ont fait l’objet de recherches de sécurité récentes montrant des faiblesses dans certaines variantes.
+
+---
+
+# Utilisations
+
+Les réseaux TETRA sont largement utilisés dans le monde pour les communications professionnelles.
+
+Exemples d’applications :
+
+* réseaux de police
+* services d’urgence
+* contrôle ferroviaire
+* gestion d’aéroports
+* transports publics
+
+Ils offrent un avantage important : ils restent **opérationnels même en cas de surcharge des réseaux mobiles classiques**.
+
+---
+
+# Limites
+
+Bien que très robuste, la technologie TETRA présente certaines limites :
+
+* faible débit de données
+* technologie principalement conçue pour la voix
+* coût d’infrastructure élevé
+
+Pour ces raisons, certains réseaux critiques migrent progressivement vers des solutions basées sur **LTE ou 5G mission-critical**.
+
+Cependant, TETRA reste aujourd’hui l’une des infrastructures radio les plus fiables pour les communications de sécurité publique.
+
+## Chiffrement TETRA et vulnérabilités révélées par Midnight Blue (2023)
+
+Les réseaux **TETRA (Terrestrial Trunked Radio)** utilisent un mécanisme de chiffrement spécifique appelé **TEA — TETRA Encryption Algorithm**.
+Ces algorithmes sont conçus pour protéger les communications des réseaux professionnels utilisés par les services critiques.
+
+Les différentes variantes de l’algorithme sont :
+
+* **TEA1**
+* **TEA2**
+* **TEA3**
+* **TEA4**
+
+Chaque variante correspond à un niveau d’utilisation différent :
+
+| Algorithme | Utilisation                                    |
+| ---------- | ---------------------------------------------- |
+| TEA1       | réseaux commerciaux et infrastructures civiles |
+| TEA2       | réseaux de sécurité publique (police, armée)   |
+| TEA3       | export hors Europe                             |
+| TEA4       | usage industriel                               |
+
+Pendant longtemps, les spécifications détaillées de ces algorithmes sont restées **confidentielles** et uniquement accessibles aux fabricants agréés.
+
+---
+
+# La révélation de 2023
+
+En **2023**, une équipe de chercheurs en sécurité de la société **Midnight Blue** publie une analyse détaillée du système de sécurité TETRA.
+
+Cette recherche révèle une série de vulnérabilités regroupées sous le nom :
+
+```
+TETRA:BURST
+```
+
+Ces vulnérabilités ont été enregistrées sous plusieurs identifiants **CVE-2023**.
+
+Les chercheurs ont montré que certaines implémentations du chiffrement TETRA présentaient des faiblesses significatives, notamment dans **TEA1**.
+
+---
+
+# Faiblesse principale de TEA1
+
+L’une des découvertes majeures concerne la taille réelle de la clé.
+
+Bien que TEA1 soit présenté comme utilisant une clé de **80 bits**, l’analyse a montré que la conception du système réduit en pratique l’espace de recherche à environ :
+
+```
+2^32
+```
+
+Autrement dit, le chiffrement peut être attaqué avec un **brute force réalisable sur du matériel moderne**.
+
+Avec un GPU moderne, une recherche exhaustive peut être réalisée en quelques minutes ou heures.
+
+Cette faiblesse provient notamment :
+
+* d’une réduction effective de l’entropie
+* d’un design interne affaiblissant la sécurité
+* de choix cryptographiques hérités des années 1990
+
+---
+
+# Vulnérabilités identifiées
+
+Les chercheurs ont identifié plusieurs problèmes dans l’écosystème TETRA :
+
+### Réduction de la taille de clé
+
+Le chiffrement TEA1 présente une **clé effective fortement réduite**, permettant une attaque brute force.
+
+---
+
+### Faiblesse dans l’authentification
+
+Certaines implémentations permettent des attaques permettant de :
+
+* intercepter des communications
+* injecter des paquets radio
+* perturber le réseau
+
+---
+
+### Problèmes de gestion de clés
+
+Certaines infrastructures TETRA utilisent des mécanismes de distribution de clés vulnérables.
+
+---
+
+# Impact potentiel
+
+Les réseaux TETRA sont utilisés dans de nombreux systèmes critiques :
+
+* police
+* pompiers
+* transports publics
+* infrastructures énergétiques
+* services d'urgence
+
+La découverte de ces vulnérabilités a donc un impact potentiel important.
+
+Cependant, plusieurs facteurs limitent les risques immédiats :
+
+* certaines variantes comme **TEA2** ne sont pas concernées par la même faiblesse
+* les réseaux utilisent souvent des mécanismes supplémentaires de sécurité
+* l’exploitation nécessite des équipements radio spécialisés
+
+---
+
+# Importance pour la recherche en sécurité radio
+
+L’étude publiée par Midnight Blue marque un tournant dans l’analyse des réseaux radio professionnels.
+
+Pendant longtemps, les protocoles TETRA étaient considérés comme **opaques et difficilement analysables**.
+
+Grâce aux progrès des **Software Defined Radios (SDR)** et aux recherches en sécurité radio, il devient désormais possible de :
+
+* analyser les signaux TETRA
+* étudier les protocoles de chiffrement
+* tester la robustesse des systèmes radio critiques
+
+Ces travaux illustrent un principe fondamental de la sécurité informatique :
+
+> la sécurité par le secret du design est rarement durable.
+
+Les systèmes cryptographiques doivent être **ouverts à l’analyse publique** afin de garantir leur robustesse.
+
 # TEA1 Key Brute-forcer (OpenCL Accelerated)
 
 [tea1 cracker](https://github.com/bbaranoff/tea1-cracker)

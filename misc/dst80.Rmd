@@ -1,3 +1,253 @@
+# Le chiffrement DST80 des transpondeurs Texas Instruments
+
+De nombreux systèmes modernes d’accès sans clé utilisent des **transpondeurs RFID cryptographiques** pour authentifier un dispositif physique.  
+Dans le domaine automobile, ces transpondeurs sont souvent intégrés dans les **clés électroniques** ou les **key fobs**.
+
+L’un des systèmes largement déployés dans les années 2010 est le transpondeur **DST80 (Digital Signature Transponder)** développé par **Texas Instruments**.
+
+Ce système est utilisé dans différents dispositifs RFID, notamment :
+
+- clés automobiles
+- systèmes d’immobilisation
+- systèmes d'accès sans clé
+- contrôle d’accès industriel
+
+DST80 repose sur un protocole **challenge–response** utilisant une clé secrète partagée entre :
+
+```
+
+véhicule ↔ transpondeur RFID
+
+```
+
+---
+
+# Principe du protocole d’authentification
+
+Le fonctionnement de DST80 repose sur un mécanisme classique de **défi-réponse cryptographique**.
+
+Lorsqu’un véhicule détecte la présence d’une clé, il envoie un **challenge aléatoire**.
+
+```
+
+vehicle → challenge
+key     → response
+
+```
+
+Le transpondeur calcule ensuite une **réponse cryptographique** basée sur :
+
+- la clé secrète
+- le challenge reçu
+
+```
+
+response = F(key, challenge)
+
+```
+
+Le véhicule effectue le même calcul et compare la réponse obtenue.
+
+Si les deux valeurs correspondent :
+
+```
+
+authentification = valide
+
+```
+
+Sinon :
+
+```
+
+authentification = refusée
+
+```
+
+Dans le cas de DST80, la clé secrète est supposée avoir une taille de :
+
+```
+
+80 bits
+
+```
+
+---
+
+# Faiblesses du système DST80
+
+En 2020, plusieurs chercheurs ont analysé le système DST80 et ont découvert que sa sécurité réelle était **inférieure à la sécurité théorique annoncée**.
+
+Ces travaux ont été publiés dans la revue académique **IACR Transactions on Cryptographic Hardware and Embedded Systems**.
+
+Les chercheurs ont montré que plusieurs facteurs réduisent fortement la complexité réelle de l’attaque.
+
+Parmi ces facteurs :
+
+### Structure interne de la clé
+
+Dans certaines implémentations, la clé de 80 bits est divisée en deux parties :
+
+```
+
+KL (Key Left)
+KR (Key Right)
+
+```
+
+Mais dans de nombreux systèmes, ces deux parties ne sont pas indépendantes.
+
+Certaines implémentations utilisent une relation du type :
+
+```
+
+KR = NOT(KL)
+
+```
+
+Cela réduit immédiatement l’espace de recherche.
+
+---
+
+### Constantes constructeur
+
+Les chercheurs ont également observé que certains constructeurs fixent plusieurs octets de la clé.
+
+Dans certains cas :
+
+```
+
+32 bits de la clé sont constants
+
+```
+
+L’espace de recherche devient alors :
+
+```
+
+2^48
+
+```
+
+ou même :
+
+```
+
+2^40
+
+```
+
+---
+
+### Réduction de la complexité de l’attaque
+
+En combinant plusieurs observations sur la structure du système, les chercheurs ont montré qu’il était possible de réduire la recherche effective à :
+
+```
+
+≈ 2^32
+
+```
+
+Un tel espace de recherche peut être exploré avec du matériel moderne, notamment des **GPU**.
+
+---
+
+# Méthodologie de l’attaque
+
+L’attaque repose sur un principe relativement simple :
+
+1. intercepter plusieurs échanges challenge–response
+2. utiliser ces données pour tester des clés candidates
+3. rechercher la clé correcte par brute force
+
+La complexité dépend du nombre de constantes connues.
+
+Dans certains scénarios expérimentaux :
+
+```
+
+1 octet inconnu → quelques heures
+2 octets inconnus → plusieurs jours
+
+```
+
+Mais une fois les constantes constructeur identifiées, la récupération de la clé peut devenir extrêmement rapide.
+
+---
+
+# Démonstration du COSIC sur un véhicule Tesla
+
+Une démonstration particulièrement médiatisée a été réalisée par les chercheurs du laboratoire **COSIC (Computer Security and Industrial Cryptography)** de l'Université KU Leuven.
+
+Les chercheurs ont montré qu’il était possible d’exploiter les faiblesses de DST80 dans certains systèmes d’accès sans clé utilisés par des véhicules **Tesla**.
+
+Le scénario expérimental est le suivant :
+
+1. capturer deux échanges challenge–response entre la voiture et la clé
+2. utiliser ces données pour lancer une attaque brute force
+3. récupérer la clé secrète du transpondeur
+
+Une fois la clé récupérée, il devient possible de :
+
+```
+
+émuler la clé
+
+```
+
+ou
+
+```
+
+cloner le transpondeur
+
+```
+
+Les chercheurs ont montré que l’attaque pouvait être réalisée en pratique avec :
+
+- un équipement RFID
+- un ordinateur équipé d’un GPU
+- quelques minutes de calcul
+
+Cette démonstration a conduit Tesla à publier une **mise à jour logicielle** pour limiter l’exposition à cette attaque.
+
+---
+
+# Enseignements pour la sécurité des systèmes embarqués
+
+L’analyse de DST80 illustre plusieurs principes importants de la sécurité cryptographique.
+
+Premièrement, une taille de clé annoncée ne garantit pas la sécurité réelle du système.
+
+La structure interne de l’algorithme et les choix d’implémentation peuvent réduire drastiquement l’espace de recherche.
+
+Deuxièmement, les systèmes cryptographiques propriétaires et fermés sont particulièrement difficiles à auditer.
+
+Dans le cas de DST80, les spécifications complètes n’étaient pas publiquement disponibles, ce qui a retardé l’analyse académique.
+
+Enfin, cette recherche montre que l’évolution du matériel informatique peut transformer des attaques théoriques en attaques pratiques.
+
+Un espace de recherche considéré comme impraticable dans les années 1990 peut devenir trivial avec :
+
+- GPU modernes
+- calcul parallèle
+- clusters de calcul
+
+---
+
+# Conclusion
+
+Le cas de DST80 montre comment des systèmes cryptographiques largement déployés peuvent présenter des faiblesses structurelles.
+
+Les travaux publiés par la communauté académique et les laboratoires de recherche démontrent l’importance :
+
+- de l’analyse publique des algorithmes
+- de la transparence des protocoles
+- de la mise à jour régulière des systèmes de sécurité
+
+Dans le domaine des systèmes embarqués et des dispositifs RFID, ces recherches jouent un rôle essentiel pour améliorer la robustesse des infrastructures technologiques modernes.
+
 # Suite de rétro-ingénierie et de brute-force DST80
 
 Basé sur **DST80 (non rétro-ingéniéré)** disponible ici
